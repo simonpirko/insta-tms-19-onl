@@ -2,7 +2,7 @@ package by.tms.insta.web.Dto;
 
 public class UserDto {
     private String username;
-    private String photo;
+    private String avatar;
 
     public String getUsername() {
         return username;
@@ -12,12 +12,12 @@ public class UserDto {
         this.username = username;
     }
 
-    public String getPhoto() {
-        return photo;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }
 
