@@ -1,5 +1,7 @@
 package by.tms.insta.entity;
 
+import by.tms.insta.validation.UserValidation;
+
 import java.util.Objects;
 
 /**
@@ -41,12 +43,15 @@ public class User {
         }
 
         public UserBuilder setPassword(String password) {
-            User.this.password = password;
+
+            String validPassword = UserValidation.passwordValidation(password);
+            User.this.password = validPassword;
             return this;
         }
 
         public UserBuilder setEmail(String email) {
-            User.this.email = email;
+            String validEmail = UserValidation.emailValidation(email);
+            User.this.email = validEmail;
             return this;
         }
 
