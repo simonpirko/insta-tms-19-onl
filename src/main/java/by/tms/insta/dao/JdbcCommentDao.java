@@ -20,7 +20,7 @@ public class JdbcCommentDao implements CommentDao{
             "join users on users.user_id = comments.user_id " +
             "where post_id = ?";
     private static final String SELECT_COMMENTS_POST = "select * from posts " +
-            "join users on users.user_id = posts.user.id " +
+            "join users on users.user_id = posts.user_id " +
             "where post_id = ?";
 
     private JdbcCommentDao() {
