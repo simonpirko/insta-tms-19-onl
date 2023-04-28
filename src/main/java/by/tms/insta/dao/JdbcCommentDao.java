@@ -73,7 +73,7 @@ public class JdbcCommentDao implements CommentDao{
 
             PreparedStatement postPreparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(SELECT_COMMENTS_POST);
             postPreparedStatement.setInt(1, post_id);
-            ResultSet postResultSet = postPreparedStatement.getResultSet();
+            ResultSet postResultSet = postPreparedStatement.executeQuery();
             User postUser = User.builder()
                     .setId(postResultSet.getInt("user_id"))
                     .setName(postResultSet.getString("name"))
@@ -92,7 +92,7 @@ public class JdbcCommentDao implements CommentDao{
 
             PreparedStatement commentPreparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(SELECT_BY_POST_ID);
             commentPreparedStatement.setInt(1, post_id);
-            ResultSet commentResultSet = commentPreparedStatement.getResultSet();
+            ResultSet commentResultSet = commentPreparedStatement.executeQuery();
 
             while (commentResultSet.next()) {
                 int comment_id = commentResultSet.getInt("comment_id");
