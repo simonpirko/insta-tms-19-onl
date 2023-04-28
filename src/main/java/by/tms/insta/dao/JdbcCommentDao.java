@@ -12,7 +12,7 @@ import java.util.List;
 
 public class JdbcCommentDao implements CommentDao{
     private static JdbcCommentDao instance;
-    Connection connection;
+    private final ConnectionJdbc connectionJdbc = ConnectionJdbc.getInstance();
     private static final String INSERT_COMMENT = "insert into comments (message, post_id, user_id, created_at) value(?,?,?,?)";
     private static final String DELETE_COMMENT = "delete from comments where comment_id = ?";
     private static final String UPDATE_COMMENT = "update comments set message = ? where comment_id = ?";
@@ -35,7 +35,7 @@ public class JdbcCommentDao implements CommentDao{
 
     public void save(Comment comment) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_COMMENT);
+            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(INSERT_COMMENT);
             preparedStatement.setString(1, comment.getMessage());
             preparedStatement.setLong(2, comment.getPost().getId());
             preparedStatement.setLong(3, comment.getAuthor().getId());
@@ -48,7 +48,7 @@ public class JdbcCommentDao implements CommentDao{
 
     public void deleteById(int comment_id) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_COMMENT);
+            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(DELETE_COMMENT);
             preparedStatement.setInt(1, comment_id);
             preparedStatement.execute();
         } catch (SQLException e) {
@@ -58,7 +58,7 @@ public class JdbcCommentDao implements CommentDao{
 
     public void updateMessageById(int comment_id, String message) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_COMMENT);
+            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(UPDATE_COMMENT);
             preparedStatement.setString(1, message);
             preparedStatement.setInt(2, comment_id);
             preparedStatement.execute();
@@ -71,7 +71,7 @@ public class JdbcCommentDao implements CommentDao{
         try {
             List<Comment> commentList = new ArrayList<>();
 
-            PreparedStatement postPreparedStatement = connection.prepareStatement(SELECT_COMMENTS_POST);
+            PreparedStatement postPreparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(SELECT_COMMENTS_POST);
             postPreparedStatement.setInt(1, post_id);
             ResultSet postResultSet = postPreparedStatement.getResultSet();
             User postUser = User.builder()
@@ -90,7 +90,7 @@ public class JdbcCommentDao implements CommentDao{
                     .setCreatedAt(postResultSet.getTimestamp("created_at").toLocalDateTime())
                     .build();
 
-            PreparedStatement commentPreparedStatement = connection.prepareStatement(SELECT_BY_POST_ID);
+            PreparedStatement commentPreparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(SELECT_BY_POST_ID);
             commentPreparedStatement.setInt(1, post_id);
             ResultSet commentResultSet = commentPreparedStatement.getResultSet();
 
