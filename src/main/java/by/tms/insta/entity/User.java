@@ -8,7 +8,7 @@ import java.util.Objects;
  * @author Denis Smirnov
  */
 public class User {
-    private long id;
+    private int id;
     private String name;
     private String username;
     private String password;
@@ -27,7 +27,7 @@ public class User {
         private UserBuilder() {
         }
 
-        public UserBuilder setId(long id) {
+        public UserBuilder setId(int id) {
             User.this.id = id;
             return this;
         }
@@ -105,10 +105,8 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", avatar='" + avatar + '\'' +
                 '}';

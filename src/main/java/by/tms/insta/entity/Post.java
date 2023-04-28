@@ -8,7 +8,7 @@ import java.util.Objects;
  * @author Denis Smirnov
  */
 public class Post {
-    private long id;
+    private int id;
     private User author;
     private String image;
     private String description;
@@ -26,7 +26,7 @@ public class Post {
         private PostBuilder() {
         }
 
-        public Post.PostBuilder setId(long id) {
+        public Post.PostBuilder setId(int id) {
             Post.this.id = id;
             return this;
         }
