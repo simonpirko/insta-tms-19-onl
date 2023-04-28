@@ -1,22 +1,27 @@
 package by.tms.insta.dao;
 
 import by.tms.insta.entity.Comment;
+import by.tms.insta.entity.Post;
 import by.tms.insta.entity.User;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 public class CommentDao {
     private static CommentDao instance;
     Connection connection;
-    private static final String WRITE_COMMENT = "insert into comments (message, post_id, user_id, created_at) value(?,?,?,?)";
+    private static final String INSERT_COMMENT = "insert into comments (message, post_id, user_id, created_at) value(?,?,?,?)";
     private static final String DELETE_COMMENT = "delete from comments where comment_id = ?";
     private static final String UPDATE_COMMENT = "update comments set message = ? where comment_id = ?";
-    private static final String SELECT_BY_POST_ID = "select * from comments where post_id = ?";
+    private static final String SELECT_BY_POST_ID = "select * from comments " +
+            "join users on users.user_id = comments.user_id " +
+            "where post_id = ?";
+    private static final String SELECT_COMMENTS_POST = "select * from posts " +
+            "join users on users.user_id = posts.user.id " +
+            "where post_id = ?";
 
     private CommentDao() {
     }
@@ -30,7 +35,7 @@ public class CommentDao {
 
     public void save(Comment comment) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(WRITE_COMMENT);
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_COMMENT);
             preparedStatement.setString(1, comment.getMessage());
             preparedStatement.setLong(2, comment.getPost().getId());
             preparedStatement.setLong(3, comment.getAuthor().getId());
@@ -64,20 +69,52 @@ public class CommentDao {
 
     public List<Comment> findByPostId(int post_id) {
         try {
-            List<Comment> commentList = new ArrayList<Comment>();
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_POST_ID);
-            preparedStatement.setInt(1, post_id);
-            ResultSet resultSet = preparedStatement.getResultSet();
-            while (resultSet.next()) {
-                int comment_id = resultSet.getInt("comment_id");
-                String message = resultSet.getString("message");
-                int user_id = resultSet.getInt("user_id");
-                LocalDateTime time = resultSet.getTimestamp("created_at").toLocalDateTime();
-                Comment.CommentBuilder builder = Comment.builder();
-                Comment comment = builder.setId(comment_id)
+            List<Comment> commentList = new ArrayList<>();
+
+            PreparedStatement postPreparedStatement = connection.prepareStatement(SELECT_COMMENTS_POST);
+            postPreparedStatement.setInt(1, post_id);
+            ResultSet postResultSet = postPreparedStatement.getResultSet();
+            User postUser = User.builder()
+                    .setId(postResultSet.getInt("user_id"))
+                    .setName(postResultSet.getString("name"))
+                    .setUsername(postResultSet.getString("username"))
+                    .setEmail(postResultSet.getString("email"))
+                    .setAvatar(postResultSet.getString("avatar"))
+                    .setPassword(postResultSet.getString("password"))
+                    .build();
+            Post post = Post.builder()
+                    .setId(post_id)
+                    .setAuthor(postUser)
+                    .setImage(postResultSet.getString("image"))
+                    .setDescription(postResultSet.getString("description"))
+                    .setCreatedAt(postResultSet.getTimestamp("created_at").toLocalDateTime())
+                    .build();
+
+            PreparedStatement commentPreparedStatement = connection.prepareStatement(SELECT_BY_POST_ID);
+            commentPreparedStatement.setInt(1, post_id);
+            ResultSet commentResultSet = commentPreparedStatement.getResultSet();
+
+            while (commentResultSet.next()) {
+                int comment_id = commentResultSet.getInt("comment_id");
+                String message = commentResultSet.getString("message");
+                int user_id = commentResultSet.getInt("user_id");
+                LocalDateTime time = commentResultSet.getTimestamp("created_at").toLocalDateTime();
+                String image = commentResultSet.getString("image");
+
+                User user = User.builder()
+                        .setId(commentResultSet.getInt("user_id"))
+                        .setName(commentResultSet.getString("name"))
+                        .setUsername(commentResultSet.getString("username"))
+                        .setEmail(commentResultSet.getString("email"))
+                        .setAvatar(commentResultSet.getString("avatar"))
+                        .setPassword(commentResultSet.getString("password"))
+                        .build();
+
+                Comment comment = Comment.builder()
+                        .setId(comment_id)
                         .setMessage(message)
-                        .setAuthor()
-                        .setPost()
+                        .setAuthor(user)
+                        .setPost(post)
                         .setCreateAt(time)
                         .build();
                 commentList.add(comment);
