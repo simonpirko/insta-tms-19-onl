@@ -26,7 +26,7 @@ public class JDBCUserDAO implements UserDAO {
 
     private static JDBCUserDAO instance;
 
-    public JDBCUserDAO getInstance() {
+    public static JDBCUserDAO getInstance() {
         if (instance == null) {
             instance = new JDBCUserDAO();
         }
