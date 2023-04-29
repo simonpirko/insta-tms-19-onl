@@ -7,8 +7,8 @@ import by.tms.insta.entity.User;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class JdbcCommentDao implements CommentDao{
     private static JdbcCommentDao instance;
@@ -66,8 +66,7 @@ public class JdbcCommentDao implements CommentDao{
             throw new RuntimeException(e);
         }
     }
-
-    public List<Comment> findByPostId(int post_id) {
+    public Optional<List<Comment>> findByPostId(int post_id) {
         try {
             List<Comment> commentList = new ArrayList<>();
 
@@ -120,9 +119,10 @@ public class JdbcCommentDao implements CommentDao{
                 commentList.add(comment);
             }
 //            Collections.sort(commentList);
-            return commentList;
+            return Optional.of(commentList);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return Optional.empty();
     }
 }
