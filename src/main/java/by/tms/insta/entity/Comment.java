@@ -7,7 +7,7 @@ import java.util.Objects;
  * @author Denis Smirnov
  */
 public class Comment {
-    private long id;
+    private int id;
     private String message;
     private User author;
     private Post post;
@@ -24,7 +24,7 @@ public class Comment {
         private CommentBuilder() {
         }
 
-        public Comment.CommentBuilder setId(long id) {
+        public Comment.CommentBuilder setId(int id) {
             Comment.this.id = id;
             return this;
         }
