@@ -52,10 +52,10 @@ public class JDBCUserDAO implements UserDAO {
     }
 
     @Override
-    public void deleteById(long user_id) {
+    public void deleteById(int user_id) {
         try {
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(DELETE_USER);
-            preparedStatement.setLong(1, user_id);
+            preparedStatement.setInt(1, user_id);
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -70,7 +70,7 @@ public class JDBCUserDAO implements UserDAO {
             ResultSet resultSet = statement.executeQuery(EXTRACT_ALL_USERS);
             List<User> userList = new ArrayList<>();
             while (resultSet.next()) {
-                long id = resultSet.getLong(1);
+                int id = resultSet.getInt(1);
                 String username = resultSet.getString(2);
                 String password = resultSet.getString(3);
                 String name = resultSet.getString(4);
@@ -99,7 +99,7 @@ public class JDBCUserDAO implements UserDAO {
             preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                long id = resultSet.getLong(1);
+                int id = resultSet.getInt(1);
                 String userName = resultSet.getString(2);
                 String password = resultSet.getString(3);
                 String name = resultSet.getString(4);
@@ -123,13 +123,13 @@ public class JDBCUserDAO implements UserDAO {
     }
 
     @Override
-    public Optional<User> findByUserId(long user_id) {
+    public Optional<User> findByUserId(int user_id) {
         try {
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_USER_BY_ID);
             preparedStatement.setLong(1, user_id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                long id = resultSet.getLong(1);
+                int id = resultSet.getInt(1);
                 String username = resultSet.getString(2);
                 String password = resultSet.getString(3);
                 String name = resultSet.getString(4);
@@ -152,7 +152,7 @@ public class JDBCUserDAO implements UserDAO {
     }
 
     @Override
-    public List<User> extractFollowers(long user_id) {
+    public List<User> extractFollowers(int user_id) {
         try {
             List<User> followersList = new ArrayList<>();
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_USER_FOLLOWERS);
@@ -178,7 +178,7 @@ public class JDBCUserDAO implements UserDAO {
     }
 
     @Override
-    public List<User> extractFollowed(long user_id) {
+    public List<User> extractFollowed(int user_id) {
         try {
             List<User> followedList = new ArrayList<>();
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_USER_FOLLOWED);
@@ -204,7 +204,7 @@ public class JDBCUserDAO implements UserDAO {
     }
 
     @Override
-    public void extractCountOfFollowers(long user_id) {
+    public void extractCountOfFollowers(int user_id) {
         try {
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_COUNT_OF_USERS_FOLLOWERS);
             preparedStatement.setLong(1, user_id);
@@ -219,7 +219,7 @@ public class JDBCUserDAO implements UserDAO {
     }
 
     @Override
-    public void extractCountOfFollowed(long user_id) {
+    public void extractCountOfFollowed(int user_id) {
         try {
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_COUNT_OF_USER_FOLLOWED);
             preparedStatement.setLong(1, user_id);
