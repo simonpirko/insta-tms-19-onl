@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class JdbcCommentDao implements CommentDao{
-    private static JdbcCommentDao instance;
+public class JDBCCommentDAO implements CommentDAO {
+    private static JDBCCommentDAO instance;
     private final ConnectionJdbc connectionJdbc = ConnectionJdbc.getInstance();
     private static final String INSERT_COMMENT = "insert into comments (message, post_id, user_id, created_at) value(?,?,?,?)";
     private static final String DELETE_COMMENT = "delete from comments where comment_id = ?";
@@ -23,12 +23,12 @@ public class JdbcCommentDao implements CommentDao{
             "join users on users.user_id = posts.user_id " +
             "where post_id = ?";
 
-    private JdbcCommentDao() {
+    private JDBCCommentDAO() {
     }
 
-    public JdbcCommentDao getInstance() {
+    public JDBCCommentDAO getInstance() {
         if (instance == null) {
-            instance = new JdbcCommentDao();
+            instance = new JDBCCommentDAO();
         }
         return instance;
     }
