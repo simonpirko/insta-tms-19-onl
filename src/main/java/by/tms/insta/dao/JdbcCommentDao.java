@@ -118,7 +118,6 @@ public class JdbcCommentDao implements CommentDao{
                         .build();
                 commentList.add(comment);
             }
-//            Collections.sort(commentList);
             return Optional.of(commentList);
         } catch (SQLException e) {
             throw new RuntimeException(e);
