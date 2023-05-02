@@ -9,5 +9,5 @@ public interface CommentDAO {
     void save(Comment comment);
     void deleteById(int comment_id);
     void updateMessageById(int comment_id, String message);
-    Optional<List<Comment>> findByPostId(int post_id);
+    Optional<List<Comment>> findByPostId(int post_id, int paginationOffset);
 }

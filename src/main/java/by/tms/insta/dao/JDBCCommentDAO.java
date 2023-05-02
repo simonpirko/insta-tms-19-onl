@@ -18,10 +18,12 @@ public class JDBCCommentDAO implements CommentDAO {
     private static final String UPDATE_COMMENT = "update comments set message = ? where comment_id = ?";
     private static final String SELECT_BY_POST_ID = "select * from comments " +
             "join users on users.user_id = comments.user_id " +
-            "where post_id = ?";
+            "where post_id = ? ";
     private static final String SELECT_COMMENTS_POST = "select * from posts " +
             "join users on users.user_id = posts.user_id " +
-            "where post_id = ?";
+            "where post_id = ? " +
+            "ordered by created_at desc " +
+            "limit 5 offset ?";
 
     private JDBCCommentDAO() {
     }
@@ -66,7 +68,7 @@ public class JDBCCommentDAO implements CommentDAO {
             throw new RuntimeException(e);
         }
     }
-    public Optional<List<Comment>> findByPostId(int post_id) {
+    public Optional<List<Comment>> findByPostId(int post_id, int paginationOffset) {
         try {
             List<Comment> commentList = new ArrayList<>();
 
@@ -91,6 +93,7 @@ public class JDBCCommentDAO implements CommentDAO {
 
             PreparedStatement commentPreparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(SELECT_BY_POST_ID);
             commentPreparedStatement.setInt(1, post_id);
+            commentPreparedStatement.setInt(2, paginationOffset);
             ResultSet commentResultSet = commentPreparedStatement.executeQuery();
 
             while (commentResultSet.next()) {
