@@ -42,7 +42,7 @@ public class CommentService {
         JDBCCommentDAO.updateMessageById(comment_id, message);
     }
 
-    public Optional<List<Comment>> findByPostId(int post_id) {
-        return JDBCCommentDAO.findByPostId(post_id);
+    public Optional<List<Comment>> findByPostId(int post_id, int  paginationOffset) {
+        return JDBCCommentDAO.findByPostId(post_id, paginationOffset);
     }
 }
