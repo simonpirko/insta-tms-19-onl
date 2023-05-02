@@ -25,11 +25,11 @@
                 </h4>
                 <div class="input-group flex-nowrap mb-3">
                     <span class="input-group-text" id="addon-wrapping">Enter a photo link</span>
-                    <input type="text" class="form-control" placeholder="link" aria-label="link" aria-describedby="addon-wrapping" required
+                    <input name="image" type="text" class="form-control" placeholder="link" aria-label="link" aria-describedby="addon-wrapping" required
                            pattern="(http)?s?:?(\/\/[^']*\.(?:png|jpg|jpeg))">
                 </div>
                 <div class="form-floating">
-                    <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea" maxlength="2200" required></textarea>
+                    <textarea name="description" class="form-control" placeholder="Leave a description here" id="floatingTextarea" maxlength="2200" required></textarea>
                     <label for="floatingTextarea">Description</label>
                 </div>
                 <p class="fs-6">    </p>
