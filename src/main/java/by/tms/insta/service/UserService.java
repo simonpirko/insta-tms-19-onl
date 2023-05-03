@@ -24,11 +24,9 @@ public class UserService {
     }
 
     public void save(User user) {
-        try {
-            jdbcUserDAO.save(user);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+        jdbcUserDAO.save(user);
+
     }
 
     public void deleteById(int userId) {
