@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface PostDao {
+public interface PostDAO {
 
     void createPost(Post post) throws IOException;
 

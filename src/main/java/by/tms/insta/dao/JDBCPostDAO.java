@@ -10,10 +10,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JdbcPostDao implements PostDao {
+public class JDBCPostDAO implements PostDAO {
     private Connection connection;
 
-    public JdbcPostDao(Connection connection) {
+    public JDBCPostDAO(Connection connection) {
         this.connection = connection;
     }
 
@@ -22,7 +22,7 @@ public class JdbcPostDao implements PostDao {
 
         try {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO posts (user_id, image, createdAt) VALUES (?,?,?)");
-            statement.setString(1, String.valueOf(post.getAuthor().getId())); // почему сетаем стрингу а не инт и просто передаем айди
+            statement.setString(1, String.valueOf(post.getAuthor().getId()));
             statement.setString(2, post.getImage());
             statement.setTimestamp(3, Timestamp.valueOf(post.getCreatedAt()));
             statement.executeUpdate();
