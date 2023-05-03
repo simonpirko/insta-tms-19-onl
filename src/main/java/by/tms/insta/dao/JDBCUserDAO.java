@@ -3,7 +3,6 @@ package by.tms.insta.dao;
 import by.tms.insta.entity.User;
 import by.tms.insta.util.ConnectionJdbc;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +36,9 @@ public class JDBCUserDAO implements UserDAO {
     private JDBCUserDAO() {
 
     }
+
     @Override
-    public void save(User user) throws IOException {
+    public void save(User user) {
         try {
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(INSERT_USER);
             preparedStatement.setString(1, user.getUsername());
@@ -171,6 +171,7 @@ public class JDBCUserDAO implements UserDAO {
             throw new RuntimeException(e);
         }
     }
+
     private User buildUser(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt(1);
         String username = resultSet.getString(2);
@@ -187,6 +188,7 @@ public class JDBCUserDAO implements UserDAO {
                 .setEmail(email)
                 .build();
     }
+
     private User buildFollower(ResultSet resultSet) throws SQLException {
         String name = resultSet.getString(1);
         String username = resultSet.getString(2);

@@ -12,22 +12,22 @@ import java.util.Optional;
 
 public interface UserDAO {
 
-    void save(User user) throws IOException;
+    void save(User user);
 
-    void deleteById(int userId) throws IOException;
+    void deleteById(int userId);
 
-    List<User> findAll() throws IOException;
+    List<User> findAll();
 
-    Optional<User> findByUsername(String username) throws IOException;
+    Optional<User> findByUsername(String username);
 
-    Optional<User> findByUserId(int userId) throws IOException;
+    Optional<User> findByUserId(int userId);
 
-    List<User> extractFollowers(int userId) throws IOException;
+    List<User> extractFollowers(int userId);
 
-    List<User> extractFollowed(int userId) throws IOException;
+    List<User> extractFollowed(int userId);
 
-    void extractCountOfFollowers(int userId) throws IOException;
+    void extractCountOfFollowers(int userId);
 
-    void extractCountOfFollowed(int userId) throws IOException;
+    void extractCountOfFollowed(int userId);
 
 }
