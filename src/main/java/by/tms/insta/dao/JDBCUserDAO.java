@@ -71,21 +71,7 @@ public class JDBCUserDAO implements UserDAO {
             ResultSet resultSet = statement.executeQuery(EXTRACT_ALL_USERS);
             List<User> userList = new ArrayList<>();
             while (resultSet.next()) {
-                int id = resultSet.getInt(1);
-                String username = resultSet.getString(2);
-                String password = resultSet.getString(3);
-                String name = resultSet.getString(4);
-                String photo = resultSet.getString(5);
-                String email = resultSet.getString(6);
-                User user = User.builder()
-                        .setId(id)
-                        .setUsername(username)
-                        .setPassword(password)
-                        .setName(name)
-                        .setAvatar(photo)
-                        .setEmail(email)
-                        .build();
-                userList.add(user);
+                userList.add(buildUser(resultSet));
             }
             return userList;
         } catch (SQLException e) {
@@ -100,21 +86,7 @@ public class JDBCUserDAO implements UserDAO {
             preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                int id = resultSet.getInt(1);
-                String userName = resultSet.getString(2);
-                String password = resultSet.getString(3);
-                String name = resultSet.getString(4);
-                String photo = resultSet.getString(5);
-                String email = resultSet.getString(6);
-                User user = User.builder()
-                        .setId(id)
-                        .setUsername(userName)
-                        .setPassword(password)
-                        .setName(name)
-                        .setAvatar(photo)
-                        .setEmail(email)
-                        .build();
-                return Optional.of(user);
+                return Optional.of(buildUser(resultSet));
             }
             return Optional.empty();
         } catch (SQLException e) {
@@ -127,24 +99,10 @@ public class JDBCUserDAO implements UserDAO {
     public Optional<User> findByUserId(int userId) {
         try {
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_USER_BY_ID);
-            preparedStatement.setLong(1, userId);
+            preparedStatement.setInt(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                int id = resultSet.getInt(1);
-                String username = resultSet.getString(2);
-                String password = resultSet.getString(3);
-                String name = resultSet.getString(4);
-                String photo = resultSet.getString(5);
-                String email = resultSet.getString(6);
-                User user = User.builder()
-                        .setId(id)
-                        .setUsername(username)
-                        .setPassword(password)
-                        .setName(name)
-                        .setAvatar(photo)
-                        .setEmail(email)
-                        .build();
-                return Optional.of(user);
+                return Optional.of(buildUser(resultSet));
             }
             return Optional.empty();
         } catch (SQLException e) {
@@ -157,20 +115,10 @@ public class JDBCUserDAO implements UserDAO {
         try {
             List<User> followersList = new ArrayList<>();
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_USER_FOLLOWERS);
-            preparedStatement.setLong(1, userId);
+            preparedStatement.setInt(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                String name = resultSet.getString(1);
-                String username = resultSet.getString(2);
-                String email = resultSet.getString(3);
-                String photo = resultSet.getString(4);
-                User user = User.builder()
-                        .setName(name)
-                        .setUsername(username)
-                        .setEmail(email)
-                        .setAvatar(photo)
-                        .build();
-                followersList.add(user);
+                followersList.add(buildFollower(resultSet));
             }
             return followersList;
         } catch (SQLException e) {
@@ -183,20 +131,10 @@ public class JDBCUserDAO implements UserDAO {
         try {
             List<User> followedList = new ArrayList<>();
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_USER_FOLLOWED);
-            preparedStatement.setLong(1, userId);
+            preparedStatement.setInt(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                String name = resultSet.getString(1);
-                String username = resultSet.getString(2);
-                String email = resultSet.getString(3);
-                String photo = resultSet.getString(4);
-                User user = User.builder()
-                        .setName(name)
-                        .setUsername(username)
-                        .setEmail(email)
-                        .setAvatar(photo)
-                        .build();
-                followedList.add(user);
+                followedList.add(buildFollower(resultSet));
             }
             return followedList;
         } catch (SQLException e) {
@@ -208,7 +146,7 @@ public class JDBCUserDAO implements UserDAO {
     public void extractCountOfFollowers(int userId) {
         try {
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_COUNT_OF_USERS_FOLLOWERS);
-            preparedStatement.setLong(1, userId);
+            preparedStatement.setInt(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             int count = 0;
             if (resultSet.next()) ;
@@ -223,7 +161,7 @@ public class JDBCUserDAO implements UserDAO {
     public void extractCountOfFollowed(int userId) {
         try {
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_COUNT_OF_USER_FOLLOWED);
-            preparedStatement.setLong(1, userId);
+            preparedStatement.setInt(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             int count = 0;
             if (resultSet.next()) ;
@@ -232,5 +170,33 @@ public class JDBCUserDAO implements UserDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+    private User buildUser(ResultSet resultSet) throws SQLException {
+        int id = resultSet.getInt(1);
+        String username = resultSet.getString(2);
+        String password = resultSet.getString(3);
+        String name = resultSet.getString(4);
+        String photo = resultSet.getString(5);
+        String email = resultSet.getString(6);
+        return User.builder()
+                .setId(id)
+                .setUsername(username)
+                .setPassword(password)
+                .setName(name)
+                .setAvatar(photo)
+                .setEmail(email)
+                .build();
+    }
+    private User buildFollower(ResultSet resultSet) throws SQLException {
+        String name = resultSet.getString(1);
+        String username = resultSet.getString(2);
+        String email = resultSet.getString(3);
+        String photo = resultSet.getString(4);
+        return User.builder()
+                .setName(name)
+                .setUsername(username)
+                .setEmail(email)
+                .setAvatar(photo)
+                .build();
     }
 }
