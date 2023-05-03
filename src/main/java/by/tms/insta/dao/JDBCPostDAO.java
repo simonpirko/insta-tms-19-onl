@@ -3,6 +3,7 @@ package by.tms.insta.dao;
 import by.tms.insta.entity.Comment;
 import by.tms.insta.entity.Post;
 import by.tms.insta.entity.User;
+import by.tms.insta.util.ConnectionJdbc;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -11,17 +12,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JDBCPostDAO implements PostDAO {
-    private Connection connection;
 
-    public JDBCPostDAO(Connection connection) {
-        this.connection = connection;
+    private static JDBCPostDAO instance;
+    private final ConnectionJdbc connectionJdbc = ConnectionJdbc.getInstance();
+
+    private JDBCPostDAO() {
     }
+
+    public JDBCPostDAO getInstance() {
+        if (instance == null) {
+            instance = new JDBCPostDAO();
+        }
+        return instance;
+    }
+
 
     @Override
     public void createPost(Post post) throws IOException {
 
         try {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO posts (user_id, image, createdAt) VALUES (?,?,?)");
+            PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement("INSERT INTO posts (user_id, image, createdAt) VALUES (?,?,?)");
             statement.setString(1, String.valueOf(post.getAuthor().getId()));
             statement.setString(2, post.getImage());
             statement.setTimestamp(3, Timestamp.valueOf(post.getCreatedAt()));
@@ -36,7 +46,7 @@ public class JDBCPostDAO implements PostDAO {
     @Override
     public Post findPostById(int id) throws IOException {
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM posts WHERE id =?");
+            PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement("SELECT * FROM posts WHERE id =?");
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             Post post = null;
@@ -62,7 +72,7 @@ public class JDBCPostDAO implements PostDAO {
 
         try {
 
-            PreparedStatement statement = connection.prepareStatement("UPDATE post SET (user_id, image, createdAt) VALUES (?,?,?) WHERE post_id =?  ");
+            PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement("UPDATE post SET (user_id, image, createdAt) VALUES (?,?,?) WHERE post_id =?  ");
             statement.setLong(1, postId);
             statement.setString(2, post.getImage());
             statement.setTimestamp(3, Timestamp.valueOf(post.getCreatedAt()));
@@ -80,7 +90,7 @@ public class JDBCPostDAO implements PostDAO {
     @Override
     public void deletePost(int id) throws IOException, SQLException {
 
-        PreparedStatement statement = connection.prepareStatement("DELETE FROM posts WHERE id =?");
+        PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement("DELETE FROM posts WHERE id =?");
         statement.setInt(1, id);
         statement.executeUpdate();
 
@@ -90,7 +100,7 @@ public class JDBCPostDAO implements PostDAO {
     public List<Post> getPostsByUser(User user) throws IOException {
         Post post;
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM posts WHERE user_id =?");
+            PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement("SELECT * FROM posts WHERE user_id =?");
             statement.setLong(1, user.getId());
             ResultSet resultSet = statement.executeQuery();
             List<Post> posts = new ArrayList<>();
@@ -115,7 +125,7 @@ public class JDBCPostDAO implements PostDAO {
     public List<Comment> getCommentsByPost(Post post) throws IOException {
 
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM comments WHERE post_id =?");
+            PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement("SELECT * FROM comments WHERE post_id =?");
             statement.setInt(1, (int) post.getId());
             ResultSet resultSet = statement.executeQuery();
             List<Comment> comments = new ArrayList();
