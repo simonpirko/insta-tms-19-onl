@@ -29,11 +29,7 @@ public class CommentService {
     }
 
     public void save(Comment comment) {
-        try {
-            jdbcCommentDAO.save(comment);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        jdbcCommentDAO.save(comment);
     }
 
     public void deleteById(int commentId) {
@@ -44,7 +40,7 @@ public class CommentService {
         jdbcCommentDAO.updateMessageById(commentId, message);
     }
 
-    public Optional<List<Comment>> findByPostId(int postId, int  paginationOffset) {
+    public List<Comment> findByPostId(int postId, int  paginationOffset) {
         return jdbcCommentDAO.findByPostId(postId, paginationOffset);
     }
 }

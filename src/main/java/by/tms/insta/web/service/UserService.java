@@ -1,11 +1,15 @@
 package by.tms.insta.web.service;
 
+import by.tms.insta.dao.JDBCUserDAO;
+import by.tms.insta.entity.User;
+
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
 
 public class UserService {
         private static UserService instance;
-        private final UserStorage storage = JdbcUserStorage.getInstance();
+        private final JDBCUserDAO storage = JDBCUserDAO.getInstance();
         private UserService() throws SQLException {
 
         }
@@ -16,7 +20,7 @@ public class UserService {
             return instance;
         }
 
-    public void save(User user) {
+    public void save(User user) throws IOException {
         storage.save(user);
     }
 
@@ -25,6 +29,7 @@ public class UserService {
     }
 
     public boolean checkUsername(String username) {
-        return storage.checkUsername(username);
+        Optional<User> optional = storage.findByUsername(username);
+        return optional.isPresent();
     }
 }
