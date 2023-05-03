@@ -1,5 +1,7 @@
 package by.tms.insta.service;
 
+import by.tms.insta.dao.CommentDAO;
+import by.tms.insta.dao.JDBCCommentDAO;
 import by.tms.insta.entity.Comment;
 
 import javax.imageio.IIOException;
@@ -13,7 +15,7 @@ import java.util.Optional;
 public class CommentService {
     private static CommentService instance;
 
-    private final CommentDAO JDBCCommentDAO = JDBCCommentDAO.getInstance();
+    private final CommentDAO jdbcCommentDAO = JDBCCommentDAO.getInstance();
 
     public static CommentService getInstance() {
         if (instance == null) {
@@ -28,21 +30,21 @@ public class CommentService {
 
     public void save(Comment comment) {
         try {
-            JDBCCommentDAO.save(comment);
+            jdbcCommentDAO.save(comment);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void deleteById(int comment_id) {
-        JDBCCommentDAO.deleteById(comment_id);
+    public void deleteById(int commentId) {
+        jdbcCommentDAO.deleteById(commentId);
     }
 
-    public void updateMessageById(int comment_id, String message) {
-        JDBCCommentDAO.updateMessageById(comment_id, message);
+    public void updateMessageById(int commentId, String message) {
+        jdbcCommentDAO.updateMessageById(commentId, message);
     }
 
-    public Optional<List<Comment>> findByPostId(int post_id, int  paginationOffset) {
-        return JDBCCommentDAO.findByPostId(post_id, paginationOffset);
+    public Optional<List<Comment>> findByPostId(int postId, int  paginationOffset) {
+        return jdbcCommentDAO.findByPostId(postId, paginationOffset);
     }
 }

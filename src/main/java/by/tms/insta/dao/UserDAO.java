@@ -14,20 +14,20 @@ public interface UserDAO {
 
     void save(User user) throws IOException;
 
-    void deleteById(int user_id) throws IOException;
+    void deleteById(int userId) throws IOException;
 
     List<User> findAll() throws IOException;
 
     Optional<User> findByUsername(String username) throws IOException;
 
-    Optional<User> findByUserId(int user_id) throws IOException;
+    Optional<User> findByUserId(int userId) throws IOException;
 
-    List<User> extractFollowers(int user_id) throws IOException;
+    List<User> extractFollowers(int userId) throws IOException;
 
-    List<User> extractFollowed(int user_id) throws IOException;
+    List<User> extractFollowed(int userId) throws IOException;
 
-    void extractCountOfFollowers(int user_id) throws IOException;
+    void extractCountOfFollowers(int userId) throws IOException;
 
-    void extractCountOfFollowed(int user_id) throws IOException;
+    void extractCountOfFollowed(int userId) throws IOException;
 
 }

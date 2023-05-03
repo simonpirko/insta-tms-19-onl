@@ -10,7 +10,7 @@ import java.util.Optional;
 public class UserService {
     private static UserService instance;
 
-    private final JDBCUserDAO JDBCUserDAO = by.tms.insta.dao.JDBCUserDAO.getInstance();
+    private final JDBCUserDAO jdbcUserDAO = by.tms.insta.dao.JDBCUserDAO.getInstance();
 
     public static UserService getInstance() {
         if (instance == null) {
@@ -25,41 +25,41 @@ public class UserService {
 
     public void save(User user) {
         try {
-            JDBCUserDAO.save(user);
+            jdbcUserDAO.save(user);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void deleteById(int user_id) {
-        JDBCUserDAO.deleteById(user_id);
+    public void deleteById(int userId) {
+        jdbcUserDAO.deleteById(userId);
     }
 
     public List<User> findAll() {
-        return JDBCUserDAO.findAll();
+        return jdbcUserDAO.findAll();
     }
 
     public Optional<User> findByUsername(String username) {
-        return JDBCUserDAO.findByUsername(username);
+        return jdbcUserDAO.findByUsername(username);
     }
 
-    public Optional<User> findByUserId(int user_id) {
-        return JDBCUserDAO.findByUserId(user_id);
+    public Optional<User> findByUserId(int userId) {
+        return jdbcUserDAO.findByUserId(userId);
     }
 
-    public List<User> extractFollowers(int user_id) {
-        return JDBCUserDAO.extractFollowers(user_id);
+    public List<User> extractFollowers(int userId) {
+        return jdbcUserDAO.extractFollowers(userId);
     }
 
-    public List<User> extractFollowed(int user_id) {
-        return JDBCUserDAO.extractFollowed(user_id);
+    public List<User> extractFollowed(int userId) {
+        return jdbcUserDAO.extractFollowed(userId);
     }
 
-    public void extractCountOfFollowers(int user_id) {
-        JDBCUserDAO.extractCountOfFollowers(user_id);
+    public void extractCountOfFollowers(int userId) {
+        jdbcUserDAO.extractCountOfFollowers(userId);
     }
 
-    public void extractCountOfFollowed(int user_id) {
-        JDBCUserDAO.extractCountOfFollowed(user_id);
+    public void extractCountOfFollowed(int userId) {
+        jdbcUserDAO.extractCountOfFollowed(userId);
     }
 }

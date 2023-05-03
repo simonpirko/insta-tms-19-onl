@@ -1,6 +1,7 @@
 package by.tms.insta.dao;
 
 import by.tms.insta.entity.User;
+import by.tms.insta.util.ConnectionJdbc;
 
 import java.io.IOException;
 import java.sql.*;
@@ -52,10 +53,10 @@ public class JDBCUserDAO implements UserDAO {
     }
 
     @Override
-    public void deleteById(int user_id) {
+    public void deleteById(int userId) {
         try {
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(DELETE_USER);
-            preparedStatement.setInt(1, user_id);
+            preparedStatement.setInt(1, userId);
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -123,10 +124,10 @@ public class JDBCUserDAO implements UserDAO {
     }
 
     @Override
-    public Optional<User> findByUserId(int user_id) {
+    public Optional<User> findByUserId(int userId) {
         try {
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_USER_BY_ID);
-            preparedStatement.setLong(1, user_id);
+            preparedStatement.setLong(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 int id = resultSet.getInt(1);
@@ -152,11 +153,11 @@ public class JDBCUserDAO implements UserDAO {
     }
 
     @Override
-    public List<User> extractFollowers(int user_id) {
+    public List<User> extractFollowers(int userId) {
         try {
             List<User> followersList = new ArrayList<>();
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_USER_FOLLOWERS);
-            preparedStatement.setLong(1, user_id);
+            preparedStatement.setLong(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 String name = resultSet.getString(1);
@@ -178,11 +179,11 @@ public class JDBCUserDAO implements UserDAO {
     }
 
     @Override
-    public List<User> extractFollowed(int user_id) {
+    public List<User> extractFollowed(int userId) {
         try {
             List<User> followedList = new ArrayList<>();
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_USER_FOLLOWED);
-            preparedStatement.setLong(1, user_id);
+            preparedStatement.setLong(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 String name = resultSet.getString(1);
@@ -204,10 +205,10 @@ public class JDBCUserDAO implements UserDAO {
     }
 
     @Override
-    public void extractCountOfFollowers(int user_id) {
+    public void extractCountOfFollowers(int userId) {
         try {
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_COUNT_OF_USERS_FOLLOWERS);
-            preparedStatement.setLong(1, user_id);
+            preparedStatement.setLong(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             int count = 0;
             if (resultSet.next()) ;
@@ -219,10 +220,10 @@ public class JDBCUserDAO implements UserDAO {
     }
 
     @Override
-    public void extractCountOfFollowed(int user_id) {
+    public void extractCountOfFollowed(int userId) {
         try {
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_COUNT_OF_USER_FOLLOWED);
-            preparedStatement.setLong(1, user_id);
+            preparedStatement.setLong(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             int count = 0;
             if (resultSet.next()) ;
