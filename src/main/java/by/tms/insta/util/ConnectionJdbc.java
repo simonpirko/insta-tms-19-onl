@@ -20,7 +20,6 @@ public class ConnectionJdbc {
     public Connection getPostgresConnection(){
         try {
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "postgres");
-            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             return connection;
         } catch (SQLException e) {
             throw new RuntimeException(e);
