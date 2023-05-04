@@ -10,7 +10,7 @@ import java.util.Optional;
 public class UserService {
     private static UserService instance;
 
-    private final JDBCUserDAO jdbcUserDAO = by.tms.insta.dao.JDBCUserDAO.getInstance();
+    private final JDBCUserDAO jdbcUserDAO = JDBCUserDAO.getInstance();
 
     public static UserService getInstance() {
         if (instance == null) {
@@ -39,6 +39,11 @@ public class UserService {
 
     public Optional<User> findByUsername(String username) {
         return jdbcUserDAO.findByUsername(username);
+    }
+
+    public boolean checkUsername(String username) {
+        Optional<User> optional = jdbcUserDAO.findByUsername(username);
+        return optional.isPresent();
     }
 
     public Optional<User> findByUserId(int userId) {
