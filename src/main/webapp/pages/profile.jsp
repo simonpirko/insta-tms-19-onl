@@ -12,7 +12,7 @@
     <title>User</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <%--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">--%>
     <%--    <link rel="stylesheet" href="valid.css">--%>
 </head>
 <body>
@@ -22,7 +22,7 @@
     <div class="row">
         <div class="col-md d-flex align-items-center justify-content-center">
             <img src="${requestScope.user.avatar}"
-                 class="img-circle border border-dark" width="150" height="150">
+                 class="rounded-circle border border-dark" width="150" height="150">
         </div>
         <div class="col-md text-md-start">
             <h3>${requestScope.user.name}</h3>
