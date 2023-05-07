@@ -10,16 +10,16 @@ import java.util.List;
 
 public interface PostDAO {
 
-    void createPost(Post post) throws IOException;
+    void createPost(Post post);
 
-    Post findPostById (int id) throws IOException;
+    Post findPostById (int id);
 
-    void updatePost(Post post, int postId) throws IOException;
+    void updatePost(Post post, int postId);
 
-    void deletePost(int id) throws IOException, SQLException;
+    void deletePost(int id);
 
-    List<Post> getPostsByUser(User user) throws IOException;
+    List<Post> getPostsByUser(User user);
 
-    List<Comment> getCommentsByPost(Post post ) throws IOException;
+    List<Comment> getCommentsByPost(Post post);
 
 }

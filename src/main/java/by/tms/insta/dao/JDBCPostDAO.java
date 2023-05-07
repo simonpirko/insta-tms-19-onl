@@ -19,7 +19,7 @@ public class JDBCPostDAO implements PostDAO {
     private JDBCPostDAO() {
     }
 
-    public JDBCPostDAO getInstance() {
+    public static JDBCPostDAO getInstance() {
         if (instance == null) {
             instance = new JDBCPostDAO();
         }
@@ -28,7 +28,7 @@ public class JDBCPostDAO implements PostDAO {
 
 
     @Override
-    public void createPost(Post post) throws IOException {
+    public void createPost(Post post) {
 
         try {
             PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement("INSERT INTO posts (user_id, image, createdAt) VALUES (?,?,?)");
@@ -38,13 +38,13 @@ public class JDBCPostDAO implements PostDAO {
             statement.executeUpdate();
 
         } catch (Exception e) {
-            throw new RemoteException();
+            throw new RuntimeException();
         }
 
     }
 
     @Override
-    public Post findPostById(int id) throws IOException {
+    public Post findPostById(int id) {
         try {
             PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement("SELECT * FROM posts WHERE id =?");
             statement.setInt(1, id);
@@ -60,16 +60,14 @@ public class JDBCPostDAO implements PostDAO {
             }
             return post;
         } catch (SQLException e) {
-            throw new RemoteException();
+            throw new RuntimeException();
         }
 
 
     }
 
     @Override
-    public void updatePost(Post post, int postId) throws IOException {
-
-
+    public void updatePost(Post post, int postId) {
         try {
 
             PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement("UPDATE post SET (user_id, image, createdAt) VALUES (?,?,?) WHERE post_id =?  ");
@@ -81,23 +79,25 @@ public class JDBCPostDAO implements PostDAO {
 
 
         } catch (SQLException e) {
-            throw new IOException(e);
+            throw new RuntimeException(e);
         }
 
     }
 
 
     @Override
-    public void deletePost(int id) throws IOException, SQLException {
-
-        PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement("DELETE FROM posts WHERE id =?");
-        statement.setInt(1, id);
-        statement.executeUpdate();
-
+    public void deletePost(int id) {
+        try {
+            PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement("DELETE FROM posts WHERE id =?");
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public List<Post> getPostsByUser(User user) throws IOException {
+    public List<Post> getPostsByUser(User user) {
         Post post;
         try {
             PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement("SELECT * FROM posts WHERE user_id =?");
@@ -122,7 +122,7 @@ public class JDBCPostDAO implements PostDAO {
     }
 
     @Override
-    public List<Comment> getCommentsByPost(Post post) throws IOException {
+    public List<Comment> getCommentsByPost(Post post) {
 
         try {
             PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement("SELECT * FROM comments WHERE post_id =?");
@@ -144,10 +144,7 @@ public class JDBCPostDAO implements PostDAO {
             }
             return comments;
         } catch (SQLException e) {
-            throw new IOException(e);
-
+            throw new RuntimeException(e);
         }
-
-
     }
 }

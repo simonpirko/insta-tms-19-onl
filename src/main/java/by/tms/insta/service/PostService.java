@@ -1,9 +1,10 @@
 package by.tms.insta.service;
 
+import by.tms.insta.dao.JDBCPostDAO;
+import by.tms.insta.dao.PostDAO;
 import by.tms.insta.entity.Comment;
 import by.tms.insta.entity.Post;
 import by.tms.insta.entity.User;
-
 
 import java.util.List;
 
@@ -11,6 +12,8 @@ import java.util.List;
  * @author Denis Smirnov on 03.05.2023
  */
 public class PostService {
+
+    private static PostService instance;
 
     private final PostDAO jdbcPostDAO = JDBCPostDAO.getInstance();
 
