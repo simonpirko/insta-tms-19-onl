@@ -13,6 +13,8 @@
           integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
 </head>
 <body>
+<jsp:include page="header.jsp"/>
+
 <div class="container h-100">
     <div class="row h-100 justify-content-center align-items-center">
         <div class="card">
