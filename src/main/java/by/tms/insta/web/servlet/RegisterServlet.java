@@ -1,16 +1,25 @@
 package by.tms.insta.web.servlet;
 
 
+import by.tms.insta.entity.User;
+import by.tms.insta.service.UserService;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
+
+/**
+ * @author Denis Smirnov on 01.05.2023
+ */
 
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
 
+    private final UserService userService = UserService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -19,20 +28,29 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String name = req.getParameter("name");
         String username = req.getParameter("username");
-        String email = req.getParameter("email");
         String password = req.getParameter("password");
-//        if (service.checkEmail(email)) {
-//            req.setAttribute("emailUsed", "this email already in used");
-//            req.getRequestDispatcher("/pages/reg.jsp").forward(req, resp);
-//        } else if (service.checkUsername(username)){
-//            req.setAttribute("usernameUsed", "this username already in used");
-//            req.getRequestDispatcher("/pages/reg.jsp").forward(req, resp);
-//        } else {
-//            User user = new User(name, username, email, password);
-//            service.save(user);
-//            resp.sendRedirect("/");
-//        }
+        String name = req.getParameter("name");
+        String email = req.getParameter("email");
+        String avatar = req.getParameter("avatar");
+
+        Optional<User> byUsername = userService.findByUsername(username);
+        if (byUsername.isEmpty()) {
+            User user = User.builder()
+                    .setUsername(username)
+                    .setPassword(password)
+                    .setName(name)
+                    .setEmail(email)
+                    .setAvatar(avatar)
+                    .build();
+            userService.save(user);
+            resp.sendRedirect("/");
+        } else {
+            req.setAttribute("message", "User with this UserName already exists! Please, try with another name!");
+            getServletContext().getRequestDispatcher("/pages/register.jsp").forward(req, resp);
+
+        }
+
+
     }
 }
