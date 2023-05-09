@@ -38,6 +38,11 @@
                     <input name="newEmail" type="text" class="form-control" id="newEmail"><br>
                     <label for="newImage" class="form-label">New profile's image:</label>
                     <input name="newImage" type="text" class="form-control" id="newImage"><br>
+                    <p>Change password:</p>
+                    <label for="newPassword" class="form-label">New password:</label>
+                    <input name="newPassword" type="password" class="form-control" id="newPassword"><br>
+                    <label for="repeatNewPassword" class="form-label">Repeat new password:</label>
+                    <input name="repeatNewPassword" type="password" class="form-control" id="repeatNewPassword"><br>
 
                     <button type="submit" formaction="/editpost" class="btn btn-primary">Edit</button>
                     <button type="submit" formaction="/delitpost" class="btn btn-danger">Delete</button>
