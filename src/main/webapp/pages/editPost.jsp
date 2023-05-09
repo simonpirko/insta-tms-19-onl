@@ -15,9 +15,12 @@
 <body>
 <jsp:include page="header.jsp"/>
 
-<div class="container h-100">
+<div class="container h-100 mt-3">
     <div class="row h-100 justify-content-center align-items-center">
         <div class="card">
+            <div class="d-flex justify-content-end">
+                <a href="#">[x]close</a>
+            </div>
             <br>
             <img class="card-img-top" src="${requestScope.post.image}" alt="Card image cap">
             <div class="card-body">
