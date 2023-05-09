@@ -1,8 +1,10 @@
 package by.tms.insta.web.servlet;
 
 import by.tms.insta.dto.UserDto;
+import by.tms.insta.entity.Post;
 import by.tms.insta.entity.User;
 import by.tms.insta.mapper.UserMapper;
+import by.tms.insta.service.PostService;
 import by.tms.insta.service.UserService;
 
 import javax.servlet.ServletException;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -41,6 +44,9 @@ public class ViewProfileServlet extends HttpServlet {
 
             //TODO
             //Need to add post extraction and pagination
+            PostService postService = PostService.getInstance();
+            List<Post> posts = postService.getPostsByUser(account.get());
+            req.setAttribute("posts", posts);
 
             getServletContext().getRequestDispatcher("/pages/profile.jsp").forward(req, resp);
         } else {
