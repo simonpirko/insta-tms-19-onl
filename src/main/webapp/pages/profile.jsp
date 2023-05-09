@@ -21,14 +21,14 @@
 <div class="container-fluid bg-3 text-center border-bottom">
     <div class="row">
         <div class="col-md d-flex align-items-center justify-content-center">
-            <img src="${requestScope.user.avatar}"
+            <img src="${requestScope.account.avatar}"
                  class="rounded-circle border border-dark" width="150" height="150">
         </div>
         <div class="col-md text-md-start">
-            <h3>${requestScope.user.name}</h3>
-            <h4>@${requestScope.user.username}</h4>
+            <h3>${requestScope.account.name}</h3>
+            <h4>@${requestScope.account.username}</h4>
 
-            <c:if test="${sessionScope.user.id == requestScope.user.id}">
+            <c:if test="${sessionScope.user.username == requestScope.account.username}">
                 <div class="alert alert-danger" role="alert">
                     <a href="#" class="btn btn-secondary active" role="button" aria-pressed="true">Edit</a>
                 </div>
