@@ -72,16 +72,18 @@
                         </ul>
                     </div>
                     <div class="container">
-                        <c:if test="${offset != 0}">
-                            <form action="/calchistory" method="post">
-                                <button name="DAOPagination" type="submit" value="${DAOPagination-5}">&laquo;</button>
-                            </form>
-                        </c:if>
-                        <c:if test="${size == 5}">
-                            <form action="/calchistory" method="post">
-                                <button name="DAOPagination" type="submit" value="${DAOPagination+5}">&raquo;</button>
-                            </form>
-                        </c:if>
+                        <div class="row justify-content-center">
+                            <c:if test="${offset != 0}">
+                                <form action="/calchistory" method="post">
+                                    <button name="DAOPagination" type="submit" value="${DAOPagination-5}">&laquo;</button>
+                                </form>
+                            </c:if>
+                            <c:if test="${size == 5}">
+                                <form action="/calchistory" method="post">
+                                    <button name="DAOPagination" type="submit" value="${DAOPagination+5}">&raquo;</button>
+                                </form>
+                            </c:if>
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer" style="height: 70px">
