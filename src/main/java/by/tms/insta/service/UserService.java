@@ -23,11 +23,7 @@ public class UserService {
 
     }
 
-    public void save(User user) {
-
-        jdbcUserDAO.save(user);
-
-    }
+    public void save(User user) { jdbcUserDAO.save(user); }
 
     public void deleteById(int userId) {
         jdbcUserDAO.deleteById(userId);
@@ -58,11 +54,15 @@ public class UserService {
         return jdbcUserDAO.extractFollowed(userId);
     }
 
-    public void extractCountOfFollowers(int userId) {
-        jdbcUserDAO.extractCountOfFollowers(userId);
+    public int extractCountOfFollowers(int userId) {
+        return jdbcUserDAO.extractCountOfFollowers(userId);
     }
 
-    public void extractCountOfFollowed(int userId) {
-        jdbcUserDAO.extractCountOfFollowed(userId);
+    public int extractCountOfFollowed(int userId) {
+        return jdbcUserDAO.extractCountOfFollowed(userId);
     }
+
+    public void follow (int parentId, int childId) {jdbcUserDAO.follow(parentId, childId);}
+
+    public void unFollow (int parentId, int childId) {jdbcUserDAO.unfollow(parentId, childId);}
 }
