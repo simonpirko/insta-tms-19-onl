@@ -72,24 +72,16 @@
                         </ul>
                     </div>
                     <div class="container">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item">
-                                <button type="button" aria-label="Previous">
-                                    <span aria-hidden="true">
-                                        &laquo;
-                                    </span>
-                                    <c:set var="${DAOPagination}" value="${DAOPagination-5}"/>
-                                </button>
-                            </li>
-                            <li class="page-item">
-                                <button type="button" aria-label="Next">
-                                    <span aria-hidden="true">
-                                        &raquo;
-                                    </span>
-                                    <c:set var="${DAOPagination}" value="${DAOPagination+5}"/>
-                                </button>
-                            </li>
-                        </ul>
+                        <c:if test="${offset != 0}">
+                            <form action="/calchistory" method="post">
+                                <button name="DAOPagination" type="submit" value="${DAOPagination-5}">&laquo;</button>
+                            </form>
+                        </c:if>
+                        <c:if test="${size == 5}">
+                            <form action="/calchistory" method="post">
+                                <button name="DAOPagination" type="submit" value="${DAOPagination+5}">&raquo;</button>
+                            </form>
+                        </c:if>
                     </div>
                 </div>
                 <div class="card-footer" style="height: 70px">
