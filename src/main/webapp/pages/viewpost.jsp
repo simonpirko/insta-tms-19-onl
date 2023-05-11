@@ -21,24 +21,43 @@
     <div class="card mb-3 rounded-0">
         <div class="row g-0" style="height: 800px; background-color: black">
             <div class="col-sm-7 align-self-center" style="text-align: center">
-                <img src="${postPhoto}"
-                     class="img-fluid" style="max-height: 800px" alt="...">
+                <img src="${requestScope.post.image}"
+                     class="img-fluid" style="max-height: 800px" alt="post image">
             </div>
             <div class="col-sm-5" style="background-color: white">
                 <div class="card-header" style="height: 80px">
                     <div class="row g-0">
-                        <div class="col-sm-8 text-start">
-                            <p>
-                                ${postAuthorAvatar} ${postAuthorUsername}
-                            </p>
-                            <fmt:parseDate value="${createdPostAt}" var="parsedPostTime" pattern="yyyy-MM-dd'T'HH:mm"
+                        <div class="col-sm-6 text-start">
+                            <div>
+                                <a href="profile.jsp">
+                                    <img class="img-fluid rounded-5" src="${requestScope.post.author.avatar}"
+                                         style="padding: unset; height: 24px; width: 24px" alt="profile image">
+                                    <c:set var="ProfileUser" scope="request" value="${requestScope.post.author}"/>
+                                </a>
+                                <a href="profile.jsp"
+                                   style="text-decoration: none; color: black; text-align: end">
+                                    ${requestScope.post.author.username}
+                                    <c:set var="ProfileUser" scope="request" value="${requestScope.post.author}"/>
+                                </a>
+                            </div>
+                            <fmt:parseDate value="${requestScope.post.createdAt}" var="parsedPostTime"
+                                           pattern="yyyy-MM-dd'T'HH:mm"
                                            type="date"/>
                             <fmt:formatDate value="${parsedPostTime}" pattern="dd.MM.yyyy HH:mm"
                                             var="formattedPostTime"/>
                             <small class="text-body-secondary">${formattedTime}</small>
                         </div>
+                        <div class="col-sm-2 align-self-center text-center">
+                            <c:if test="${sessionScope.user == requestScope.post.author}">
+                                <a href="editPost.jsp" class="border-0 align-self-center justify-content-end"
+                                   style="text-decoration: none">
+                                    edit post
+                                    <c:set var="post" scope="request" value="${requestScope.post}"/>
+                                </a>
+                            </c:if>
+                        </div>
                         <div class="col-sm-3 align-self-center text-end">
-                            ${likes}
+                            ${requestScope.likes}
                         </div>
                         <form action="" method="post" class="col-sm-1 align-self-center text-center">
                             <button type="submit" class="btn border-0"
@@ -46,7 +65,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                                      class="bi bi-heart-fill object-fit-cover" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd"
-                                          d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                                          d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"></path>
                                 </svg>
                             </button>
                         </form>
@@ -54,40 +73,72 @@
                 </div>
                 <div class="card-body" style="height: 650px">
                     <p class="card-text overflow-y-scroll" style="height: 200px">
-                        ${postDescription}
+                        ${requestScope.post.description}
                     </p>
                     <div class="container-sm-5 border-top overflow-y-scroll" style="height: 380px; border-color: black">
                         <ul>
-                            <c:forEach items="postComments" var="postComment">
-                                <fmt:parseDate value="${postComment.createdAt}" var="parsedCommentTime"
+                            <c:forEach items="${commentList}" var="comment" end="4">
+                                <fmt:parseDate value="${comment.createdAt}" var="parsedCommentTime"
                                                pattern="yyyy-MM-dd'T'HH:mm"
                                                type="date"/>
                                 <fmt:formatDate value="${parsedCommentTime}" pattern="dd.MM.yyyy HH:mm"
                                                 var="formattedCommentTime"/>
                                 <li>
-                                    <c:out value="${postComment.author.avatar} ${postComment.author.username} ${formattedCommentTime}"/>
-                                    <c:out value="${postComment.message}"/>
+                                    <div class="container border-bottom mt-2">
+                                        <div class="row">
+                                            <div class="col-sm-8 align-self-center">
+                                                <a href="profile.jsp"><img class="img-fluid rounded-5"
+                                                                           src="${comment.author.avatar}"
+                                                                           style="padding: unset; height: 24px; width: 24px"
+                                                                           alt="comment user avatar">
+                                                    <c:set var="ProfileUser" value="${comment.author}"/>
+                                                </a>
+                                                <a href="profile.jsp" style="text-decoration: none; color: black">
+                                                        ${comment.author.nickname}
+                                                            <c:set var="ProfileUser" value="${comment.author}"/>
+                                                </a>
+                                            </div>
+                                            <div class="col-sm-4 text-end">
+                                                <c:if test="${sessionScope.user == comment.author}">
+                                                <a href="a.html" class="border-0 align-self-center"
+                                                   style="text-decoration: none">
+                                                    edit
+                                                </a>
+                                                </c:if>
+                                            </div>
+                                        </div>
+                                        <small>
+                                                ${comment.message}
+                                        </small>
+                                        <div>
+                                            <small class="text-body-secondary align-self-end">
+                                                    ${formattedCommentTime}
+                                            </small>
+                                        </div>
+                                    </div>
                                 </li>
                             </c:forEach>
                         </ul>
                     </div>
                     <div class="container">
                         <div class="row justify-content-center">
-                            <c:if test="${offset != 0}">
-                                <form action="/calchistory" method="post">
-                                    <button name="DAOPagination" type="submit" value="${DAOPagination-5}">&laquo;</button>
+                            <c:if test="${paginationOffset != 0}">
+                                <form action="/viewpost" method="post">
+                                    <button name="DAOPagination" type="submit" value="${paginationOffset-5}">&laquo;
+                                    </button>
                                 </form>
                             </c:if>
-                            <c:if test="${size == 5}">
-                                <form action="/calchistory" method="post">
-                                    <button name="DAOPagination" type="submit" value="${DAOPagination+5}">&raquo;</button>
+                            <c:if test="${listSize == 6}">
+                                <form action="/viewpost" method="post">
+                                    <button name="DAOPagination" type="submit" value="${paginationOffset+5}">&raquo;
+                                    </button>
                                 </form>
                             </c:if>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer" style="height: 70px">
-                    <form action="" method="post" class="row g-2">
+                    <form action="/createcomment" method="post" class="row g-2">
                         <div class="col-sm-11 align-self-center">
                             <input type="text" class="form-control" placeholder="create comment"
                                    aria-label="create comment" style="height: 50px;">
@@ -97,7 +148,7 @@
                                     style="padding: unset; --bs-btn-hover-color: blue; transition: 0.3s">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor"
                                      class="bi bi-arrow-up-right-square-fill" viewBox="0 0 16 16" size="cover">
-                                    <path d="M14 0a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12zM5.904 10.803 10 6.707v2.768a.5.5 0 0 0 1 0V5.5a.5.5 0 0 0-.5-.5H6.525a.5.5 0 1 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 .707.707z"/>
+                                    <path d="M14 0a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12zM5.904 10.803 10 6.707v2.768a.5.5 0 0 0 1 0V5.5a.5.5 0 0 0-.5-.5H6.525a.5.5 0 1 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 .707.707z"></path>
                                 </svg>
                             </button>
                         </div>
