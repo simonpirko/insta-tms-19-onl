@@ -26,8 +26,12 @@ public interface UserDAO {
 
     List<User> extractFollowed(int userId);
 
-    void extractCountOfFollowers(int userId);
+    int extractCountOfFollowers(int userId);
 
-    void extractCountOfFollowed(int userId);
+    int extractCountOfFollowed(int userId);
+
+    void follow(int parentId, int childId);
+
+    void unfollow(int parentId, int childId);
 
 }
