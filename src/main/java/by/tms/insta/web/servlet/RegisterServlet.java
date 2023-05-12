@@ -18,11 +18,11 @@ import java.util.Optional;
 
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
-    private final String USERNAME = "username";
-    private final String PASSWORD = "password";
-    private final String NAME = "name";
-    private final String EMAIL = "email";
-    private final String AVATAR = "avatar";
+    private final static String USERNAME = "username";
+    private final static String PASSWORD = "password";
+    private final static String NAME = "name";
+    private final static String EMAIL = "email";
+    private final static String AVATAR = "avatar";
 
     private final UserService userService = UserService.getInstance();
 

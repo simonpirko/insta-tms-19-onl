@@ -21,9 +21,9 @@ import java.util.Optional;
 @WebServlet("/login")
 public class LogInServlet extends HttpServlet {
 
-    private final String USERNAME = "username";
-    private final String PASSWORD = "password";
-    private final UserService userService = UserService.getInstance();
+    private final static String USERNAME = "username";
+    private final static String PASSWORD = "password";
+    private final static UserService userService = UserService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
