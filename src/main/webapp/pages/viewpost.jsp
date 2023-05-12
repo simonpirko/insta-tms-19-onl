@@ -60,7 +60,7 @@
                             ${requestScope.likes}
                         </div>
                         <form action="/like" method="post" class="col-sm-1 align-self-center text-center">
-                            <c:if test="${sessionScope.user.like == requestScope.post.like == 0}">
+                            <c:if test="${sessionScope.user.userId != requestScope.post.like.userId}">
                                 <button type="submit" name="like" value="1" class="btn border-0"
                                         style="padding: unset; --bs-btn-hover-color: red; transition: 0.3s">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -70,7 +70,7 @@
                                     </svg>
                                 </button>
                             </c:if>
-                            <c:if test="${sessionScope.user.like == requestScope.post.like == 1}">
+                            <c:if test="${sessionScope.user.userId == requestScope.post.like.userId}">
                                 <button type="submit" name="like" value="0" class="btn border-0"
                                         style="padding: unset; --bs-btn-hover-color: black; transition: 0.3s">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -112,7 +112,7 @@
                                             </div>
                                             <div class="col-sm-4 text-end">
                                                 <c:if test="${sessionScope.user == comment.author}">
-                                                    <a href="a.html" class="border-0 align-self-center"
+                                                    <a href="editcomment.jsp" class="border-0 align-self-center"
                                                        style="text-decoration: none">
                                                         edit
                                                     </a>
