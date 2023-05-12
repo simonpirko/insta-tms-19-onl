@@ -28,8 +28,8 @@
         <p class="fs-6">    </p>
 
         <div class="mb-3">
-          <label for="Username" class="form-label">Username</label>
-          <input name="username" type="text" class="form-control" id="Username" required pattern="\w*">
+          <label for="user" class="form-label">Username</label>
+          <input name="username" type="text" class="form-control" id="user" required pattern="\w*">
           <c:if test="${usernameUsed != null}">
             <div class="alert alert-danger" role="alert">
                 ${usernameUsed}

@@ -21,8 +21,8 @@
         <form class="mt-3 needs-validation" action="/register" method="post">
             <div class="row mb-3">
                 <div class="col">
-                    <label for="Firstname" class="form-label">Full name</label>
-                    <input name="firstName" type="text" class="form-control" id="Firstname" required pattern="(^[A-Za-z]{3,16})([ ]{0,1})([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})">
+                    <label for="name" class="form-label">Full name</label>
+                    <input name="name" type="text" class="form-control" id="name" required pattern="(^[A-Za-z]{3,16})([ ]{0,1})([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})">
                 </div>
             </div>
             <div class="mb-3">

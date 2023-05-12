@@ -14,15 +14,21 @@ import java.util.Optional;
 public class JDBCUserDAO implements UserDAO {
 
     private final ConnectionJdbc connectionJdbc = ConnectionJdbc.getInstance();
-    private static final String INSERT_USER = "insert into users(username, password, name, photo, email) values (?, ?, ?, ?, ?)";
+    private static final String INSERT_USER = "insert into users(username, password, name, photo, email) " +
+            "values (?, ?, ?, ?, ?)";
     private static final String DELETE_USER = "delete from users where user_id = ?";
     private static final String EXTRACT_ALL_USERS = "select * from users";
     private static final String EXTRACT_CURRENT_USER = "select * from users where username = ?";
     private static final String EXTRACT_USER_BY_ID = "select * from users where user_id = ?";
-    private static final String EXTRACT_USER_FOLLOWERS = "select u.name, u.username, u.email, u.photo from followers f join users u on f.child_id = u.user_id where f.parent_id = ?";
-    private static final String EXTRACT_USER_FOLLOWED = "select u.name, u.username, u.email, u.photo from followers f join users u on f.parent_id = u.user_id where f.child_id = ?";
+    private static final String EXTRACT_USER_FOLLOWERS = "select u.name, u.username, u.email, u.photo from " +
+            "followers f join users u on f.child_id = u.user_id where f.parent_id = ?";
+    private static final String EXTRACT_USER_FOLLOWED = "select u.name, u.username, u.email, u.photo from " +
+            "followers f join users u on f.parent_id = u.user_id where f.child_id = ?";
     private static final String EXTRACT_COUNT_OF_USERS_FOLLOWERS = "select count (*) from followers where parent_id = ? ";
     private static final String EXTRACT_COUNT_OF_USER_FOLLOWED = "select count (*) from followers where child_id = ?";
+
+    private static final String FOLLOW_ON_USER = "insert into followers (parent_id, child_id) values (?, ?)";
+    private static final String UNFOLLOW_FROM_USER = "delete from followers where parent_id = ? and child_id = ?";
 
     private static JDBCUserDAO instance;
 
@@ -143,7 +149,7 @@ public class JDBCUserDAO implements UserDAO {
     }
 
     @Override
-    public void extractCountOfFollowers(int userId) {
+    public int extractCountOfFollowers(int userId) {
         try {
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_COUNT_OF_USERS_FOLLOWERS);
             preparedStatement.setInt(1, userId);
@@ -151,14 +157,14 @@ public class JDBCUserDAO implements UserDAO {
             int count = 0;
             if (resultSet.next()) ;
             count = resultSet.getInt(1);
-            System.out.println(count);
+            return count;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void extractCountOfFollowed(int userId) {
+    public int extractCountOfFollowed(int userId) {
         try {
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_COUNT_OF_USER_FOLLOWED);
             preparedStatement.setInt(1, userId);
@@ -166,7 +172,31 @@ public class JDBCUserDAO implements UserDAO {
             int count = 0;
             if (resultSet.next()) ;
             count = resultSet.getInt(1);
-            System.out.println(count);
+            return count;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void follow (int parentId, int childId) {
+        try {
+            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(FOLLOW_ON_USER);
+            preparedStatement.setInt(1, parentId);
+            preparedStatement.setInt(2,childId);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void unfollow(int parentId, int childId) {
+        try {
+            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(UNFOLLOW_FROM_USER);
+            preparedStatement.setLong(1, parentId);
+            preparedStatement.setLong(2, childId);
+            preparedStatement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -1,7 +1,9 @@
 package by.tms.insta.web.servlet;
 
 
+import by.tms.insta.dto.UserDto;
 import by.tms.insta.entity.User;
+import by.tms.insta.mapper.UserMapper;
 import by.tms.insta.service.UserService;
 
 import javax.servlet.ServletException;
@@ -19,7 +21,9 @@ import java.util.Optional;
 @WebServlet("/login")
 public class LogInServlet extends HttpServlet {
 
-    private final UserService userService = UserService.getInstance();
+    private final static String USERNAME = "username";
+    private final static String PASSWORD = "password";
+    private final static UserService userService = UserService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -29,14 +33,14 @@ public class LogInServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
+        String username = req.getParameter(USERNAME);
+        String password = req.getParameter(PASSWORD);
         Optional<User> byUsername = userService.findByUsername(username);
         if (byUsername.isPresent()) {
-            User user = byUsername.get();
-            if (user.getPassword().equals(password)) {
+            UserDto byUsernameDto = UserMapper.toDto(byUsername.get());
+            if (byUsername.get().getPassword().equals(password)) {
 
-                req.getSession().setAttribute("user", user);
+                req.getSession().setAttribute("user", byUsernameDto);
 
                 resp.sendRedirect("/");
             } else {

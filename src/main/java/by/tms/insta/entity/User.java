@@ -16,7 +16,7 @@ public class User {
     private String avatar;
 
 
-    private User() {
+    public User() {
     }
 
     public static UserBuilder builder() {
@@ -65,7 +65,7 @@ public class User {
         }
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
