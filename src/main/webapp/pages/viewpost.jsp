@@ -59,15 +59,27 @@
                         <div class="col-sm-3 align-self-center text-end">
                             ${requestScope.likes}
                         </div>
-                        <form action="" method="post" class="col-sm-1 align-self-center text-center">
-                            <button type="submit" class="btn border-0"
-                                    style="padding: unset; --bs-btn-hover-color: red; transition: 0.3s">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                                     class="bi bi-heart-fill object-fit-cover" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd"
-                                          d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"></path>
-                                </svg>
-                            </button>
+                        <form action="/like" method="post" class="col-sm-1 align-self-center text-center">
+                            <c:if test="${sessionScope.user.like == requestScope.post.like == 0}">
+                                <button type="submit" name="like" value="1" class="btn border-0"
+                                        style="padding: unset; --bs-btn-hover-color: red; transition: 0.3s">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                         class="bi bi-heart-fill object-fit-cover" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                              d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"></path>
+                                    </svg>
+                                </button>
+                            </c:if>
+                            <c:if test="${sessionScope.user.like == requestScope.post.like == 1}">
+                                <button type="submit" name="like" value="0" class="btn border-0"
+                                        style="padding: unset; --bs-btn-hover-color: black; transition: 0.3s">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                         class="bi bi-heart-fill object-fit-cover" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                              d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"></path>
+                                    </svg>
+                                </button>
+                            </c:if>
                         </form>
                     </div>
                 </div>
@@ -95,15 +107,15 @@
                                                 </a>
                                                 <a href="profile.jsp" style="text-decoration: none; color: black">
                                                         ${comment.author.nickname}
-                                                            <c:set var="ProfileUser" value="${comment.author}"/>
+                                                    <c:set var="ProfileUser" value="${comment.author}"/>
                                                 </a>
                                             </div>
                                             <div class="col-sm-4 text-end">
                                                 <c:if test="${sessionScope.user == comment.author}">
-                                                <a href="a.html" class="border-0 align-self-center"
-                                                   style="text-decoration: none">
-                                                    edit
-                                                </a>
+                                                    <a href="a.html" class="border-0 align-self-center"
+                                                       style="text-decoration: none">
+                                                        edit
+                                                    </a>
                                                 </c:if>
                                             </div>
                                         </div>
