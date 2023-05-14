@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Optional;
 
 /**
@@ -39,23 +40,31 @@ public class RegisterServlet extends HttpServlet {
         String email = req.getParameter(EMAIL);
         String avatar = req.getParameter(AVATAR);
 
-        Optional<User> byUsername = userService.findByUsername(username);
-        if (byUsername.isEmpty()) {
-            User user = User.builder()
-                    .setUsername(username)
-                    .setPassword(password)
-                    .setName(name)
-                    .setEmail(email)
-                    .setAvatar(avatar)
-                    .build();
-            userService.save(user);
-            resp.sendRedirect("/");
-        } else {
-            req.setAttribute("message", "User with this UserName already exists! Please, try with another name!");
-            getServletContext().getRequestDispatcher("/pages/register.jsp").forward(req, resp);
+        Optional<User> byUsername = null;
+        try {
+            byUsername = userService.findByUsername(username);
 
+            if (byUsername.isEmpty()) {
+                User user = User.builder()
+                        .setUsername(username)
+                        .setPassword(password)
+                        .setName(name)
+                        .setEmail(email)
+                        .setAvatar(avatar)
+                        .build();
+                userService.save(user);
+                resp.sendRedirect("/");
+
+            } else {
+                req.setAttribute("message", "User with this UserName already exists! Please, try with another name!");
+                getServletContext().getRequestDispatcher("/pages/register.jsp").forward(req, resp);
+
+            }
+        } catch (
+                SQLException e) {
+            req.setAttribute("errormessage", "Something went wrong on our side.");
+            getServletContext().getRequestDispatcher("/pages/error.jsp").forward(req, resp);
         }
-
 
     }
 }

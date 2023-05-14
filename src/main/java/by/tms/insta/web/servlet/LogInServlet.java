@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Optional;
 
 /**
@@ -35,7 +36,13 @@ public class LogInServlet extends HttpServlet {
 
         String username = req.getParameter(USERNAME);
         String password = req.getParameter(PASSWORD);
-        Optional<User> byUsername = userService.findByUsername(username);
+        Optional<User> byUsername = null;
+        try {
+            byUsername = userService.findByUsername(username);
+        } catch (SQLException e) {
+            req.setAttribute("errormessage", "Something went wrong on our side.");
+            getServletContext().getRequestDispatcher("/pages/error.jsp").forward(req, resp);
+        }
         if (byUsername.isPresent()) {
             UserDto byUsernameDto = UserMapper.toDto(byUsername.get());
             if (byUsername.get().getPassword().equals(password)) {
