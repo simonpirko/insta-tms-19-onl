@@ -15,7 +15,7 @@ public class Post {
     private LocalDateTime createdAt;
     private List<Comment> commentList;
 
-    private Post() {
+    public Post() {
     }
 
     public static Post.PostBuilder builder() {

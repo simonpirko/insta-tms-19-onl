@@ -44,162 +44,126 @@ public class JDBCUserDAO implements UserDAO {
     }
 
     @Override
-    public void save(User user) {
-        try {
-            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(INSERT_USER);
-            preparedStatement.setString(1, user.getUsername());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setString(3, user.getName());
-            preparedStatement.setString(4, user.getAvatar());
-            preparedStatement.setString(5, user.getEmail());
-            preparedStatement.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public void save(User user) throws SQLException {
+
+        PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(INSERT_USER);
+        preparedStatement.setString(1, user.getUsername());
+        preparedStatement.setString(2, user.getPassword());
+        preparedStatement.setString(3, user.getName());
+        preparedStatement.setString(4, user.getAvatar());
+        preparedStatement.setString(5, user.getEmail());
+        preparedStatement.execute();
     }
 
     @Override
-    public void deleteById(int userId) {
-        try {
-            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(DELETE_USER);
-            preparedStatement.setInt(1, userId);
-            preparedStatement.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
+    public void deleteById(int userId) throws SQLException {
+        PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(DELETE_USER);
+        preparedStatement.setInt(1, userId);
+        preparedStatement.execute();
     }
 
+
     @Override
-    public List<User> findAll() {
-        try {
-            Statement statement = connectionJdbc.getPostgresConnection().createStatement();
-            ResultSet resultSet = statement.executeQuery(EXTRACT_ALL_USERS);
-            List<User> userList = new ArrayList<>();
-            while (resultSet.next()) {
-                userList.add(buildUser(resultSet));
-            }
-            return userList;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+    public List<User> findAll() throws SQLException {
+        Statement statement = connectionJdbc.getPostgresConnection().createStatement();
+        ResultSet resultSet = statement.executeQuery(EXTRACT_ALL_USERS);
+        List<User> userList = new ArrayList<>();
+        while (resultSet.next()) {
+            userList.add(buildUser(resultSet));
         }
+        return userList;
     }
 
-    @Override
-    public Optional<User> findByUsername(String username) {
-        try {
-            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_CURRENT_USER);
-            preparedStatement.setString(1, username);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return Optional.of(buildUser(resultSet));
-            }
-            return Optional.empty();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
 
+    @Override
+    public Optional<User> findByUsername(String username) throws SQLException {
+        PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_CURRENT_USER);
+        preparedStatement.setString(1, username);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            return Optional.of(buildUser(resultSet));
+        }
+        return Optional.empty();
     }
 
-    @Override
-    public Optional<User> findByUserId(int userId) {
-        try {
-            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_USER_BY_ID);
-            preparedStatement.setInt(1, userId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return Optional.of(buildUser(resultSet));
-            }
-            return Optional.empty();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
-    public List<User> extractFollowers(int userId) {
-        try {
-            List<User> followersList = new ArrayList<>();
-            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_USER_FOLLOWERS);
-            preparedStatement.setInt(1, userId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                followersList.add(buildFollower(resultSet));
-            }
-            return followersList;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+    public Optional<User> findByUserId(int userId) throws SQLException {
+        PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_USER_BY_ID);
+        preparedStatement.setInt(1, userId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            return Optional.of(buildUser(resultSet));
         }
+        return Optional.empty();
     }
 
-    @Override
-    public List<User> extractFollowed(int userId) {
-        try {
-            List<User> followedList = new ArrayList<>();
-            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_USER_FOLLOWED);
-            preparedStatement.setInt(1, userId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                followedList.add(buildFollower(resultSet));
-            }
-            return followedList;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
-    public int extractCountOfFollowers(int userId) {
-        try {
-            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_COUNT_OF_USERS_FOLLOWERS);
-            preparedStatement.setInt(1, userId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            int count = 0;
-            if (resultSet.next()) ;
-            count = resultSet.getInt(1);
-            return count;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+    public List<User> extractFollowers(int userId) throws SQLException {
+        List<User> followersList = new ArrayList<>();
+        PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_USER_FOLLOWERS);
+        preparedStatement.setInt(1, userId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            followersList.add(buildFollower(resultSet));
         }
+        return followersList;
     }
 
-    @Override
-    public int extractCountOfFollowed(int userId) {
-        try {
-            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_COUNT_OF_USER_FOLLOWED);
-            preparedStatement.setInt(1, userId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            int count = 0;
-            if (resultSet.next()) ;
-            count = resultSet.getInt(1);
-            return count;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
-    public void follow (int parentId, int childId) {
-        try {
-            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(FOLLOW_ON_USER);
-            preparedStatement.setInt(1, parentId);
-            preparedStatement.setInt(2,childId);
-            preparedStatement.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+    public List<User> extractFollowed(int userId) throws SQLException {
+        List<User> followedList = new ArrayList<>();
+        PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_USER_FOLLOWED);
+        preparedStatement.setInt(1, userId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            followedList.add(buildFollower(resultSet));
         }
+        return followedList;
     }
 
+
     @Override
-    public void unfollow(int parentId, int childId) {
-        try {
-            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(UNFOLLOW_FROM_USER);
-            preparedStatement.setLong(1, parentId);
-            preparedStatement.setLong(2, childId);
-            preparedStatement.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public int extractCountOfFollowers(int userId) throws SQLException {
+        PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_COUNT_OF_USERS_FOLLOWERS);
+        preparedStatement.setInt(1, userId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        int count = 0;
+        if (resultSet.next()) ;
+        count = resultSet.getInt(1);
+        return count;
+    }
+
+
+    @Override
+    public int extractCountOfFollowed(int userId) throws SQLException {
+        PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_COUNT_OF_USER_FOLLOWED);
+        preparedStatement.setInt(1, userId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        int count = 0;
+        if (resultSet.next()) ;
+        count = resultSet.getInt(1);
+        return count;
+    }
+
+
+    @Override
+    public void follow(int parentId, int childId) throws SQLException {
+        PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(FOLLOW_ON_USER);
+        preparedStatement.setInt(1, parentId);
+        preparedStatement.setInt(2, childId);
+        preparedStatement.execute();
+    }
+
+
+    @Override
+    public void unfollow(int parentId, int childId) throws SQLException {
+        PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(UNFOLLOW_FROM_USER);
+        preparedStatement.setLong(1, parentId);
+        preparedStatement.setLong(2, childId);
+        preparedStatement.execute();
     }
 
     private User buildUser(ResultSet resultSet) throws SQLException {

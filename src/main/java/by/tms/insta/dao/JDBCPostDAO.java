@@ -1,20 +1,27 @@
 package by.tms.insta.dao;
 
-import by.tms.insta.entity.Comment;
 import by.tms.insta.entity.Post;
 import by.tms.insta.entity.User;
 import by.tms.insta.util.ConnectionJdbc;
 
-import java.io.IOException;
-import java.rmi.RemoteException;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class JDBCPostDAO implements PostDAO {
 
     private static JDBCPostDAO instance;
     private final ConnectionJdbc connectionJdbc = ConnectionJdbc.getInstance();
+    private static final String INSERT_POST = "insert into posts (user_id, image, createdAt, description) values (?,?,?,?)";
+    private static final String SELECT_BY_POST_ID = "select * from posts join users on users.user_id = posts.user_id where post_id = ? ";
+    private static final String UPDATE_POST = "update post set (image, description, createdAt) values (?,?,?) where post_id = ?";
+    private static final String DELETE_BY_POST_ID = "delete from posts where post_id =?";
+    private static final String SELECT_BY_USER = "select * from posts join users on users.user_id = posts.user_id where user_id = ? ordered by created_at desc";
+    private static final String INSERT_LIKE = "insert into likes (user_id, post_id) values(?,?)";
+    private static final String DELETE_LIKE = "delete from likes where user_id = ?";
+    private static final String EXTRACT_COUNT_OF_LIKES = "select count (*) from likes where post_id = ?";
 
     private JDBCPostDAO() {
     }
@@ -28,123 +35,97 @@ public class JDBCPostDAO implements PostDAO {
 
 
     @Override
-    public void createPost(Post post) {
-
-        try {
-            PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement("INSERT INTO posts (user_id, image, createdAt) VALUES (?,?,?)");
-            statement.setString(1, String.valueOf(post.getAuthor().getId()));
-            statement.setString(2, post.getImage());
-            statement.setTimestamp(3, Timestamp.valueOf(post.getCreatedAt()));
-            statement.executeUpdate();
-
-        } catch (Exception e) {
-            throw new RuntimeException();
-        }
-
+    public void save(Post post) throws SQLException {
+        PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement(INSERT_POST);
+        statement.setInt(1, post.getAuthor().getId());
+        statement.setString(2, post.getImage());
+        statement.setTimestamp(3, Timestamp.valueOf(post.getCreatedAt()));
+        statement.setString(4, post.getDescription());
+        statement.executeUpdate();
     }
 
     @Override
-    public Post findPostById(int id) {
-        try {
-            PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement("SELECT * FROM posts WHERE id =?");
-            statement.setInt(1, id);
-            ResultSet resultSet = statement.executeQuery();
-            Post post = null;
-            while (resultSet.next()) {
-                Long userId = resultSet.getLong("user_id");
-                post = Post.builder().setId(resultSet.getInt("id")).setAuthor(User.builder().build()) // todo before add UserDAO
-                        .setImage(resultSet.getString("image"))
-                        .setCreatedAt(Timestamp.valueOf(resultSet.getString("createdAt")).toLocalDateTime()).build();
-
-
-            }
-            return post;
-        } catch (SQLException e) {
-            throw new RuntimeException();
+    public Optional<Post> findPostById(int id) throws SQLException {
+        PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(SELECT_BY_POST_ID);
+        preparedStatement.setInt(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            return Optional.of(buildPost(resultSet));
         }
-
-
+        return Optional.empty();
     }
 
     @Override
-    public void updatePost(Post post, int postId) {
-        try {
-
-            PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement("UPDATE post SET (user_id, image, createdAt) VALUES (?,?,?) WHERE post_id =?  ");
-            statement.setLong(1, postId);
-            statement.setString(2, post.getImage());
-            statement.setTimestamp(3, Timestamp.valueOf(post.getCreatedAt()));
-            statement.setLong(4, postId);
-            statement.executeUpdate();
-
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public void updatePost(int postId, String image, String description, LocalDateTime createdAt) throws SQLException {
+        PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(UPDATE_POST);
+        preparedStatement.setString(1, image);
+        preparedStatement.setString(2, description);
+        preparedStatement.setTimestamp(3, Timestamp.valueOf(createdAt));
+        preparedStatement.setLong(4, postId);
+        preparedStatement.executeUpdate();
 
     }
 
 
     @Override
-    public void deletePost(int id) {
-        try {
-            PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement("DELETE FROM posts WHERE id =?");
-            statement.setInt(1, id);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public List<Post> getPostsByUser(User user) {
-        Post post;
-        try {
-            PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement("SELECT * FROM posts WHERE user_id =?");
-            statement.setLong(1, user.getId());
-            ResultSet resultSet = statement.executeQuery();
-            List<Post> posts = new ArrayList<>();
-            while (resultSet.next()) {
-                post = Post.builder().setId(resultSet.getInt("id")).setAuthor(user)
-                        .setImage(resultSet.getString("image"))
-                        .setCreatedAt(Timestamp.valueOf(resultSet.getString("createdAt")).toLocalDateTime()).build();
-
-                posts.add(post);
-
-            }
-            return posts;
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
+    public void deletePost(int id) throws SQLException {
+        PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(DELETE_BY_POST_ID);
+        preparedStatement.setInt(1, id);
+        preparedStatement.execute();
 
     }
 
     @Override
-    public List<Comment> getCommentsByPost(Post post) {
-
-        try {
-            PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement("SELECT * FROM comments WHERE post_id =?");
-            statement.setInt(1, (int) post.getId());
-            ResultSet resultSet = statement.executeQuery();
-            List<Comment> comments = new ArrayList();
-            while (resultSet.next()) {
-                Long userId = resultSet.getLong("post_id");
-                Comment comment = Comment.builder()
-                        .setId(resultSet.getInt("id"))
-                        .setAuthor(User.builder().build())// todo before add UserDAO)
-                        .setPost(post)
-                        .setMessage(resultSet.getString("message"))
-                        .setCreateAt(Timestamp.valueOf(resultSet.getString("createdAt")).toLocalDateTime()).build();
-
-
-                comments.add(comment);
-
-            }
-            return comments;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+    public List<Post> getPostsByUserId(int userId) throws SQLException {
+        PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(SELECT_BY_USER);
+        preparedStatement.setLong(1, userId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<Post> posts = new ArrayList<>();
+        while (resultSet.next()) {
+            posts.add(buildPost(resultSet));
         }
+        return posts;
+    }
+
+    public void Like(int user_id, int post_id) throws SQLException {
+        PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(INSERT_LIKE);
+        preparedStatement.setInt(1, user_id);
+        preparedStatement.setInt(2, post_id);
+        preparedStatement.execute();
+    }
+
+    public void unLike(int user_id) throws SQLException {
+        PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(DELETE_LIKE);
+        preparedStatement.setInt(1, user_id);
+        preparedStatement.execute();
+    }
+
+    public int extractCountOfLikes(int post_id) throws SQLException {
+        PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_COUNT_OF_LIKES);
+        preparedStatement.setInt(1, post_id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        int count = 0;
+        if (resultSet.next()) {
+            count = resultSet.getInt(1);
+        }
+        return count;
+    }
+
+    private Post buildPost(ResultSet resultSet) throws SQLException {
+        Post post = Post.builder()
+                .setId(resultSet.getInt("post_id"))
+                .setAuthor(User.builder()
+                        .setId(resultSet.getInt("user_id"))
+                        .setName(resultSet.getString("name"))
+                        .setUsername(resultSet.getString("username"))
+                        .setEmail(resultSet.getString("email"))
+                        .setAvatar(resultSet.getString("avatar"))
+                        .setPassword(resultSet.getString("password"))
+                        .build())
+                .setImage(resultSet.getString("image"))
+                .setDescription(resultSet.getString("description"))
+                .setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime())
+                .build();
+        return post;
     }
 }

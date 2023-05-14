@@ -13,7 +13,7 @@ public class Comment {
     private Post post;
     private LocalDateTime createdAt;
 
-    private Comment() {
+    public Comment() {
     }
 
     public static Comment.CommentBuilder builder() {

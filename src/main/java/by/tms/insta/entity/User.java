@@ -16,7 +16,7 @@ public class User {
     private String avatar;
 
 
-    private User() {
+    public User() {
     }
 
     public static UserBuilder builder() {
