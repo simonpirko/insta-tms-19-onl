@@ -30,14 +30,16 @@
                         <div class="col-sm-6 text-start">
                             <div class="row g-0">
                                 <form action="/profile" class="col-sm-2 align-self-center text-center">
-                                    <button class="btn border-0" name="profile" type="submit" value="${post.author}" style="padding: unset">
-                                    <img class="img-fluid rounded-5" src="${post.author.avatar}"
-                                         style="padding: unset; height: 24px; width: 24px" alt="profile image">
+                                    <button class="btn border-0" name="profile" type="submit" value="${post.author}"
+                                            style="padding: unset">
+                                        <img class="img-fluid rounded-5" src="${post.author.avatar}"
+                                             style="padding: unset; height: 24px; width: 24px" alt="profile image">
                                     </button>
                                 </form>
                                 <form action="/profile" class="col-sm-10 align-self-center text-start">
-                                    <button class="btn border-0" name="profile" type="submit" value="${post.author}" style="padding: unset">
-                                    ${post.author.username}
+                                    <button class="btn border-0" name="profile" type="submit" value="${post.author}"
+                                            style="padding: unset">
+                                        ${post.author.username}
                                     </button>
                                 </form>
                             </div>
@@ -51,8 +53,9 @@
                         <div class="col-sm-2 align-self-center text-center">
                             <c:if test="${sessionScope.user.userId == requestScope.post.author.userId}">
                                 <form action="/editpost">
-                                    <button class="btn border-0" name="profile" type="submit" value="${post}" style="padding: unset">
-                                            edit post
+                                    <button class="btn border-0" name="profile" type="submit" value="${post}"
+                                            style="padding: unset">
+                                        edit post
                                     </button>
                                 </form>
                             </c:if>
@@ -100,23 +103,33 @@
                                     <div class="container border-bottom mt-2">
                                         <div class="row">
                                             <div class="col-sm-8 align-self-center">
-                                                <form action="/profile" class="col-sm-2 align-self-center text-center">
-                                                    <button class="btn border-0" name="profile" type="submit" value="${comment.author}" style="padding: unset">
-                                                        <img class="img-fluid rounded-5" src="${comment.author.avatar}"
-                                                             style="padding: unset; height: 24px; width: 24px" alt="profile image">
-                                                    </button>
-                                                </form>
-                                                <form action="/profile" class="col-sm-10 align-self-center text-start">
-                                                    <button class="btn border-0" name="profile" type="submit" value="${comment.author}" style="padding: unset">
-                                                            ${comment.author.username}
-                                                    </button>
-                                                </form>
+                                                <div class="row g-0">
+                                                    <form action="/profile"
+                                                          class="col-sm-2 align-self-center text-center">
+                                                        <button class="btn border-0" name="profile" type="submit"
+                                                                value="${comment.author}" style="padding: unset">
+                                                            <img class="img-fluid rounded-5"
+                                                                 src="${comment.author.avatar}"
+                                                                 style="padding: unset; height: 24px; width: 24px"
+                                                                 alt="profile image">
+                                                        </button>
+                                                    </form>
+                                                    <form action="/profile"
+                                                          class="col-sm-10 align-self-center text-start">
+                                                        <button class="btn border-0" name="profile" type="submit"
+                                                                value="${comment.author}" style="padding: unset">
+                                                                ${comment.author.username}
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </div>
                                             <div class="col-sm-4 text-end">
                                                 <c:if test="${sessionScope.user.userId == comment.author.userId}">
-                                                    <form action="/editcomment" class="col-sm-4 align-self-center text-start">
-                                                        <button class="btn border-0" name="profile" type="submit" value="${comment}" style="padding: unset">
-                                                                edit
+                                                    <form action="/editcomment"
+                                                          class="col-sm-4 align-self-center text-start">
+                                                        <button class="btn border-0" name="profile" type="submit"
+                                                                value="${comment}" style="padding: unset">
+                                                            edit
                                                         </button>
                                                     </form>
                                                 </c:if>
