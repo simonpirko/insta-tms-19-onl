@@ -36,6 +36,6 @@ public class HomeServlet extends HttpServlet {
         req.setAttribute("offset", offset);
         req.setAttribute("postList", postList);
 
-        req.getRequestDispatcher("/pages/calchistory.jsp").forward(req, resp);
+        req.getRequestDispatcher("/pages/home.jsp").forward(req, resp);
     }
 }
