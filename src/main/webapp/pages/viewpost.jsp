@@ -21,26 +21,27 @@
     <div class="card mb-3 rounded-0">
         <div class="row g-0" style="height: 800px; background-color: black">
             <div class="col-sm-7 align-self-center" style="text-align: center">
-                <img src="${requestScope.post.image}"
+                <img src="${post.image}"
                      class="img-fluid" style="max-height: 800px" alt="post image">
             </div>
             <div class="col-sm-5" style="background-color: white">
                 <div class="card-header" style="height: 80px">
                     <div class="row g-0">
                         <div class="col-sm-6 text-start">
-                            <div>
-                                <a href="profile.jsp">
-                                    <img class="img-fluid rounded-5" src="${requestScope.post.author.avatar}"
+                            <div class="row g-0">
+                                <form action="/profile" class="col-sm-2 align-self-center text-center">
+                                    <button class="btn border-0" name="profile" type="submit" value="${post.author}" style="padding: unset">
+                                    <img class="img-fluid rounded-5" src="${post.author.avatar}"
                                          style="padding: unset; height: 24px; width: 24px" alt="profile image">
-                                    <c:set var="ProfileUser" scope="request" value="${requestScope.post.author}"/>
-                                </a>
-                                <a href="profile.jsp"
-                                   style="text-decoration: none; color: black; text-align: end">
-                                    ${requestScope.post.author.username}
-                                    <c:set var="ProfileUser" scope="request" value="${requestScope.post.author}"/>
-                                </a>
+                                    </button>
+                                </form>
+                                <form action="/profile" class="col-sm-10 align-self-center text-start">
+                                    <button class="btn border-0" name="profile" type="submit" value="${post.author}" style="padding: unset">
+                                    ${post.author.username}
+                                    </button>
+                                </form>
                             </div>
-                            <fmt:parseDate value="${requestScope.post.createdAt}" var="parsedPostTime"
+                            <fmt:parseDate value="${post.createdAt}" var="parsedPostTime"
                                            pattern="yyyy-MM-dd'T'HH:mm"
                                            type="date"/>
                             <fmt:formatDate value="${parsedPostTime}" pattern="dd.MM.yyyy HH:mm"
@@ -48,19 +49,19 @@
                             <small class="text-body-secondary">${formattedTime}</small>
                         </div>
                         <div class="col-sm-2 align-self-center text-center">
-                            <c:if test="${sessionScope.user == requestScope.post.author}">
-                                <a href="editPost.jsp" class="border-0 align-self-center justify-content-end"
-                                   style="text-decoration: none">
-                                    edit post
-                                    <c:set var="post" scope="request" value="${requestScope.post}"/>
-                                </a>
+                            <c:if test="${sessionScope.user.userId == requestScope.post.author.userId}">
+                                <form action="/editpost">
+                                    <button class="btn border-0" name="profile" type="submit" value="${post}" style="padding: unset">
+                                            edit post
+                                    </button>
+                                </form>
                             </c:if>
                         </div>
                         <div class="col-sm-3 align-self-center text-end">
-                            ${requestScope.likes}
+                            ${likes}
                         </div>
                         <form action="/like" method="post" class="col-sm-1 align-self-center text-center">
-                            <c:if test="${sessionScope.user.userId != requestScope.post.like.userId}">
+                            <c:if test="${sessionScope.user.userId != post.like.userId}">
                                 <button type="submit" name="like" value="1" class="btn border-0"
                                         style="padding: unset; --bs-btn-hover-color: red; transition: 0.3s">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -70,7 +71,7 @@
                                     </svg>
                                 </button>
                             </c:if>
-                            <c:if test="${sessionScope.user.userId == requestScope.post.like.userId}">
+                            <c:if test="${sessionScope.user.userId == post.like.userId}">
                                 <button type="submit" name="like" value="0" class="btn border-0"
                                         style="padding: unset; --bs-btn-hover-color: black; transition: 0.3s">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -99,23 +100,25 @@
                                     <div class="container border-bottom mt-2">
                                         <div class="row">
                                             <div class="col-sm-8 align-self-center">
-                                                <a href="profile.jsp"><img class="img-fluid rounded-5"
-                                                                           src="${comment.author.avatar}"
-                                                                           style="padding: unset; height: 24px; width: 24px"
-                                                                           alt="comment user avatar">
-                                                    <c:set var="ProfileUser" value="${comment.author}"/>
-                                                </a>
-                                                <a href="profile.jsp" style="text-decoration: none; color: black">
-                                                        ${comment.author.nickname}
-                                                    <c:set var="ProfileUser" value="${comment.author}"/>
-                                                </a>
+                                                <form action="/profile" class="col-sm-2 align-self-center text-center">
+                                                    <button class="btn border-0" name="profile" type="submit" value="${comment.author}" style="padding: unset">
+                                                        <img class="img-fluid rounded-5" src="${comment.author.avatar}"
+                                                             style="padding: unset; height: 24px; width: 24px" alt="profile image">
+                                                    </button>
+                                                </form>
+                                                <form action="/profile" class="col-sm-10 align-self-center text-start">
+                                                    <button class="btn border-0" name="profile" type="submit" value="${comment.author}" style="padding: unset">
+                                                            ${comment.author.username}
+                                                    </button>
+                                                </form>
                                             </div>
                                             <div class="col-sm-4 text-end">
-                                                <c:if test="${sessionScope.user == comment.author}">
-                                                    <a href="editcomment.jsp" class="border-0 align-self-center"
-                                                       style="text-decoration: none">
-                                                        edit
-                                                    </a>
+                                                <c:if test="${sessionScope.user.userId == comment.author.userId}">
+                                                    <form action="/editcomment" class="col-sm-4 align-self-center text-start">
+                                                        <button class="btn border-0" name="profile" type="submit" value="${comment}" style="padding: unset">
+                                                                edit
+                                                        </button>
+                                                    </form>
                                                 </c:if>
                                             </div>
                                         </div>
