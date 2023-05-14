@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -14,83 +16,85 @@
     <div class="col-5 mt-5">
 
 
-      <!--            1. Фото-->
-      <div class="card mt-5" style="width: 30rem;">
-        <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
-        <img src="#" alt="...">   <%--<-- Фото поста--%>
-        <div class="card-body">
-          <p class="card-text">#</p>  <%--<-- Текст поста--%>
+      <ul>
+        <c:forEach items="${postList}" var="operation" end="4">
+          <fmt:parseDate value="${post.createdAt}" var="parsedTime" pattern="yyyy-MM-dd'T'HH:mm" type="date"/>
+          <fmt:formatDate value="${#}" pattern="dd.MM.yyyy HH:mm" var="formattedTime"/>
+
+        </c:forEach>
+
+
+        <!--            1. Фото-->
+        <div class="card mt-5" style="width: 30rem;">
+          <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
+          <img src="#" alt="...">   <%--<-- Фото поста--%>
+          <div class="card-body">
+            <p class="card-text">#</p>  <%--<-- Текст поста--%>
+          </div>
         </div>
-      </div>
 
 
 
-      <!--            2. Фото-->
-      <div class="card mt-5" style="width: 30rem;">
-        <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
-        <img src="#" alt="...">   <%--<-- Фото поста--%>
-        <div class="card-body">
-          <p class="card-text">#</p>  <%--<-- Текст поста--%>
+        <!--            2. Фото-->
+        <div class="card mt-5" style="width: 30rem;">
+          <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
+          <img src="#" alt="...">   <%--<-- Фото поста--%>
+          <div class="card-body">
+            <p class="card-text">#</p>  <%--<-- Текст поста--%>
+          </div>
         </div>
-      </div>
 
 
-      <p class="fs-6">    </p>
+        <p class="fs-6">    </p>
 
-      <!--            3. Фото-->
-      <div class="card mt-5" style="width: 30rem;">
-        <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
-        <img src="#" alt="...">   <%--<-- Фото поста--%>
-        <div class="card-body">
-          <p class="card-text">#</p>  <%--<-- Текст поста--%>
+        <!--            3. Фото-->
+        <div class="card mt-5" style="width: 30rem;">
+          <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
+          <img src="#" alt="...">   <%--<-- Фото поста--%>
+          <div class="card-body">
+            <p class="card-text">#</p>  <%--<-- Текст поста--%>
+          </div>
         </div>
-      </div>
 
 
 
-      <!--            4. Фото-->
-      <div class="card mt-5" style="width: 30rem;">
-        <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
-        <img src="#" alt="...">   <%--<-- Фото поста--%>
-        <div class="card-body">
-          <p class="card-text">#</p>  <%--<-- Текст поста--%>
+        <!--            4. Фото-->
+        <div class="card mt-5" style="width: 30rem;">
+          <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
+          <img src="#" alt="...">   <%--<-- Фото поста--%>
+          <div class="card-body">
+            <p class="card-text">#</p>  <%--<-- Текст поста--%>
+          </div>
         </div>
-      </div>
 
 
-      <!--            5. Фото-->
-      <div class="card mt-5" style="width: 30rem;">
-        <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
-        <img src="#" alt="...">   <%--<-- Фото поста--%>
-        <div class="card-body">
-          <p class="card-text">#</p>  <%--<-- Текст поста--%>
+        <!--            5. Фото-->
+        <div class="card mt-5" style="width: 30rem;">
+          <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
+          <img src="#" alt="...">   <%--<-- Фото поста--%>
+          <div class="card-body">
+            <p class="card-text">#</p>  <%--<-- Текст поста--%>
+          </div>
         </div>
-      </div>
 
 
+      </ul>
 
 
       <!--           Pagination-->
-      <div class="d-flex">
-        <div class="mx-auto">
-          <nav aria-label="...">
-            <ul class="pagination mt-5">
+      <p class="fs-6">    </p>
+      <c:if test="${offset != 0}">
+        <form action="/user/home" method="post">
+          <button name="offset" class="btn btn-secondary" type="submit" value="${offset-5}">&laquo;</button>
+        </form>
+      </c:if>
+      <c:if test="${size == 6}">
+        <form action="/user/home" method="post">
+          <button name="offset" class="btn btn-secondary" type="submit" value="${offset+5}">&raquo;</button>
+        </form>
+      </c:if>
 
-              <li class="page-item disabled">
-                <span class="page-link">Previous</span>
-              </li>
-              <li class="page-item"><a class="page-link" href="#">1</a></li>
-              <li class="page-item active" aria-current="page">
-                <span class="page-link">2</span>
-              </li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item">
-                <a class="page-link" href="#">Next</a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </div>
+
 
 
     </div>
