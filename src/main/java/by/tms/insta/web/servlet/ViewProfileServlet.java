@@ -13,16 +13,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 /**
  * @author Andrei Lisouski (Andrlis) - 10/05/2023 - 0:03
  */
-@WebServlet("/account")
+@WebServlet("/user/account")
 public class ViewProfileServlet extends HttpServlet {
 
     private final static String USERNAME_PARAMETER = "username";
+    private final static int POSTS_PER_PAGE = 8;
+    private final static String PAGE_NUMBER = "page";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,11 +36,12 @@ public class ViewProfileServlet extends HttpServlet {
         Optional<User> account = userService.findByUsername(username);
 
         if (account.isPresent()) {
-            UserDto accountDto = UserMapper.toDto(account.get());
+            User userAccount = account.get();
+            UserDto accountDto = UserMapper.toDto(userAccount);
             req.setAttribute("account", accountDto);
 
-            int followersCnt = userService.extractCountOfFollowers(account.get().getId());
-            int followingCnt = userService.extractCountOfFollowed(account.get().getId());
+            int followersCnt = userService.extractCountOfFollowers(userAccount.getId());
+            int followingCnt = userService.extractCountOfFollowed(userAccount.getId());
 
             req.setAttribute("followersCnt", followersCnt);
             req.setAttribute("followingCnt", followingCnt);
@@ -45,7 +49,20 @@ public class ViewProfileServlet extends HttpServlet {
             //TODO
             //Need to add post extraction and pagination
             PostService postService = PostService.getInstance();
-            List<Post> posts = postService.getPostsByUser(account.get());
+            int countOfPages = postService.getCountOfPagesWithPosts(userAccount, 6);
+            req.setAttribute("countOfPages", countOfPages);
+
+            String requestedPage = req.getParameter(PAGE_NUMBER);
+            int offset;
+
+            if (requestedPage == null){
+                offset = 0;
+            }
+            else {
+                offset = Integer.parseInt(requestedPage) - 1;
+            }
+
+            List<Post> posts = postService.getPostsByUserWithOffset(userAccount, POSTS_PER_PAGE, offset);
             req.setAttribute("posts", posts);
 
             getServletContext().getRequestDispatcher("/pages/profile.jsp").forward(req, resp);
