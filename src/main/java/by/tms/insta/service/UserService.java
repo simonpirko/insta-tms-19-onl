@@ -4,6 +4,7 @@ import by.tms.insta.dao.JDBCUserDAO;
 import by.tms.insta.entity.User;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,46 +24,46 @@ public class UserService {
 
     }
 
-    public void save(User user) { jdbcUserDAO.save(user); }
+    public void save(User user) throws SQLException { jdbcUserDAO.save(user); }
 
-    public void deleteById(int userId) {
+    public void deleteById(int userId) throws SQLException {
         jdbcUserDAO.deleteById(userId);
     }
 
-    public List<User> findAll() {
+    public List<User> findAll() throws SQLException {
         return jdbcUserDAO.findAll();
     }
 
-    public Optional<User> findByUsername(String username) {
+    public Optional<User> findByUsername(String username) throws SQLException {
         return jdbcUserDAO.findByUsername(username);
     }
 
-    public boolean checkUsername(String username) {
+    public boolean checkUsername(String username) throws SQLException {
         Optional<User> optional = jdbcUserDAO.findByUsername(username);
         return optional.isPresent();
     }
 
-    public Optional<User> findByUserId(int userId) {
+    public Optional<User> findByUserId(int userId) throws SQLException {
         return jdbcUserDAO.findByUserId(userId);
     }
 
-    public List<User> extractFollowers(int userId) {
+    public List<User> extractFollowers(int userId) throws SQLException {
         return jdbcUserDAO.extractFollowers(userId);
     }
 
-    public List<User> extractFollowed(int userId) {
+    public List<User> extractFollowed(int userId) throws SQLException {
         return jdbcUserDAO.extractFollowed(userId);
     }
 
-    public int extractCountOfFollowers(int userId) {
+    public int extractCountOfFollowers(int userId) throws SQLException {
         return jdbcUserDAO.extractCountOfFollowers(userId);
     }
 
-    public int extractCountOfFollowed(int userId) {
+    public int extractCountOfFollowed(int userId) throws SQLException {
         return jdbcUserDAO.extractCountOfFollowed(userId);
     }
 
-    public void follow (int parentId, int childId) {jdbcUserDAO.follow(parentId, childId);}
+    public void follow (int parentId, int childId) throws SQLException {jdbcUserDAO.follow(parentId, childId);}
 
-    public void unFollow (int parentId, int childId) {jdbcUserDAO.unfollow(parentId, childId);}
+    public void unFollow (int parentId, int childId) throws SQLException {jdbcUserDAO.unfollow(parentId, childId);}
 }

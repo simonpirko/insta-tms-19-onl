@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,41 +34,47 @@ public class ViewProfileServlet extends HttpServlet {
         UserService userService = UserService.getInstance();
 
         String username = req.getParameter(USERNAME_PARAMETER);
-        Optional<User> account = userService.findByUsername(username);
+        Optional<User> account = null;
+        try {
+            account = userService.findByUsername(username);
 
-        if (account.isPresent()) {
-            User userAccount = account.get();
-            UserDto accountDto = UserMapper.toDto(userAccount);
-            req.setAttribute("account", accountDto);
 
-            int followersCnt = userService.extractCountOfFollowers(userAccount.getId());
-            int followingCnt = userService.extractCountOfFollowed(userAccount.getId());
+            if (account.isPresent()) {
+                User userAccount = account.get();
+                UserDto accountDto = UserMapper.toDto(userAccount);
+                req.setAttribute("account", accountDto);
 
-            req.setAttribute("followersCnt", followersCnt);
-            req.setAttribute("followingCnt", followingCnt);
+                int followersCnt = userService.extractCountOfFollowers(userAccount.getId());
+                int followingCnt = userService.extractCountOfFollowed(userAccount.getId());
 
-            //TODO
-            //Need to add post extraction and pagination
-            PostService postService = PostService.getInstance();
-            int countOfPages = postService.getCountOfPagesWithPosts(userAccount, 6);
-            req.setAttribute("countOfPages", countOfPages);
+                req.setAttribute("followersCnt", followersCnt);
+                req.setAttribute("followingCnt", followingCnt);
 
-            String requestedPage = req.getParameter(PAGE_NUMBER);
-            int offset;
+                //TODO
+                //Need to add post extraction and pagination
+                PostService postService = PostService.getInstance();
+                int countOfPages = postService.getCountOfPagesWithPosts(userAccount, 6);
+                req.setAttribute("countOfPages", countOfPages);
 
-            if (requestedPage == null){
-                offset = 0;
+                String requestedPage = req.getParameter(PAGE_NUMBER);
+                int offset;
+
+                if (requestedPage == null) {
+                    offset = 0;
+                } else {
+                    offset = Integer.parseInt(requestedPage) - 1;
+                }
+
+                List<Post> posts = postService.getPostsByUserWithOffset(userAccount, POSTS_PER_PAGE, offset);
+                req.setAttribute("posts", posts);
+
+                getServletContext().getRequestDispatcher("/pages/profile.jsp").forward(req, resp);
+            } else {
+                req.setAttribute("errormessage", "User not found.");
+                getServletContext().getRequestDispatcher("/pages/error.jsp").forward(req, resp);
             }
-            else {
-                offset = Integer.parseInt(requestedPage) - 1;
-            }
-
-            List<Post> posts = postService.getPostsByUserWithOffset(userAccount, POSTS_PER_PAGE, offset);
-            req.setAttribute("posts", posts);
-
-            getServletContext().getRequestDispatcher("/pages/profile.jsp").forward(req, resp);
-        } else {
-            req.setAttribute("errormessage", "User not found.");
+        } catch (SQLException e) {
+            req.setAttribute("errormessage", "Something went wrong on our side.");
             getServletContext().getRequestDispatcher("/pages/error.jsp").forward(req, resp);
         }
     }

@@ -16,12 +16,14 @@ public class JDBCPostDAO implements PostDAO {
     private final ConnectionJdbc connectionJdbc = ConnectionJdbc.getInstance();
     private static final String INSERT_POST = "insert into posts (user_id, image, createdAt, description) values (?,?,?,?)";
     private static final String SELECT_BY_POST_ID = "select * from posts join users on users.user_id = posts.user_id where post_id = ? ";
-    private static final String UPDATE_POST = "update post set (image, description, createdAt) values (?,?,?) where post_id = ?";
+    private static final String UPDATE_POST = "update post set (image, description) values (?,?) where post_id = ?";
     private static final String DELETE_BY_POST_ID = "delete from posts where post_id =?";
     private static final String SELECT_BY_USER = "select * from posts join users on users.user_id = posts.user_id where user_id = ? ordered by created_at desc";
     private static final String INSERT_LIKE = "insert into likes (user_id, post_id) values(?,?)";
     private static final String DELETE_LIKE = "delete from likes where user_id = ?";
     private static final String EXTRACT_COUNT_OF_LIKES = "select count (*) from likes where post_id = ?";
+    private static final String COUNT_BY_USER = "SELECT count(1) FROM posts WHERE user_id =?";
+    private static final String POSTS_BY_USER_WITH_OFFSET = "SELECT * FROM posts JOIN users ON users.user_id = posts.user_id WHERE user_id = ? ORDER BY post_id ASC limit ? offset ?";
 
     private JDBCPostDAO() {
     }
@@ -56,12 +58,11 @@ public class JDBCPostDAO implements PostDAO {
     }
 
     @Override
-    public void updatePost(int postId, String image, String description, LocalDateTime createdAt) throws SQLException {
+    public void updatePost(int postId, String image, String description) throws SQLException {
         PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(UPDATE_POST);
         preparedStatement.setString(1, image);
         preparedStatement.setString(2, description);
-        preparedStatement.setTimestamp(3, Timestamp.valueOf(createdAt));
-        preparedStatement.setLong(4, postId);
+        preparedStatement.setLong(3, postId);
         preparedStatement.executeUpdate();
 
     }
@@ -87,7 +88,7 @@ public class JDBCPostDAO implements PostDAO {
         return posts;
     }
 
-    public void Like(int user_id, int post_id) throws SQLException {
+    public void like(int user_id, int post_id) throws SQLException {
         PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(INSERT_LIKE);
         preparedStatement.setInt(1, user_id);
         preparedStatement.setInt(2, post_id);
@@ -109,6 +110,31 @@ public class JDBCPostDAO implements PostDAO {
             count = resultSet.getInt(1);
         }
         return count;
+    }
+
+    @Override
+    public int getCountByUser(int user_id) throws SQLException {
+        PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement(COUNT_BY_USER);
+        statement.setLong(1, user_id);
+        ResultSet resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            return resultSet.getInt(1);
+        }
+        return 0;
+    }
+
+    @Override
+    public List<Post> getPostsByUserWithOffset(int user_id, int limit, int offset) throws SQLException {
+        PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement(POSTS_BY_USER_WITH_OFFSET);
+        statement.setLong(1, user_id);
+        statement.setInt(2, limit);
+        statement.setInt(3, offset);
+        ResultSet resultSet = statement.executeQuery();
+        List<Post> posts = new ArrayList<>();
+        while (resultSet.next()) {
+            posts.add(buildPost(resultSet));
+        }
+        return posts;
     }
 
     private Post buildPost(ResultSet resultSet) throws SQLException {

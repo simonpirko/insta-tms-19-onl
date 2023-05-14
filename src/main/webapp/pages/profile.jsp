@@ -49,29 +49,29 @@
         <div class="row">
             <div class="col-sm-4">
                 <c:if test="${requestScope.posts[0].image != null}">
-                    <a href="#"><img src="${requestScope.posts[2].image}" class="img-responsive"
+                    <a href="#"><img src="${requestScope.posts[0].image}" class="img-responsive"
                                      style="width:100%" alt="Image"></a><br>
                 </c:if>
                 <c:if test="${requestScope.posts[3].image != null}">
-                    <a href="#"><img src="${requestScope.posts[2].image}" class="img-responsive"
+                    <a href="#"><img src="${requestScope.posts[3].image}" class="img-responsive"
                                      style="width:100%" alt="Image"></a><br>
                 </c:if>
                 <c:if test="${requestScope.posts[6].image != null}">
-                    <a href="#"><img src="${requestScope.posts[2].image}" class="img-responsive"
+                    <a href="#"><img src="${requestScope.posts[6].image}" class="img-responsive"
                                      style="width:100%" alt="Image"></a><br>
                 </c:if>
             </div>
             <div class="col-sm-4">
                 <c:if test="${requestScope.posts[1].image != null}">
-                    <a href="#"><img src="${requestScope.posts[2].image}" class="img-responsive"
+                    <a href="#"><img src="${requestScope.posts[1].image}" class="img-responsive"
                                      style="width:100%" alt="Image"></a><br>
                 </c:if>
                 <c:if test="${requestScope.posts[4].image != null}">
-                    <a href="#"><img src="${requestScope.posts[2].image}" class="img-responsive"
+                    <a href="#"><img src="${requestScope.posts[4].image}" class="img-responsive"
                                      style="width:100%" alt="Image"></a><br>
                 </c:if>
                 <c:if test="${requestScope.posts[7].image != null}">
-                    <a href="#"><img src="${requestScope.posts[2].image}" class="img-responsive"
+                    <a href="#"><img src="${requestScope.posts[7].image}" class="img-responsive"
                                      style="width:100%" alt="Image"></a><br>
                 </c:if>
             </div>
@@ -81,11 +81,11 @@
                                      style="width:100%" alt="Image"></a><br>
                 </c:if>
                 <c:if test="${requestScope.posts[5].image != null}">
-                    <a href="#"><img src="${requestScope.posts[2].image}" class="img-responsive"
+                    <a href="#"><img src="${requestScope.posts[5].image}" class="img-responsive"
                                      style="width:100%" alt="Image"></a><br>
                 </c:if>
                 <c:if test="${requestScope.posts[8].image != null}">
-                    <a href="#"><img src="${requestScope.posts[2].image}" class="img-responsive"
+                    <a href="#"><img src="${requestScope.posts[8].image}" class="img-responsive"
                                      style="width:100%" alt="Image"></a><br>
                 </c:if>
             </div>
@@ -95,15 +95,17 @@
 <br>
 
 <%--TODO--%>
-<div class="text-center">
-    <ul class="pagination">
-        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-    </ul>
-</div>
+<c:if test="${requestScope.countOfPages > 1}">
+    <div class="text-center">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+    </div>
+</c:if>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
