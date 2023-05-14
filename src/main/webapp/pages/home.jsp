@@ -21,63 +21,17 @@
           <fmt:parseDate value="${post.createdAt}" var="parsedTime" pattern="yyyy-MM-dd'T'HH:mm" type="date"/>
           <fmt:formatDate value="${#}" pattern="dd.MM.yyyy HH:mm" var="formattedTime"/>
 
+
+          <div class="card mt-5" style="width: 30rem;">
+            <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
+            <img src="${post.image}" alt="post image">
+            <div class="card-body">
+              <p class="card-text">${post.description}</p>
+            </div>
+          </div>
+
+
         </c:forEach>
-
-
-        <!--            1. Фото-->
-        <div class="card mt-5" style="width: 30rem;">
-          <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
-          <img src="#" alt="...">   <%--<-- Фото поста--%>
-          <div class="card-body">
-            <p class="card-text">#</p>  <%--<-- Текст поста--%>
-          </div>
-        </div>
-
-
-
-        <!--            2. Фото-->
-        <div class="card mt-5" style="width: 30rem;">
-          <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
-          <img src="#" alt="...">   <%--<-- Фото поста--%>
-          <div class="card-body">
-            <p class="card-text">#</p>  <%--<-- Текст поста--%>
-          </div>
-        </div>
-
-
-        <p class="fs-6">    </p>
-
-        <!--            3. Фото-->
-        <div class="card mt-5" style="width: 30rem;">
-          <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
-          <img src="#" alt="...">   <%--<-- Фото поста--%>
-          <div class="card-body">
-            <p class="card-text">#</p>  <%--<-- Текст поста--%>
-          </div>
-        </div>
-
-
-
-        <!--            4. Фото-->
-        <div class="card mt-5" style="width: 30rem;">
-          <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
-          <img src="#" alt="...">   <%--<-- Фото поста--%>
-          <div class="card-body">
-            <p class="card-text">#</p>  <%--<-- Текст поста--%>
-          </div>
-        </div>
-
-
-        <!--            5. Фото-->
-        <div class="card mt-5" style="width: 30rem;">
-          <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
-          <img src="#" alt="...">   <%--<-- Фото поста--%>
-          <div class="card-body">
-            <p class="card-text">#</p>  <%--<-- Текст поста--%>
-          </div>
-        </div>
-
-
       </ul>
 
 
