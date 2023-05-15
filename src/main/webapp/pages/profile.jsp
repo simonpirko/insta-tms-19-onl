@@ -47,48 +47,82 @@
 <div class="border-bottom">
     <div class="container-fluid text-center">
         <div class="row">
-            <div class="col-sm-4">
-                <c:if test="${requestScope.posts[0].image != null}">
-                    <a href="#"><img src="${requestScope.posts[0].image}" class="img-responsive"
-                                     style="width:100%" alt="Image"></a><br>
-                </c:if>
-                <c:if test="${requestScope.posts[3].image != null}">
-                    <a href="#"><img src="${requestScope.posts[3].image}" class="img-responsive"
-                                     style="width:100%" alt="Image"></a><br>
-                </c:if>
-                <c:if test="${requestScope.posts[6].image != null}">
-                    <a href="#"><img src="${requestScope.posts[6].image}" class="img-responsive"
-                                     style="width:100%" alt="Image"></a><br>
-                </c:if>
-            </div>
-            <div class="col-sm-4">
-                <c:if test="${requestScope.posts[1].image != null}">
-                    <a href="#"><img src="${requestScope.posts[1].image}" class="img-responsive"
-                                     style="width:100%" alt="Image"></a><br>
-                </c:if>
-                <c:if test="${requestScope.posts[4].image != null}">
-                    <a href="#"><img src="${requestScope.posts[4].image}" class="img-responsive"
-                                     style="width:100%" alt="Image"></a><br>
-                </c:if>
-                <c:if test="${requestScope.posts[7].image != null}">
-                    <a href="#"><img src="${requestScope.posts[7].image}" class="img-responsive"
-                                     style="width:100%" alt="Image"></a><br>
-                </c:if>
-            </div>
-            <div class="col-sm-4">
-                <c:if test="${requestScope.posts[2].image != null}">
-                    <a href="#"><img src="${requestScope.posts[2].image}" class="img-responsive"
-                                     style="width:100%" alt="Image"></a><br>
-                </c:if>
-                <c:if test="${requestScope.posts[5].image != null}">
-                    <a href="#"><img src="${requestScope.posts[5].image}" class="img-responsive"
-                                     style="width:100%" alt="Image"></a><br>
-                </c:if>
-                <c:if test="${requestScope.posts[8].image != null}">
-                    <a href="#"><img src="${requestScope.posts[8].image}" class="img-responsive"
-                                     style="width:100%" alt="Image"></a><br>
-                </c:if>
-            </div>
+            <c:if test="${requestScope.posts[0].image != null}">
+                <div class="col-sm-4">
+                    <div class="thumbnail">
+                        <a href="#"><img src="${requestScope.posts[0].image}" style="width:100%"
+                                         alt="Image"></a><br>
+                    </div>
+                </div>
+            </c:if>
+            <c:if test="${requestScope.posts[3].image != null}">
+                <div class="col-sm-4">
+                    <div class="thumbnail">
+                        <a href="#"><img src="${requestScope.posts[3].image}" style="width:100%"
+                                         alt="Image"></a><br>
+                    </div>
+                </div>
+            </c:if>
+            <c:if test="${requestScope.posts[6].image != null}">
+                <div class="col-sm-4">
+                    <div class="thumbnail">
+                        <a href="#"><img src="${requestScope.posts[6].image}" style="width:100%"
+                                         alt="Image"></a><br>
+                    </div>
+                </div>
+            </c:if>
+        </div>
+        <div class="row">
+            <c:if test="${requestScope.posts[1].image != null}">
+                <div class="col-sm-4">
+                    <div class="thumbnail">
+                        <a href="#"><img src="${requestScope.posts[1].image}" style="width:100%"
+                                         alt="Image"></a><br>
+                    </div>
+                </div>
+            </c:if>
+            <c:if test="${requestScope.posts[4].image != null}">
+                <div class="col-sm-4">
+                    <div class="thumbnail">
+                        <a href="#"><img src="${requestScope.posts[4].image}" style="width:100%"
+                                         alt="Image"></a><br>
+                    </div>
+                </div>
+            </c:if>
+            <c:if test="${requestScope.posts[7].image != null}">
+                <div class="col-sm-4">
+                    <div class="thumbnail">
+                        <a href="#"><img src="${requestScope.posts[7].image}" style="width:100%"
+                                         alt="Image"></a><br>
+                    </div>
+                </div>
+            </c:if>
+        </div>
+        <div class="row">
+            <c:if test="${requestScope.posts[2].image != null}">
+                <div class="col-sm-4">
+                    <div class="thumbnail">
+                        <a href="#"><img src="${requestScope.posts[2].image}" style="width:100%"
+                                         alt="Image"></a><br>
+                    </div>
+                </div>
+            </c:if>
+            <c:if test="${requestScope.posts[5].image != null}">
+                <div class="col-sm-4">
+                    <div class="thumbnail">
+                        <a href="#"><img src="${requestScope.posts[5].image}" style="width:100%"
+                                         alt="Image"></a><br>
+                    </div>
+                </div>
+            </c:if>
+            <c:if test="${requestScope.posts[8].image != null}">
+                <div class="col-sm-4">
+                    <div class="thumbnail">
+                        <a href="#"><img src="${requestScope.posts[8].image}" style="width:100%"
+                                         alt="Image"></a><br>
+                    </div>
+                </div>
+            </c:if>
         </div>
     </div>
 </div>
