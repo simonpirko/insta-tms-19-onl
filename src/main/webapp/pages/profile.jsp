@@ -19,6 +19,7 @@
 <jsp:include page="header.jsp"/>
 
 <div class="container-fluid bg-3 text-center border-bottom">
+    <br>
     <div class="row">
         <div class="col-md d-flex align-items-center justify-content-center">
             <img src="${requestScope.account.avatar}"
@@ -49,76 +50,87 @@
         <div class="row">
             <c:if test="${requestScope.posts[0].image != null}">
                 <div class="col-sm-4">
-                    <div class="thumbnail">
-                        <a href="#"><img src="${requestScope.posts[0].image}" style="width:100%"
+                    <div class="card" style="width: 100%">
+                        <a href="#"><img class="card-img-top" src="${requestScope.posts[0].image}"
+                                         style="width:100%; height: auto;  aspect-ratio: 16/9"
                                          alt="Image"></a><br>
                     </div>
                 </div>
             </c:if>
             <c:if test="${requestScope.posts[3].image != null}">
                 <div class="col-sm-4">
-                    <div class="thumbnail">
-                        <a href="#"><img src="${requestScope.posts[3].image}" style="width:100%"
+                    <div class="card" style="width: 100%">
+                        <a href="#"><img class="card-img-top" src="${requestScope.posts[3].image}"
+                                         style="width:100%; height: auto;  aspect-ratio: 16/9"
                                          alt="Image"></a><br>
                     </div>
                 </div>
             </c:if>
             <c:if test="${requestScope.posts[6].image != null}">
                 <div class="col-sm-4">
-                    <div class="thumbnail">
-                        <a href="#"><img src="${requestScope.posts[6].image}" style="width:100%"
+                    <div class="card" style="width: 100%">
+                        <a href="#"><img class="card-img-top" src="${requestScope.posts[6].image}"
+                                         style="width:100%; height: auto;  aspect-ratio: 16/9"
                                          alt="Image"></a><br>
                     </div>
                 </div>
             </c:if>
         </div>
+        <br>
         <div class="row">
             <c:if test="${requestScope.posts[1].image != null}">
                 <div class="col-sm-4">
-                    <div class="thumbnail">
-                        <a href="#"><img src="${requestScope.posts[1].image}" style="width:100%"
+                    <div class="card" style="width: 100%">
+                        <a href="#"><img class="card-img-top" src="${requestScope.posts[1].image}"
+                                         style="width:100%; height: auto;  aspect-ratio: 16/9"
                                          alt="Image"></a><br>
                     </div>
                 </div>
             </c:if>
             <c:if test="${requestScope.posts[4].image != null}">
                 <div class="col-sm-4">
-                    <div class="thumbnail">
-                        <a href="#"><img src="${requestScope.posts[4].image}" style="width:100%"
+                    <div class="card" style="width: 100%">
+                        <a href="#"><img class="card-img-top" src="${requestScope.posts[4].image}"
+                                         style="width:100%; height: auto;  aspect-ratio: 16/9"
                                          alt="Image"></a><br>
                     </div>
                 </div>
             </c:if>
             <c:if test="${requestScope.posts[7].image != null}">
                 <div class="col-sm-4">
-                    <div class="thumbnail">
-                        <a href="#"><img src="${requestScope.posts[7].image}" style="width:100%"
+                    <div class="card" style="width: 100%">
+                        <a href="#"><img class="card-img-top" src="${requestScope.posts[7].image}"
+                                         style="width:100%; height: auto;  aspect-ratio: 16/9"
                                          alt="Image"></a><br>
                     </div>
                 </div>
             </c:if>
         </div>
+        <br>
         <div class="row">
             <c:if test="${requestScope.posts[2].image != null}">
                 <div class="col-sm-4">
-                    <div class="thumbnail">
-                        <a href="#"><img src="${requestScope.posts[2].image}" style="width:100%"
+                    <div class="card" style="width: 100%">
+                        <a href="#"><img class="card-img-top" src="${requestScope.posts[2].image}"
+                                         style="width:100%; height: auto;  aspect-ratio: 16/9"
                                          alt="Image"></a><br>
                     </div>
                 </div>
             </c:if>
             <c:if test="${requestScope.posts[5].image != null}">
                 <div class="col-sm-4">
-                    <div class="thumbnail">
-                        <a href="#"><img src="${requestScope.posts[5].image}" style="width:100%"
+                    <div class="card" style="width: 100%">
+                        <a href="#"><img class="card-img-top" src="${requestScope.posts[5].image}"
+                                         style="width:100%; height: auto;  aspect-ratio: 16/9"
                                          alt="Image"></a><br>
                     </div>
                 </div>
             </c:if>
             <c:if test="${requestScope.posts[8].image != null}">
                 <div class="col-sm-4">
-                    <div class="thumbnail">
-                        <a href="#"><img src="${requestScope.posts[8].image}" style="width:100%"
+                    <div class="card" style="width: 100%">
+                        <a href="#"><img class="card-img-top" src="${requestScope.posts[8].image}"
+                                         style="width:100%; height: auto;  aspect-ratio: 16/9"
                                          alt="Image"></a><br>
                     </div>
                 </div>
@@ -128,15 +140,56 @@
 </div>
 <br>
 
-<%--TODO--%>
+<%--Pagination--%>
 <c:if test="${requestScope.countOfPages > 1}">
     <div class="text-center">
-        <ul class="pagination">
-            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        <ul class="pagination justify-content-center">
+            <c:choose>
+                <c:when test="${requestScope.page == null || requestScope.page == 1}">
+                    <li class="page-item disabled"><a class="page-link" aria-disabled="true" href="#">Previous</a></li>
+                </c:when>
+                <c:otherwise>
+                    <c:url value="/user/account" var="prevPageURL">
+                        <c:param name="username" value="${requestScope.account.username}"/>
+                        <c:param name="page" value="${requestScope.page - 1}"/>
+                    </c:url>
+                    <li class="page-item"><a class="page-link" href='<c:out value="${prevPageURL}" />'>Previous</a></li>
+                </c:otherwise>
+            </c:choose>
+
+
+            <c:forEach var="i" begin="1" end="${requestScope.countOfPages}">
+                <c:url value="/user/account" var="pageURL">
+                    <c:param name="username" value="${requestScope.account.username}"/>
+                    <c:param name="page" value="${i}"/>
+                </c:url>
+                <c:choose>
+                    <c:when test="${requestScope.page == null || requestScope.page == i}">
+                        <li class="page-item active"><a class="page-link"
+                                                        href='<c:out value="${pageURL}" />'><c:out
+                                value="${i}"/></a></li>
+                    </c:when>
+                    <c:otherwise>
+                        <li class="page-item"><a class="page-link" href='<c:out value="${pageURL}" />'><c:out
+                                value="${i}"/></a></li>
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
+
+
+            <c:choose>
+                <c:when test="${requestScope.page == null || requestScope.page == requestScope.countOfPages}">
+                    <li class="page-item disabled"><a class="page-link" aria-disabled="true" href="#">Next</a></li>
+                </c:when>
+                <c:otherwise>
+                    <c:url value="/user/account" var="nextPageURL">
+                        <c:param name="username" value="${requestScope.account.username}"/>
+                        <c:param name="page" value="${requestScope.page + 1}"/>
+                    </c:url>
+                    <li class="page-item"><a class="page-link" href='<c:out value="${nextPageURL}" />'>Next</a>
+                    </li>
+                </c:otherwise>
+            </c:choose>
         </ul>
     </div>
 </c:if>

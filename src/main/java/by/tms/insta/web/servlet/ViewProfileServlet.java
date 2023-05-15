@@ -25,7 +25,7 @@ import java.util.Optional;
 public class ViewProfileServlet extends HttpServlet {
 
     private final static String USERNAME_PARAMETER = "username";
-    private final static int POSTS_PER_PAGE = 8;
+    private final static int POSTS_PER_PAGE = 9;
     private final static String PAGE_NUMBER = "page";
 
     @Override
@@ -50,8 +50,6 @@ public class ViewProfileServlet extends HttpServlet {
                 req.setAttribute("followersCnt", followersCnt);
                 req.setAttribute("followingCnt", followingCnt);
 
-                //TODO
-                //Need to add post extraction and pagination
                 PostService postService = PostService.getInstance();
                 int countOfPages = postService.getCountOfPagesWithPosts(userAccount, 6);
                 req.setAttribute("countOfPages", countOfPages);
@@ -61,9 +59,12 @@ public class ViewProfileServlet extends HttpServlet {
 
                 if (requestedPage == null) {
                     offset = 0;
+                    req.setAttribute(PAGE_NUMBER, 1);
                 } else {
                     offset = Integer.parseInt(requestedPage) - 1;
+                    req.setAttribute(PAGE_NUMBER, requestedPage);
                 }
+
 
                 List<Post> posts = postService.getPostsByUserWithOffset(userAccount, POSTS_PER_PAGE, offset);
                 req.setAttribute("posts", posts);
