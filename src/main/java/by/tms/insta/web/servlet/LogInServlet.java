@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Optional;
 
 /**
@@ -35,21 +36,28 @@ public class LogInServlet extends HttpServlet {
 
         String username = req.getParameter(USERNAME);
         String password = req.getParameter(PASSWORD);
-        Optional<User> byUsername = userService.findByUsername(username);
-        if (byUsername.isPresent()) {
-            UserDto byUsernameDto = UserMapper.toDto(byUsername.get());
-            if (byUsername.get().getPassword().equals(password)) {
+        Optional<User> byUsername;
+        try {
+            byUsername = userService.findByUsername(username);
 
-                req.getSession().setAttribute("user", byUsernameDto);
+            if (byUsername.isPresent()) {
+                UserDto byUsernameDto = UserMapper.toDto(byUsername.get());
+                if (byUsername.get().getPassword().equals(password)) {
 
-                resp.sendRedirect("/");
+                    req.getSession().setAttribute("user", byUsernameDto);
+                    req.setAttribute("username", byUsernameDto.getUsername());
+                    getServletContext().getRequestDispatcher("/user/account").forward(req, resp);
+                } else {
+                    req.setAttribute("message", "Wrong password!");
+                    getServletContext().getRequestDispatcher("/pages/login.jsp").forward(req, resp);
+                }
             } else {
-                req.setAttribute("message", "Wrong password!");
+                req.setAttribute("message", "Sorry, but User not found!");
                 getServletContext().getRequestDispatcher("/pages/login.jsp").forward(req, resp);
             }
-        } else {
-            req.setAttribute("message", "Sorry, but User not found!");
-            getServletContext().getRequestDispatcher("/pages/login.jsp").forward(req, resp);
+        } catch (SQLException e) {
+            req.setAttribute("errormessage", "Something went wrong on our side.");
+            getServletContext().getRequestDispatcher("/pages/error.jsp").forward(req, resp);
         }
     }
 }

@@ -2,11 +2,13 @@ package by.tms.insta.service;
 
 import by.tms.insta.dao.JDBCPostDAO;
 import by.tms.insta.dao.PostDAO;
-import by.tms.insta.entity.Comment;
 import by.tms.insta.entity.Post;
 import by.tms.insta.entity.User;
 
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Denis Smirnov on 03.05.2023
@@ -28,28 +30,33 @@ public class PostService {
 
     }
 
-    public void createPost(Post post) {
-        jdbcPostDAO.createPost(post);
+    public void createPost(Post post) throws SQLException {
+        jdbcPostDAO.save(post);
 
     }
 
-    public Post findPostById(int id) {
+    public Optional<Post> findPostById(int id) throws SQLException {
         return jdbcPostDAO.findPostById(id);
     }
 
-    public void updatePost(Post post, int postId) {
-        jdbcPostDAO.updatePost(post, postId);
+    public void updatePost(Post post) throws SQLException {
+        jdbcPostDAO.updatePost(post.getId(), post.getImage(), post.getDescription());
     }
 
-    public void deletePost(int id) {
+    public void deletePost(int id) throws SQLException {
         jdbcPostDAO.deletePost(id);
     }
 
-    public List<Post> getPostsByUser(User user) {
-        return jdbcPostDAO.getPostsByUser(user);
+    public List<Post> getPostsByUser(int user_id) throws SQLException {
+        return jdbcPostDAO.getPostsByUserId(user_id);
     }
 
-    public List<Comment> getCommentsByPost(Post post) {
-        return jdbcPostDAO.getCommentsByPost(post);
+    public int getCountOfPagesWithPosts(User user, int postsPerPage) throws SQLException {
+        int countOfAllPosts = jdbcPostDAO.getCountByUser(user.getId());
+        return (int) Math.ceil(countOfAllPosts / postsPerPage);
+    }
+
+    public List<Post> getPostsByUserWithOffset(User user, int limit, int offset) throws SQLException {
+        return jdbcPostDAO.getPostsByUserWithOffset(user.getId(), limit, offset);
     }
 }
