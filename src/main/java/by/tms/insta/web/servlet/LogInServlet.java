@@ -45,8 +45,8 @@ public class LogInServlet extends HttpServlet {
                 if (byUsername.get().getPassword().equals(password)) {
 
                     req.getSession().setAttribute("user", byUsernameDto);
-
-                    resp.sendRedirect("/");
+                    req.setAttribute("username", byUsernameDto.getUsername());
+                    getServletContext().getRequestDispatcher("/user/account").forward(req, resp);
                 } else {
                     req.setAttribute("message", "Wrong password!");
                     getServletContext().getRequestDispatcher("/pages/login.jsp").forward(req, resp);

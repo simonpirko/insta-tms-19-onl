@@ -17,7 +17,6 @@
 </head>
 <body>
 <jsp:include page="header.jsp"/>
-
 <div class="container-fluid bg-3 text-center border-bottom">
     <br>
     <div class="row">
@@ -30,9 +29,7 @@
             <h4>@${requestScope.account.username}</h4>
 
             <c:if test="${sessionScope.user.username == requestScope.account.username}">
-                <div class="alert alert-danger" role="alert">
-                    <a href="#" class="btn btn-secondary active" role="button" aria-pressed="true">Edit</a>
-                </div>
+                <a href="#" class="btn btn-sm btn-danger" role="button" aria-pressed="true">Edit</a>
             </c:if>
         </div>
         <div class="col-md">
