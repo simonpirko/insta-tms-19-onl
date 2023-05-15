@@ -18,12 +18,12 @@ public class JDBCPostDAO implements PostDAO {
     private static final String SELECT_BY_POST_ID = "select * from posts join users on users.user_id = posts.user_id where post_id = ? ";
     private static final String UPDATE_POST = "update post set (image, description) values (?,?) where post_id = ?";
     private static final String DELETE_BY_POST_ID = "delete from posts where post_id =?";
-    private static final String SELECT_BY_USER = "select * from posts join users on users.user_id = posts.user_id where user_id = ? ordered by created_at desc";
+    private static final String SELECT_BY_USER = "select * from posts join users on users.user_id = posts.user_id where posts.user_id = ? ordered by created_at desc";
     private static final String INSERT_LIKE = "insert into likes (user_id, post_id) values(?,?)";
     private static final String DELETE_LIKE = "delete from likes where user_id = ?";
     private static final String EXTRACT_COUNT_OF_LIKES = "select count (*) from likes where post_id = ?";
     private static final String COUNT_BY_USER = "SELECT count(1) FROM posts WHERE user_id =?";
-    private static final String POSTS_BY_USER_WITH_OFFSET = "SELECT * FROM posts JOIN users ON users.user_id = posts.user_id WHERE user_id = ? ORDER BY post_id ASC limit ? offset ?";
+    private static final String POSTS_BY_USER_WITH_OFFSET = "SELECT * FROM posts JOIN users ON users.user_id = posts.user_id WHERE posts.user_id = ? ORDER BY post_id ASC limit ? offset ?";
 
     private JDBCPostDAO() {
     }
@@ -145,8 +145,7 @@ public class JDBCPostDAO implements PostDAO {
                         .setName(resultSet.getString("name"))
                         .setUsername(resultSet.getString("username"))
                         .setEmail(resultSet.getString("email"))
-                        .setAvatar(resultSet.getString("avatar"))
-                        .setPassword(resultSet.getString("password"))
+                        .setAvatar(resultSet.getString("photo"))
                         .build())
                 .setImage(resultSet.getString("image"))
                 .setDescription(resultSet.getString("description"))

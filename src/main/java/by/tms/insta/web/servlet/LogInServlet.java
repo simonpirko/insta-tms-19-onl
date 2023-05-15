@@ -36,27 +36,28 @@ public class LogInServlet extends HttpServlet {
 
         String username = req.getParameter(USERNAME);
         String password = req.getParameter(PASSWORD);
-        Optional<User> byUsername = null;
+        Optional<User> byUsername;
         try {
             byUsername = userService.findByUsername(username);
+
+            if (byUsername.isPresent()) {
+                UserDto byUsernameDto = UserMapper.toDto(byUsername.get());
+                if (byUsername.get().getPassword().equals(password)) {
+
+                    req.getSession().setAttribute("user", byUsernameDto);
+
+                    resp.sendRedirect("/");
+                } else {
+                    req.setAttribute("message", "Wrong password!");
+                    getServletContext().getRequestDispatcher("/pages/login.jsp").forward(req, resp);
+                }
+            } else {
+                req.setAttribute("message", "Sorry, but User not found!");
+                getServletContext().getRequestDispatcher("/pages/login.jsp").forward(req, resp);
+            }
         } catch (SQLException e) {
             req.setAttribute("errormessage", "Something went wrong on our side.");
             getServletContext().getRequestDispatcher("/pages/error.jsp").forward(req, resp);
-        }
-        if (byUsername.isPresent()) {
-            UserDto byUsernameDto = UserMapper.toDto(byUsername.get());
-            if (byUsername.get().getPassword().equals(password)) {
-
-                req.getSession().setAttribute("user", byUsernameDto);
-
-                resp.sendRedirect("/");
-            } else {
-                req.setAttribute("message", "Wrong password!");
-                getServletContext().getRequestDispatcher("/pages/login.jsp").forward(req, resp);
-            }
-        } else {
-            req.setAttribute("message", "Sorry, but User not found!");
-            getServletContext().getRequestDispatcher("/pages/login.jsp").forward(req, resp);
         }
     }
 }
