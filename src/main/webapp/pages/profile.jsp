@@ -33,8 +33,27 @@
             </c:if>
         </div>
         <div class="col-md">
-            <a href="#">${requestScope.followersCnt} Followers</a>
-            <a href="#">${requestScope.followingCnt} Following</a>
+            <div class="container">
+                <div class="row">
+                    <a href="#">${requestScope.followersCnt} Followers</a>
+                    <a href="#">${requestScope.followingCnt} Following</a>
+                </div>
+                <c:if test="${sessionScope.user.username != requestScope.account.username}">
+                    <div class="row">
+                        <form action="/#" method="post">
+                            <c:choose>
+                                <c:when test="${!requestScope.isAlreadyFollowed}">
+                                    <button type="button" class="btn btn-sm btn-success">Follow</button>
+                                </c:when>
+                                <c:otherwise>
+                                    <button type="button" class="btn btn-sm btn-danger">Unfollow</button>
+                                </c:otherwise>
+                            </c:choose>
+                        </form>
+                    </div>
+                </c:if>
+            </div>
+
         </div>
     </div>
     <br>

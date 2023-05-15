@@ -66,4 +66,9 @@ public class UserService {
     public void follow (int parentId, int childId) throws SQLException {jdbcUserDAO.follow(parentId, childId);}
 
     public void unFollow (int parentId, int childId) throws SQLException {jdbcUserDAO.unfollow(parentId, childId);}
+
+    public boolean isFollower(String followedUsername, String followerUsername){
+        int countOfItems = jdbcUserDAO.isFollower(followedUsername, followerUsername);
+        return countOfItems != 0;
+    }
 }

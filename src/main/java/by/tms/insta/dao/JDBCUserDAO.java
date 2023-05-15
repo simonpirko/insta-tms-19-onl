@@ -30,6 +30,11 @@ public class JDBCUserDAO implements UserDAO {
     private static final String FOLLOW_ON_USER = "insert into followers (parent_id, child_id) values (?, ?)";
     private static final String UNFOLLOW_FROM_USER = "delete from followers where parent_id = ? and child_id = ?";
 
+    private static final String IS_FOLLOWER = "select count (*) from followers "
+            + "join users followed on followers.child_id = followed.user_id "
+            + "join users follower on followers.parent_id = follower.user_id "
+            + "where followed.username = ? and follower.username = ?";
+
     private static JDBCUserDAO instance;
 
     public static JDBCUserDAO getInstance() {
@@ -164,6 +169,24 @@ public class JDBCUserDAO implements UserDAO {
         preparedStatement.setLong(1, parentId);
         preparedStatement.setLong(2, childId);
         preparedStatement.execute();
+    }
+
+    @Override
+    public int isFollower(String followedUsername, String followerUsername) {
+        try {
+            PreparedStatement preparedStatement = null;
+            preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(IS_FOLLOWER);
+            preparedStatement.setString(1, followedUsername);
+            preparedStatement.setString(2, followerUsername);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            int count = 0;
+            if (resultSet.next()) {
+                count = resultSet.getInt(1);
+            }
+            return count;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private User buildUser(ResultSet resultSet) throws SQLException {
