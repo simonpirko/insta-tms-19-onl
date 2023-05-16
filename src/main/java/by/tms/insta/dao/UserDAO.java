@@ -3,6 +3,7 @@ package by.tms.insta.dao;
 import by.tms.insta.entity.User;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,26 +13,26 @@ import java.util.Optional;
 
 public interface UserDAO {
 
-    void save(User user);
+    void save(User user) throws SQLException;
 
-    void deleteById(int userId);
+    void deleteById(int userId) throws SQLException;
 
-    List<User> findAll();
+    List<User> findAll() throws SQLException;
 
-    Optional<User> findByUsername(String username);
+    Optional<User> findByUsername(String username) throws SQLException;
 
-    Optional<User> findByUserId(int userId);
+    Optional<User> findByUserId(int userId) throws SQLException;
 
-    List<User> extractFollowers(int userId);
+    List<User> extractFollowers(int userId) throws SQLException;
 
-    List<User> extractFollowed(int userId);
+    List<User> extractFollowed(int userId) throws SQLException;
 
-    int extractCountOfFollowers(int userId);
+    int extractCountOfFollowers(int userId) throws SQLException;
 
-    int extractCountOfFollowed(int userId);
+    int extractCountOfFollowed(int userId) throws SQLException;
 
-    void follow(int parentId, int childId);
+    void follow(int parentId, int childId) throws SQLException;
 
-    void unfollow(int parentId, int childId);
+    void unfollow(int parentId, int childId) throws SQLException;
 
 }
