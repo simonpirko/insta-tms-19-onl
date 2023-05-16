@@ -47,8 +47,11 @@ public class PostService {
         jdbcPostDAO.deletePost(id);
     }
 
-    public List<Post> getPostsByUser(int user_id) throws SQLException {
-        return jdbcPostDAO.getPostsByUserId(user_id);
+    public List<Post> getPostsByUser(int userId) throws SQLException {
+        return jdbcPostDAO.getPostsByUserId(userId);
+    }
+    public int getCountOfLikes(int postId) throws SQLException {
+        return jdbcPostDAO.extractCountOfLikes(postId);
     }
 
     public int getCountOfPagesWithPosts(User user, int postsPerPage) throws SQLException {
