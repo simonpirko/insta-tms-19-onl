@@ -236,7 +236,7 @@
                 <div class="card-footer" style="height: 70px">
                     <form action="/createcomment" class="row g-2">
                         <div class="col-sm-11 align-self-center">
-                            <input type="text" class="form-control" placeholder="create comment"
+                            <input name="comment" type="text" class="form-control" placeholder="create comment"
                                    aria-label="create comment" style="height: 50px;">
                         </div>
                         <div class="col-1 align-self-center">
