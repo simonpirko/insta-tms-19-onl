@@ -13,10 +13,8 @@ public class SecurityFilter extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
 
-        getServletContext().getRequestDispatcher("/pages/filter.jsp").forward(req, res);
-
         if (req.getSession().getAttribute("user") == null) {
-            res.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            getServletContext().getRequestDispatcher("/pages/filter.jsp").forward(req, res);
         } else {
             chain.doFilter(req, res);
         }

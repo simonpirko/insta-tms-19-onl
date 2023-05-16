@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Optional;
 
 /**
@@ -18,6 +19,11 @@ import java.util.Optional;
 
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
+    private final static String USERNAME = "username";
+    private final static String PASSWORD = "password";
+    private final static String NAME = "name";
+    private final static String EMAIL = "email";
+    private final static String AVATAR = "avatar";
 
     private final UserService userService = UserService.getInstance();
 
@@ -28,29 +34,37 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
-        String name = req.getParameter("name");
-        String email = req.getParameter("email");
-        String avatar = req.getParameter("avatar");
+        String username = req.getParameter(USERNAME);
+        String password = req.getParameter(PASSWORD);
+        String name = req.getParameter(NAME);
+        String email = req.getParameter(EMAIL);
+        String avatar = req.getParameter(AVATAR);
 
-        Optional<User> byUsername = userService.findByUsername(username);
-        if (byUsername.isEmpty()) {
-            User user = User.builder()
-                    .setUsername(username)
-                    .setPassword(password)
-                    .setName(name)
-                    .setEmail(email)
-                    .setAvatar(avatar)
-                    .build();
-            userService.save(user);
-            resp.sendRedirect("/");
-        } else {
-            req.setAttribute("message", "User with this UserName already exists! Please, try with another name!");
-            getServletContext().getRequestDispatcher("/pages/register.jsp").forward(req, resp);
+        Optional<User> byUsername = null;
+        try {
+            byUsername = userService.findByUsername(username);
 
+            if (byUsername.isEmpty()) {
+                User user = User.builder()
+                        .setUsername(username)
+                        .setPassword(password)
+                        .setName(name)
+                        .setEmail(email)
+                        .setAvatar(avatar)
+                        .build();
+                userService.save(user);
+                resp.sendRedirect("/");
+
+            } else {
+                req.setAttribute("message", "User with this UserName already exists! Please, try with another name!");
+                getServletContext().getRequestDispatcher("/pages/register.jsp").forward(req, resp);
+
+            }
+        } catch (
+                SQLException e) {
+            req.setAttribute("errormessage", "Something went wrong on our side.");
+            getServletContext().getRequestDispatcher("/pages/error.jsp").forward(req, resp);
         }
-
 
     }
 }
