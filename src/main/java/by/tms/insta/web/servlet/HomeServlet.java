@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet("/home")
+@WebServlet("/user/home")
 public class HomeServlet extends HttpServlet {
     private int countOfPages = 0;
     private final UserService userService = UserService.getInstance();
