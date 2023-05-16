@@ -236,11 +236,11 @@
                 <div class="card-footer" style="height: 70px">
                     <form action="/createcomment" class="row g-2">
                         <div class="col-sm-11 align-self-center">
-                            <input name="comment" type="text" class="form-control" placeholder="create comment"
-                                   aria-label="create comment" style="height: 50px;">
+                            <input name="commentMessage" type="text" class="form-control" placeholder="create comment"
+                                   aria-label="create comment" value="" style="height: 50px;">
                         </div>
                         <div class="col-1 align-self-center">
-                            <button type="submit" class="btn border-0"
+                            <button name="commentBody" value="${sessionScope.user.user_id}&${requestScope.post.author.user_id}" type="submit" class="btn border-0"
                                     style="padding: unset; --bs-btn-hover-color: blue; transition: 0.3s">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor"
                                      class="bi bi-arrow-up-right-square-fill" viewBox="0 0 16 16" size="cover">
