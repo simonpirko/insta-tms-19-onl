@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @WebServlet("/user/viewpost")
-public class ViewPost extends HttpServlet {
+public class ViewPostServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
