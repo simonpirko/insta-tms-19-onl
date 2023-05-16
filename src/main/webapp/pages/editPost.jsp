@@ -26,6 +26,8 @@
             <div class="card-body">
                 <p class="card-text">${requestScope.post.description}</p><br>
                 <form method="post">
+                    <label for="newImage" class="form-label">New image:</label>
+                    <input name="newImage" type="text" class="form-control" id="newImage"><br>
                     <label for="newDescription" class="form-label">New description:</label>
                     <input name="newDescription" type="text" class="form-control" id="newDescription"><br>
                     <button type="submit" formaction="/editpost" class="btn btn-primary">Edit</button>
