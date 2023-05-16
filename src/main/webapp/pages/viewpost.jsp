@@ -11,7 +11,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>View Post</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 </head>
@@ -21,7 +21,7 @@
     <div class="card mb-3 rounded-0">
         <div class="row g-0" style="height: 800px; background-color: black">
             <div class="col-sm-7 align-self-center" style="text-align: center">
-                <img src="${post.image}"
+                <img src="${requestScope.post.image}"
                      class="img-fluid" style="max-height: 800px" alt="post image">
             </div>
             <div class="col-sm-5" style="background-color: white">
@@ -29,21 +29,19 @@
                     <div class="row g-0">
                         <div class="col-sm-6 text-start">
                             <div class="row g-0">
-                                <form action="/profile" class="col-sm-2 align-self-center text-center">
-                                    <button class="btn border-0" name="profile" type="submit" value="${post.author}"
-                                            style="padding: unset">
-                                        <img class="img-fluid rounded-5" src="${post.author.avatar}"
-                                             style="padding: unset; height: 24px; width: 24px" alt="profile image">
-                                    </button>
-                                </form>
-                                <form action="/profile" class="col-sm-10 align-self-center text-start">
-                                    <button class="btn border-0" name="profile" type="submit" value="${post.author}"
-                                            style="padding: unset">
-                                        ${post.author.username}
-                                    </button>
-                                </form>
+                                <a class="page-link col-sm-2 align-self-center text-center"
+                                   href="/user/profile?id=${requestScope.post.author.userId}"
+                                   style="padding: unset; text-decoration: unset">
+                                    <img class="img-fluid rounded-5" src="${requestScope.post.author.avatar}"
+                                         style="padding: unset; height: 24px; width: 24px" alt="profile image">
+                                </a>
+                                <a class="page-link col-sm-10 align-self-center text-center"
+                                   href="/user/profile?id=${requestScope.post.author.userId}"
+                                   style="padding: unset; text-decoration: unset">
+                                    ${requestScope.post.author.username}
+                                </a>
                             </div>
-                            <fmt:parseDate value="${post.createdAt}" var="parsedPostTime"
+                            <fmt:parseDate value="${requestScope.post.createdAt}" var="parsedPostTime"
                                            pattern="yyyy-MM-dd'T'HH:mm"
                                            type="date"/>
                             <fmt:formatDate value="${parsedPostTime}" pattern="dd.MM.yyyy HH:mm"
@@ -52,19 +50,18 @@
                         </div>
                         <div class="col-sm-2 align-self-center text-center">
                             <c:if test="${sessionScope.user.userId == requestScope.post.author.userId}">
-                                <form action="/editpost">
-                                    <button class="btn border-0" name="profile" type="submit" value="${post}"
-                                            style="padding: unset">
-                                        edit post
-                                    </button>
-                                </form>
+                                <a class="page-link col-sm-10 align-self-center text-center"
+                                   href="/user/editpost?id=${requestScope.post.postId}"
+                                   style="padding: unset; text-decoration: unset">
+                                    edit post
+                                </a>
                             </c:if>
                         </div>
                         <div class="col-sm-3 align-self-center text-end">
-                            ${likes}
+                            ${requestScope.likes}
                         </div>
-                        <form action="/like" method="post" class="col-sm-1 align-self-center text-center">
-                            <c:if test="${sessionScope.user.userId != post.like.userId}">
+                        <form action="/like" class="col-sm-1 align-self-center text-center">
+                            <c:if test="${sessionScope.user.userId != requestScope.post.like.userId}">
                                 <button type="submit" name="like" value="1" class="btn border-0"
                                         style="padding: unset; --bs-btn-hover-color: red; transition: 0.3s">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -74,7 +71,7 @@
                                     </svg>
                                 </button>
                             </c:if>
-                            <c:if test="${sessionScope.user.userId == post.like.userId}">
+                            <c:if test="${sessionScope.user.userId == requestScope.post.like.userId}">
                                 <button type="submit" name="like" value="0" class="btn border-0"
                                         style="padding: unset; --bs-btn-hover-color: black; transition: 0.3s">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -104,27 +101,23 @@
                                         <div class="row">
                                             <div class="col-sm-8 align-self-center">
                                                 <div class="row g-0">
-                                                    <form action="/profile"
-                                                          class="col-sm-2 align-self-center text-center">
-                                                        <button class="btn border-0" name="profile" type="submit"
-                                                                value="${comment.author}" style="padding: unset">
-                                                            <img class="img-fluid rounded-5"
-                                                                 src="${comment.author.avatar}"
-                                                                 style="padding: unset; height: 24px; width: 24px"
-                                                                 alt="profile image">
-                                                        </button>
-                                                    </form>
-                                                    <form action="/profile"
-                                                          class="col-sm-10 align-self-center text-start">
-                                                        <button class="btn border-0" name="profile" type="submit"
-                                                                value="${comment.author}" style="padding: unset">
-                                                                ${comment.author.username}
-                                                        </button>
-                                                    </form>
+                                                    <a class="page-link col-sm-2 align-self-center text-center"
+                                                       href="/user/profile?id=${requestScope.comment.author.userId}"
+                                                       style="padding: unset; text-decoration: unset">
+                                                        <img class="img-fluid rounded-5"
+                                                             src="${requestScope.comment.author.avatar}"
+                                                             style="padding: unset; height: 24px; width: 24px"
+                                                             alt="profile image">
+                                                    </a>
+                                                    <a class="page-link col-sm-2 align-self-center text-center"
+                                                       href="/user/profile?id=${requestScope.comment.author.userId}"
+                                                       style="padding: unset; text-decoration: unset">
+                                                            ${requestScope.comment.author.username}
+                                                    </a>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4 text-end">
-                                                <c:if test="${sessionScope.user.userId == comment.author.userId}">
+                                                <c:if test="${sessionScope.user.userId == requestScope.comment.author.userId}">
                                                     <form action="/editcomment"
                                                           class="col-sm-4 align-self-center text-start">
                                                         <button class="btn border-0" name="profile" type="submit"
@@ -150,18 +143,93 @@
                     </div>
                     <div class="container">
                         <div class="row justify-content-center">
-                            <c:if test="${paginationOffset != 0}">
-                                <form action="/viewpost" method="post">
-                                    <button name="DAOPagination" type="submit" value="${paginationOffset-5}">&laquo;
-                                    </button>
-                                </form>
-                            </c:if>
-                            <c:if test="${listSize == 6}">
-                                <form action="/viewpost" method="post">
-                                    <button name="DAOPagination" type="submit" value="${paginationOffset+5}">&raquo;
-                                    </button>
-                                </form>
-                            </c:if>
+                            <ul class="pagination">
+                                <c:choose>
+                                    <c:when test="${requestScope.page == 1}">
+                                        <li class="page-item disable">
+                                            <a class="page-link" href="/user/viewpost?page=${1}"
+                                               aria-label="First">
+                                                <span aria-hidden="true">First</span>
+                                            </a>
+                                        </li>
+                                    </c:when>
+                                    <c:when test="${requestScope.page != 1}">
+                                        <li class="page-item">
+                                            <a class="page-link" href="/user/viewpost?page=${1}"
+                                               aria-label="First">
+                                                <span aria-hidden="true">First</span>
+                                            </a>
+                                        </li>
+                                    </c:when>
+                                </c:choose>
+                                <c:choose>
+                                    <c:when test="${requestScope.page == 1}">
+                                        <li class="page-item disable">
+                                            <a class="page-link" href="/user/viewpost?page=${requestScope.page-1}"
+                                               aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                    </c:when>
+                                    <c:when test="${requestScope.page != 1}">
+                                        <li class="page-item">
+                                            <a class="page-link" href="/user/viewpost?page=${requestScope.page-1}"
+                                               aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                    </c:when>
+                                </c:choose>
+                                <c:if test="${requestScope.countOfPages > 1}">
+                                    <div class="btn-group">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                            ${requestScope.page}
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <c:forEach begin="1" var="i" end="${requestScope.countOfPages}" step="1">
+                                                <li><a class="dropdown-item" href="/user/viewpost?page=${i}">${i}</a></li>
+                                            </c:forEach>
+                                        </ul>
+                                    </div>
+                                </c:if>
+                                <c:choose>
+                                    <c:when test="${requestScope.page == requestScope.countOfPages}">
+                                        <li class="page-item disable">
+                                            <a class="page-link" href="/user/viewpost?page=${requestScope.page+1}"
+                                               aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </c:when>
+                                    <c:when test="${requestScope.page != requestScope.countOfPages}">
+                                        <li class="page-item">
+                                            <a class="page-link" href="/user/viewpost?page=${requestScope.page+1}"
+                                               aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </c:when>
+                                </c:choose>
+                                <c:choose>
+                                    <c:when test="${requestScope.page == requestScope.countOfPages}">
+                                        <li class="page-item disable">
+                                            <a class="page-link" href="/user/viewpost?page=${requestScope.countOfPages}"
+                                               aria-label="Last">
+                                                <span aria-hidden="true">Last</span>
+                                            </a>
+                                        </li>
+                                    </c:when>
+                                    <c:when test="${requestScope.page != requestScope.countOfPages}">
+                                        <li class="page-item">
+                                            <a class="page-link" href="/user/viewpost?page=${requestScope.countOfPages}"
+                                               aria-label="Last">
+                                                <span aria-hidden="true">Last</span>
+                                            </a>
+                                        </li>
+                                    </c:when>
+                                </c:choose>
+                            </ul>
                         </div>
                     </div>
                 </div>
