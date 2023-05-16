@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-@WebServlet("user/createcomment")
+@WebServlet("user/addcomment")
 public class AddCommentServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
