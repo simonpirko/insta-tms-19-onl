@@ -118,13 +118,22 @@
                                             </div>
                                             <div class="col-sm-4 text-end">
                                                 <c:if test="${sessionScope.user.userId == requestScope.comment.author.userId}">
-                                                    <form action="/editcomment"
-                                                          class="col-sm-4 align-self-center text-start">
-                                                        <button class="btn border-0" name="profile" type="submit"
-                                                                value="${comment}" style="padding: unset">
-                                                            edit
-                                                        </button>
-                                                    </form>
+                                                    <div class="row">
+                                                        <form action="/editcomment"
+                                                              class="col-sm-6 align-self-center text-end">
+                                                            <button class="btn border-0" name="profile" type="submit"
+                                                                    value="${comment}" style="padding: unset">
+                                                                edit
+                                                            </button>
+                                                        </form>
+                                                        <form action="/deletecomment"
+                                                              class="col-sm-6 align-self-center text-center">
+                                                            <button class="btn border-0" name="profile" type="submit"
+                                                                    value="${comment}" style="padding: unset">
+                                                                del
+                                                            </button>
+                                                        </form>
+                                                    </div>
                                                 </c:if>
                                             </div>
                                         </div>
