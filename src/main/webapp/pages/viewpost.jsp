@@ -30,13 +30,13 @@
                         <div class="col-sm-6 text-start">
                             <div class="row g-0">
                                 <a class="page-link col-sm-2 align-self-center text-center"
-                                   href="/user/profile?id=${requestScope.post.author.userId}"
+                                   href="/user/profile?id=${requestScope.post.author.id}"
                                    style="padding: unset; text-decoration: unset">
                                     <img class="img-fluid rounded-5" src="${requestScope.post.author.avatar}"
                                          style="padding: unset; height: 24px; width: 24px" alt="profile image">
                                 </a>
                                 <a class="page-link col-sm-10 align-self-center text-center"
-                                   href="/user/profile?id=${requestScope.post.author.userId}"
+                                   href="/user/profile?id=${requestScope.post.author.id}"
                                    style="padding: unset; text-decoration: unset">
                                     ${requestScope.post.author.username}
                                 </a>
@@ -51,7 +51,7 @@
                         <div class="col-sm-2 align-self-center text-center">
                             <c:if test="${sessionScope.user.userId == requestScope.post.author.userId}">
                                 <a class="page-link col-sm-10 align-self-center text-center"
-                                   href="/user/editpost?id=${requestScope.post.postId}"
+                                   href="/user/editpost?id=${requestScope.post.id}"
                                    style="padding: unset; text-decoration: unset">
                                     edit post
                                 </a>
@@ -61,7 +61,7 @@
                             ${requestScope.likes}
                         </div>
                         <form action="/like" class="col-sm-1 align-self-center text-center">
-                            <c:if test="${sessionScope.user.userId != requestScope.post.like.userId}">
+                            <c:if test="${sessionScope.user.id != requestScope.post.like.id}">
                                 <button type="submit" name="like" value="1" class="btn border-0"
                                         style="padding: unset; --bs-btn-hover-color: red; transition: 0.3s">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -71,7 +71,7 @@
                                     </svg>
                                 </button>
                             </c:if>
-                            <c:if test="${sessionScope.user.userId == requestScope.post.like.userId}">
+                            <c:if test="${sessionScope.user.id == requestScope.post.like.id}">
                                 <button type="submit" name="like" value="0" class="btn border-0"
                                         style="padding: unset; --bs-btn-hover-color: black; transition: 0.3s">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -102,7 +102,7 @@
                                             <div class="col-sm-8 align-self-center">
                                                 <div class="row g-0">
                                                     <a class="page-link col-sm-2 align-self-center text-center"
-                                                       href="/user/profile?id=${requestScope.comment.author.userId}"
+                                                       href="/user/profile?id=${requestScope.comment.author.id}"
                                                        style="padding: unset; text-decoration: unset">
                                                         <img class="img-fluid rounded-5"
                                                              src="${requestScope.comment.author.avatar}"
@@ -110,26 +110,26 @@
                                                              alt="profile image">
                                                     </a>
                                                     <a class="page-link col-sm-2 align-self-center text-center"
-                                                       href="/user/profile?id=${requestScope.comment.author.userId}"
+                                                       href="/user/profile?id=${requestScope.comment.author.id}"
                                                        style="padding: unset; text-decoration: unset">
                                                             ${requestScope.comment.author.username}
                                                     </a>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4 text-end">
-                                                <c:if test="${sessionScope.user.userId == requestScope.comment.author.userId}">
+                                                <c:if test="${sessionScope.user.id == requestScope.comment.author.id}">
                                                     <div class="row">
                                                         <form action="/editcomment"
                                                               class="col-sm-6 align-self-center text-end">
                                                             <button class="btn border-0" name="comment" type="submit"
-                                                                    value="${comment}" style="padding: unset">
+                                                                    value="${comment.id}" style="padding: unset">
                                                                 edit
                                                             </button>
                                                         </form>
                                                         <form action="/deletecomment"
                                                               class="col-sm-6 align-self-center text-center">
-                                                            <button class="btn border-0" name="comment" type="submit"
-                                                                    value="${comment}" style="padding: unset">
+                                                            <button class="btn border-0" name="commentId" type="submit"
+                                                                    value="${comment.id}" style="padding: unset">
                                                                 del
                                                             </button>
                                                         </form>
@@ -249,7 +249,7 @@
                                    aria-label="create comment" value="" style="height: 50px;">
                         </div>
                         <div class="col-1 align-self-center">
-                            <button name="commentBody" value="${sessionScope.user}&${requestScope.post}" type="submit" class="btn border-0"
+                            <button name="commentBody" value="${sessionScope.user.id}&${requestScope.post.id}" type="submit" class="btn border-0"
                                     style="padding: unset; --bs-btn-hover-color: blue; transition: 0.3s">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor"
                                      class="bi bi-arrow-up-right-square-fill" viewBox="0 0 16 16" size="cover">
