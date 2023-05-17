@@ -20,8 +20,8 @@
           <fmt:formatDate value="${parsedTime}" pattern="dd.MM.yyyy HH:mm" var="formattedTime"/>
 
           <div class="card mt-5" style="width: 30rem;">
-            <p style="margin-left: 20px"><a href="/user/profile?id=${requestScope.post.author.userId}" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">${requestScope.post.author.username}</a></p>
-            <a href="/user/profile?id=${requestscope.post.postId}">
+            <p style="margin-left: 20px"><a href="/user/profile?id=${requestScope.post.author.Id}" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">${requestScope.post.author.username}</a></p>
+            <a href="/user/profile?id=${requestscope.post.Id}">
               <img src="${post.image}" alt="post image">
             </a>
             <div class="card-body">
