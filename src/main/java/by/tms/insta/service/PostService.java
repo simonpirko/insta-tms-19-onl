@@ -39,8 +39,8 @@ public class PostService {
         return jdbcPostDAO.findPostById(id);
     }
 
-    public void updatePost(Post post) throws SQLException {
-        jdbcPostDAO.updatePost(post.getId(), post.getImage(), post.getDescription());
+    public void updatePost(int postId, String image, String description) throws SQLException {
+        jdbcPostDAO.updatePost(postId, image, description);
     }
 
     public void deletePost(int id) throws SQLException {
