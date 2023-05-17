@@ -42,7 +42,11 @@ public class CommentService {
         return jdbcCommentDAO.findPostIdByCommentId(commentId);
     }
 
-    public List<Comment> findByPostId(int postId, int paginationOffset) throws SQLException {
-        return jdbcCommentDAO.findByPostId(postId,paginationOffset);
+    public List<Comment> findByPostId(int postId, int paginationOffset, int limit) throws SQLException {
+        return jdbcCommentDAO.findByPostId(postId, paginationOffset, limit);
+    }
+    public int getCountOfPages(int postId,int commentPerPage){
+        int countByPostId = jdbcCommentDAO.getCountByPostId(postId);
+        return (int) Math.ceil(countByPostId / commentPerPage);
     }
 }

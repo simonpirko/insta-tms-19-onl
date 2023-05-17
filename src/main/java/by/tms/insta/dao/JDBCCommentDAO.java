@@ -21,11 +21,12 @@ public class JDBCCommentDAO implements CommentDAO {
             "join users on users.user_id = comments.user_id " +
             "where post_id = ? " +
             "ordered by created_at desc " +
-            "limit 6 offset ?";
+            "limit ? offset ?";
     private static final String SELECT_POST = "select * from posts " +
             "join users on users.user_id = posts.user_id " +
             "where post_id = ? ";
     private static final String DELETE_ALL_BY_POST_ID = "delete * from table comments where post_id = ?";
+    private static final String COUNT_BY_POST_ID = "select count(1) from comments where post_id = ?";
 
     private JDBCCommentDAO() {
     }
@@ -58,19 +59,8 @@ public class JDBCCommentDAO implements CommentDAO {
         preparedStatement.setInt(2, commentId);
         preparedStatement.execute();
     }
-
-    @Override
-    public int findPostIdByCommentId(int commentId) throws SQLException {
-        PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(SELECT_POST_ID_BY_COMMENT_ID);
-        preparedStatement.setInt(1, commentId);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        while (resultSet.next()){
-            return resultSet.getInt(1);
-        }
-        return 0;
-    }
-
-    public List<Comment> findByPostId(int postId, int paginationOffset) throws SQLException {
+  
+    public List<Comment> findByPostId(int postId, int paginationOffset, int limit) throws SQLException {
         List<Comment> commentList = new ArrayList<>();
 
         PreparedStatement postPreparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(SELECT_POST);
@@ -95,6 +85,7 @@ public class JDBCCommentDAO implements CommentDAO {
         PreparedStatement commentPreparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(SELECT_BY_POST_ID);
         commentPreparedStatement.setInt(1, postId);
         commentPreparedStatement.setInt(2, paginationOffset);
+        commentPreparedStatement.setInt(3, limit);
         ResultSet commentResultSet = commentPreparedStatement.executeQuery();
 
         while (commentResultSet.next()) {
@@ -130,5 +121,18 @@ public class JDBCCommentDAO implements CommentDAO {
         preparedStatement.setInt(1, postId);
         preparedStatement.execute();
 
+    }
+    public int getCountByPostId(int postId){
+        try {
+            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(COUNT_BY_POST_ID);
+            preparedStatement.setInt(1, postId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                return resultSet.getInt(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
