@@ -21,25 +21,23 @@ import java.util.Optional;
 @WebServlet("user/addcomment")
 public class AddCommentServlet extends HttpServlet {
     private final PostService postService = PostService.getInstance();
-    private final UserService userService = UserService.getInstance();
     private final CommentService commentService = CommentService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        UserDto sessionUser = (UserDto) req.getSession().getAttribute("user");
+        User sessionUser = (User) req.getSession().getAttribute("user");
 
         try {
-            Optional<User> user = userService.findByUsername(sessionUser.getUsername());
 
             int postId = Integer.parseInt(req.getParameter("postId"));
             Optional<Post> post = postService.findPostById(postId);
 
-            if (user.isPresent() & post.isPresent()) {
+            if (post.isPresent()) {
                 String commentMessage = req.getParameter("commentMessage");
                 LocalDateTime now = LocalDateTime.now();
                 Comment build = Comment.builder()
-                        .setAuthor(user.get())
+                        .setAuthor(sessionUser)
                         .setPost(post.get())
                         .setMessage(commentMessage)
                         .setCreateAt(now)

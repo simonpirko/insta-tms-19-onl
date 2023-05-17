@@ -17,10 +17,11 @@ import java.util.Optional;
 
 @WebServlet("/user/viewpost")
 public class ViewPostServlet extends HttpServlet {
+    private final PostService postService = PostService.getInstance();
+    private final CommentService commentService = CommentService.getInstance();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        PostService postService = PostService.getInstance();
         int id = Integer.parseInt(req.getParameter("id"));
 
         try {
@@ -30,7 +31,6 @@ public class ViewPostServlet extends HttpServlet {
                 req.setAttribute("post", postById);
                 req.setAttribute("likes", postService.getCountOfLikes(id));
 
-                CommentService commentService = CommentService.getInstance();
                 int commentPerPage = 5;
                 int countOfPages = commentService.getCountOfPages(id, commentPerPage);
                 req.setAttribute("countOfPages", countOfPages);
@@ -39,7 +39,7 @@ public class ViewPostServlet extends HttpServlet {
                 if (page == null){
                     req.setAttribute("page", 1);
                 }
-                int paginationOffset = Integer.parseInt(page) * commentPerPage;
+                int paginationOffset = (Integer.parseInt(page) - 1) * commentPerPage;
 
                 List<Comment> commentList = commentService.findByPostId(id, paginationOffset, commentPerPage);
                 req.setAttribute("commentList", commentList);

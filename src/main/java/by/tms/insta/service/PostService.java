@@ -53,6 +53,7 @@ public class PostService {
   
     public int getCountOfLikes(int postId) throws SQLException {
         return jdbcPostDAO.extractCountOfLikes(postId);
+    }
       
     public List<Post> getFollowedUsersPosts(int userId, int limit, int offset) throws SQLException {
        return jdbcPostDAO.getFollowedUsersPosts(userId, limit, offset);

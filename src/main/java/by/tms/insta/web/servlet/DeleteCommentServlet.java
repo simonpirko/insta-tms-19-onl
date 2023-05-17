@@ -17,10 +17,10 @@ public class DeleteCommentServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         int commentId = Integer.parseInt(req.getParameter("commentId"));
+        int postId = Integer.parseInt(req.getParameter("postId"));
 
         try {
 
-            int postId = commentService.findPostIdByCommentId(commentId);
             commentService.deleteById(commentId);
 
             resp.sendRedirect(req.getContextPath() + "/viewpost?id=" + postId);

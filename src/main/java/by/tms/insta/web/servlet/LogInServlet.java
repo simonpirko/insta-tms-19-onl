@@ -41,11 +41,11 @@ public class LogInServlet extends HttpServlet {
             byUsername = userService.findByUsername(username);
 
             if (byUsername.isPresent()) {
-                UserDto byUsernameDto = UserMapper.toDto(byUsername.get());
+
                 if (byUsername.get().getPassword().equals(password)) {
 
-                    req.getSession().setAttribute("user", byUsernameDto);
-                    req.setAttribute("username", byUsernameDto.getUsername());
+                    req.getSession().setAttribute("user", byUsername.get());
+                    req.setAttribute("username", byUsername.get().getUsername());
                     getServletContext().getRequestDispatcher("/user/account").forward(req, resp);
                 } else {
                     req.setAttribute("message", "Wrong password!");

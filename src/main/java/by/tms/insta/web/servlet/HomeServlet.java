@@ -26,38 +26,32 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        UserDto userDto = (UserDto) req.getSession().getAttribute("user");
+        User sessionUser = (User) req.getSession().getAttribute("user");
 
         try {
 
-            Optional<User> sessionUser = userService.findByUsername(userDto.getUsername());
-            if (sessionUser.isPresent()) {
+            List<User> users = userService.extractFollowed(sessionUser.getId());
+            int postsPerPage = 5;
 
-                List<User> users = userService.extractFollowed(sessionUser.get().getId());
-                int postsPerPage = 5;
-
-                for (User user : users) {
-                    int countOfPagesWithPosts = postService.getCountOfPagesWithPosts(user, postsPerPage);
-                    countOfPages = countOfPages + countOfPagesWithPosts;
-                }
-
-                req.setAttribute("countOfPages", countOfPages);
-
-                String page = req.getParameter("page");
-                if (page == null) {
-                    req.setAttribute("page", 1);
-                }
-
-                int paginationOffset = Integer.parseInt(page) * postsPerPage;
-
-                List<Post> postList = postService.getFollowedUsersPosts(sessionUser.get().getId(), postsPerPage, paginationOffset);
-                req.setAttribute("postList", postList);
-
-                req.getRequestDispatcher("/pages/home.jsp").forward(req, resp);
-
+            for (User user : users) {
+                int countOfPagesWithPosts = postService.getCountOfPagesWithPosts(user, postsPerPage);
+                countOfPages = countOfPages + countOfPagesWithPosts;
             }
-            req.setAttribute("errormessage", "Something went wrong.");
-            getServletContext().getRequestDispatcher("/pages/error.jsp").forward(req, resp);
+
+            req.setAttribute("countOfPages", countOfPages);
+
+            String page = req.getParameter("page");
+            if (page == null) {
+                req.setAttribute("page", 1);
+            }
+
+            int paginationOffset = (Integer.parseInt(page) - 1) * postsPerPage;
+
+            List<Post> postList = postService.getFollowedUsersPosts(sessionUser.getId(), postsPerPage, paginationOffset);
+            req.setAttribute("postList", postList);
+
+            req.getRequestDispatcher("/pages/home.jsp").forward(req, resp);
+
 
         } catch (SQLException e) {
             req.setAttribute("errormessage", "Something went wrong on our side.");

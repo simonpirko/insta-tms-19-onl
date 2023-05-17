@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @WebServlet("/user/editpost")
 public class EditPostServlet extends HttpServlet {
+    private final PostService postService = PostService.getInstance();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         getServletContext().getRequestDispatcher("/pages/editPost.jsp").forward(req, resp);
@@ -21,10 +22,10 @@ public class EditPostServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String id = req.getParameter("id");
-        if (id != null) {
 
-            PostService postService = PostService.getInstance();
+        String id = req.getParameter("id");
+
+        if (id != null) {
 
             try {
                 int postId = Integer.parseInt(id);

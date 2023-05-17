@@ -38,9 +38,6 @@ public class CommentService {
     public void updateMessageById(int commentId, String message) throws SQLException {
         jdbcCommentDAO.updateMessageById(commentId, message);
     }
-    public int findPostIdByCommentId(int commentId) throws SQLException {
-        return jdbcCommentDAO.findPostIdByCommentId(commentId);
-    }
 
     public List<Comment> findByPostId(int postId, int paginationOffset, int limit) throws SQLException {
         return jdbcCommentDAO.findByPostId(postId, paginationOffset, limit);

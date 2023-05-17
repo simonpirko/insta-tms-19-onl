@@ -128,6 +128,7 @@
                                                         </form>
                                                         <form action="/user/deletecomment"
                                                               class="col-sm-6 align-self-center text-center">
+                                                            <input type="hidden" name="postId" value="${requestScope.post.id}" >
                                                             <button class="btn border-0" name="commentId" type="submit"
                                                                     value="${comment.id}" style="padding: unset">
                                                                 del

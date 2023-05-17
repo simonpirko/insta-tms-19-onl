@@ -16,7 +16,6 @@ public class JDBCCommentDAO implements CommentDAO {
     private static final String INSERT_COMMENT = "insert into comments (message, post_id, user_id, created_at) value(?,?,?,?)";
     private static final String DELETE_COMMENT = "delete from comments where comment_id = ?";
     private static final String UPDATE_COMMENT = "update comments set message = ? where comment_id = ?";
-    private static final String SELECT_POST_ID_BY_COMMENT_ID = "select post_id comments where comment_id = ?";
     private static final String SELECT_BY_POST_ID = "select * from comments " +
             "join users on users.user_id = comments.user_id " +
             "where post_id = ? " +
