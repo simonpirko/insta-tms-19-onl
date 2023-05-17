@@ -60,7 +60,7 @@
                         <div class="col-sm-3 align-self-center text-end">
                             ${requestScope.likes}
                         </div>
-                        <form action="/like" class="col-sm-1 align-self-center text-center">
+                        <form action="/user/like" class="col-sm-1 align-self-center text-center">
                             <c:if test="${sessionScope.user.id != requestScope.post.like.id}">
                                 <button type="submit" name="like" value="1" class="btn border-0"
                                         style="padding: unset; --bs-btn-hover-color: red; transition: 0.3s">
@@ -119,14 +119,14 @@
                                             <div class="col-sm-4 text-end">
                                                 <c:if test="${sessionScope.user.id == requestScope.comment.author.id}">
                                                     <div class="row">
-                                                        <form action="/editcomment"
+                                                        <form action="/user/editcomment"
                                                               class="col-sm-6 align-self-center text-end">
                                                             <button class="btn border-0" name="comment" type="submit"
                                                                     value="${comment.id}" style="padding: unset">
                                                                 edit
                                                             </button>
                                                         </form>
-                                                        <form action="/deletecomment"
+                                                        <form action="/user/deletecomment"
                                                               class="col-sm-6 align-self-center text-center">
                                                             <button class="btn border-0" name="commentId" type="submit"
                                                                     value="${comment.id}" style="padding: unset">
@@ -243,7 +243,7 @@
                     </div>
                 </div>
                 <div class="card-footer" style="height: 70px">
-                    <form action="/createcomment" class="row g-2">
+                    <form action="/user/createcomment" class="row g-2">
                         <div class="col-sm-11 align-self-center">
                             <input name="commentMessage" type="text" class="form-control" placeholder="create comment"
                                    aria-label="create comment" value="" style="height: 50px;">
