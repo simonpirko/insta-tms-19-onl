@@ -22,6 +22,7 @@ public interface PostDAO {
     int extractCountOfLikes(int post_id) throws SQLException;
 
     int getCountByUser(int user_id) throws SQLException;
+    List<Post> getFollowedUsersPosts(int userId, int limit, int offset) throws SQLException;
 
     List<Post> getPostsByUserWithOffset(int user_id, int limit, int offset) throws SQLException;
 }

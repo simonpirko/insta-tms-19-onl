@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -12,90 +14,120 @@
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-5 mt-5">
+      <ul>
+        <c:forEach items="${postList}" var="operation" end="4">
+          <fmt:parseDate value="${post.createdAt}" var="parsedTime" pattern="yyyy-MM-dd'T'HH:mm" type="date"/>
+          <fmt:formatDate value="${parsedTime}" pattern="dd.MM.yyyy HH:mm" var="formattedTime"/>
+
+          <div class="card mt-5" style="width: 30rem;">
+            <p style="margin-left: 20px"><a href="/user/profile?id=${requestScope.post.author.id}" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">${requestScope.post.author.username}</a></p>
+            <a href="/user/profile?id=${requestscope.post.id}">
+              <img src="${post.image}" alt="post image">
+            </a>
+            <div class="card-body">
+              <p class="card-text">${post.description}</p>
+            </div>
+          </div>
+        </c:forEach>
+      </ul>
 
 
-      <!--            1. Фото-->
-      <div class="card mt-5" style="width: 30rem;">
-        <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
-        <img src="#" alt="...">   <%--<-- Фото поста--%>
-        <div class="card-body">
-          <p class="card-text">#</p>  <%--<-- Текст поста--%>
+      <div class="container">
+        <div class="row justify-content-center">
+          <ul class="pagination">
+            <c:choose>
+              <c:when test="${requestScope.page == 1}">
+                <li class="page-item disable">
+                  <a class="page-link" href="/user/home?page=${1}"
+                     aria-label="First">
+                    <span aria-hidden="true">First</span>
+                  </a>
+                </li>
+              </c:when>
+              <c:when test="${requestScope.page != 1}">
+                <li class="page-item">
+                  <a class="page-link" href="/user/home?page=${1}"
+                     aria-label="First">
+                    <span aria-hidden="true">First</span>
+                  </a>
+                </li>
+              </c:when>
+            </c:choose>
+            <c:choose>
+              <c:when test="${requestScope.page == 1}">
+                <li class="page-item disable">
+                  <a class="page-link" href="/user/home?page=${requestScope.page-1}"
+                     aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+              </c:when>
+              <c:when test="${requestScope.page != 1}">
+                <li class="page-item">
+                  <a class="page-link" href="/user/home?page=${requestScope.page-1}"
+                     aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+              </c:when>
+            </c:choose>
+            <c:if test="${requestScope.countOfPages > 1}">
+              <div class="btn-group">
+                <button class="btn btn-secondary dropdown-toggle" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    ${requestScope.page}
+                </button>
+                <ul class="dropdown-menu">
+                  <c:forEach begin="1" var="i" end="${requestScope.countOfPages}" step="1">
+                    <li><a class="dropdown-item" href="/user/home?page=${i}">${i}</a></li>
+                  </c:forEach>
+                </ul>
+              </div>
+            </c:if>
+            <c:choose>
+              <c:when test="${requestScope.page == requestScope.countOfPages}">
+                <li class="page-item disable">
+                  <a class="page-link" href="/user/home?page=${requestScope.page+1}"
+                     aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>f
+              </c:when>
+              <c:when test="${requestScope.page != requestScope.countOfPages}">
+                <li class="page-item">
+                  <a class="page-link" href="/user/home?page=${requestScope.page+1}"
+                     aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </c:when>
+            </c:choose>
+            <c:choose>
+              <c:when test="${requestScope.page == requestScope.countOfPages}">
+                <li class="page-item disable">
+                  <a class="page-link" href="/user/home?page=${requestScope.countOfPages}"
+                     aria-label="Last">
+                    <span aria-hidden="true">Last</span>
+                  </a>
+                </li>
+              </c:when>
+              <c:when test="${requestScope.page != requestScope.countOfPages}">
+                <li class="page-item">
+                  <a class="page-link" href="/user/home?page=${requestScope.countOfPages}"
+                     aria-label="Last">
+                    <span aria-hidden="true">Last</span>
+                  </a>
+                </li>
+              </c:when>
+            </c:choose>
+          </ul>
         </div>
       </div>
-
-
-
-      <!--            2. Фото-->
-      <div class="card mt-5" style="width: 30rem;">
-        <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
-        <img src="#" alt="...">   <%--<-- Фото поста--%>
-        <div class="card-body">
-          <p class="card-text">#</p>  <%--<-- Текст поста--%>
-        </div>
-      </div>
-
-
-      <p class="fs-6">    </p>
-
-      <!--            3. Фото-->
-      <div class="card mt-5" style="width: 30rem;">
-        <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
-        <img src="#" alt="...">   <%--<-- Фото поста--%>
-        <div class="card-body">
-          <p class="card-text">#</p>  <%--<-- Текст поста--%>
-        </div>
-      </div>
-
-
-
-      <!--            4. Фото-->
-      <div class="card mt-5" style="width: 30rem;">
-        <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
-        <img src="#" alt="...">   <%--<-- Фото поста--%>
-        <div class="card-body">
-          <p class="card-text">#</p>  <%--<-- Текст поста--%>
-        </div>
-      </div>
-
-
-      <!--            5. Фото-->
-      <div class="card mt-5" style="width: 30rem;">
-        <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
-        <img src="#" alt="...">   <%--<-- Фото поста--%>
-        <div class="card-body">
-          <p class="card-text">#</p>  <%--<-- Текст поста--%>
-        </div>
-      </div>
-
-
-
-
-      <!--           Pagination-->
-      <div class="d-flex">
-        <div class="mx-auto">
-          <nav aria-label="...">
-            <ul class="pagination mt-5">
-
-              <li class="page-item disabled">
-                <span class="page-link">Previous</span>
-              </li>
-              <li class="page-item"><a class="page-link" href="#">1</a></li>
-              <li class="page-item active" aria-current="page">
-                <span class="page-link">2</span>
-              </li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item">
-                <a class="page-link" href="#">Next</a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </div>
-
 
     </div>
   </div>
 </div>
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"

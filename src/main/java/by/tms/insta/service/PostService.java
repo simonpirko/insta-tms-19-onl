@@ -39,8 +39,8 @@ public class PostService {
         return jdbcPostDAO.findPostById(id);
     }
 
-    public void updatePost(Post post) throws SQLException {
-        jdbcPostDAO.updatePost(post.getId(), post.getImage(), post.getDescription());
+    public void updatePost(int postId, String image, String description) throws SQLException {
+        jdbcPostDAO.updatePost(postId, image, description);
     }
 
     public void deletePost(int id) throws SQLException {
@@ -50,8 +50,12 @@ public class PostService {
     public List<Post> getPostsByUser(int userId) throws SQLException {
         return jdbcPostDAO.getPostsByUserId(userId);
     }
+  
     public int getCountOfLikes(int postId) throws SQLException {
         return jdbcPostDAO.extractCountOfLikes(postId);
+      
+    public List<Post> getFollowedUsersPosts(int userId, int limit, int offset) throws SQLException {
+       return jdbcPostDAO.getFollowedUsersPosts(userId, limit, offset);
     }
 
     public int getCountOfPagesWithPosts(User user, int postsPerPage) throws SQLException {
