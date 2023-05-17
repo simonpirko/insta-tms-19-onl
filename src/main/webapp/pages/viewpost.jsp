@@ -249,7 +249,7 @@
                                    aria-label="create comment" value="" style="height: 50px;">
                         </div>
                         <div class="col-1 align-self-center">
-                            <button name="commentBody" value="${sessionScope.user.id}&${requestScope.post.id}" type="submit" class="btn border-0"
+                            <button name="postId" value="${requestScope.post.id}" type="submit" class="btn border-0"
                                     style="padding: unset; --bs-btn-hover-color: blue; transition: 0.3s">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor"
                                      class="bi bi-arrow-up-right-square-fill" viewBox="0 0 16 16" size="cover">
