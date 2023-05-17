@@ -53,7 +53,7 @@ public class ViewProfileServlet extends HttpServlet {
                 UserDto authorizedUser = (UserDto) req.getSession().getAttribute("user");
                 boolean isFollowed = userService.isFollower(accountDto.getUsername(), authorizedUser.getUsername());
 
-                req.setAttribute("isFollowed", isFollowed);
+                req.setAttribute("isAlreadyFollowed", isFollowed);
 
                 PostService postService = PostService.getInstance();
                 int countOfPages = postService.getCountOfPagesWithPosts(userAccount, 6);

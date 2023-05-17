@@ -21,8 +21,16 @@
     <br>
     <div class="row">
         <div class="col-md d-flex align-items-center justify-content-center">
-            <img src="${requestScope.account.avatar}"
-                 class="rounded-circle border border-dark" width="150" height="150">
+            <c:choose>
+                <c:when test="${requestScope.account.avatar != null}">
+                    <img src="${requestScope.account.avatar}"
+                         class="rounded-circle border border-dark" width="150" height="150">
+                </c:when>
+                <c:otherwise>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png"
+                         class="rounded-circle border border-dark" width="150" height="150">
+                </c:otherwise>
+            </c:choose>
         </div>
         <div class="col-md text-md-start">
             <h3>${requestScope.account.name}</h3>
@@ -35,10 +43,11 @@
         <div class="col-md">
             <div class="container">
                 <div class="row">
-                    <a href="#">${requestScope.followersCnt} Followers</a>
-                    <a href="#">${requestScope.followingCnt} Following</a>
+                    <a class="col" href="#">${requestScope.followersCnt} Followers</a>
+                    <a class="col" href="#">${requestScope.followingCnt} Following</a>
                 </div>
                 <c:if test="${sessionScope.user.username != requestScope.account.username}">
+                    <br>
                     <div class="row">
                         <form action="/#" method="post">
                             <c:choose>
