@@ -121,14 +121,14 @@
                                                     <div class="row">
                                                         <form action="/editcomment"
                                                               class="col-sm-6 align-self-center text-end">
-                                                            <button class="btn border-0" name="profile" type="submit"
+                                                            <button class="btn border-0" name="comment" type="submit"
                                                                     value="${comment}" style="padding: unset">
                                                                 edit
                                                             </button>
                                                         </form>
                                                         <form action="/deletecomment"
                                                               class="col-sm-6 align-self-center text-center">
-                                                            <button class="btn border-0" name="profile" type="submit"
+                                                            <button class="btn border-0" name="comment" type="submit"
                                                                     value="${comment}" style="padding: unset">
                                                                 del
                                                             </button>
