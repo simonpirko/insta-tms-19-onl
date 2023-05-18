@@ -16,7 +16,7 @@ public class JDBCPostDAO implements PostDAO {
     private final ConnectionJdbc connectionJdbc = ConnectionJdbc.getInstance();
     private static final String INSERT_POST = "insert into posts (user_id, image, createdAt, description) values (?,?,?,?)";
     private static final String SELECT_BY_POST_ID = "select * from posts join users on users.user_id = posts.user_id where post_id = ? ";
-    private static final String UPDATE_POST = "update post set (image, description) values (?,?) where post_id = ?";
+    private static final String UPDATE_POST = "update posts set (image, description) values (?,?) where post_id = ?";
     private static final String DELETE_BY_POST_ID = "delete from posts where post_id =?";
     private static final String SELECT_BY_USER = "select * from posts join users on users.user_id = posts.user_id where posts.user_id = ? ordered by created_at desc";
     private static final String INSERT_LIKE = "insert into likes (user_id, post_id) values(?,?)";

@@ -30,6 +30,8 @@ public class JDBCUserDAO implements UserDAO {
     private static final String FOLLOW_ON_USER = "insert into followers (parent_id, child_id) values (?, ?)";
     private static final String UNFOLLOW_FROM_USER = "delete from followers where parent_id = ? and child_id = ?";
 
+    private static final String UPDATE_USER = "UPDATE users SET (name, password, photo, email) VALUES (?,?,?,?) WHERE user_id = ?";
+
     private static JDBCUserDAO instance;
 
     public static JDBCUserDAO getInstance() {
@@ -164,6 +166,21 @@ public class JDBCUserDAO implements UserDAO {
         preparedStatement.setLong(1, parentId);
         preparedStatement.setLong(2, childId);
         preparedStatement.execute();
+    }
+
+    @Override
+    public void update(User user) {
+        try {
+            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(UPDATE_USER);
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3, user.getAvatar());
+            preparedStatement.setString(4, user.getEmail());
+            preparedStatement.setLong(5, user.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private User buildUser(ResultSet resultSet) throws SQLException {

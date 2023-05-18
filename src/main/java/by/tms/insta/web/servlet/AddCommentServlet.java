@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-@WebServlet("user/addcomment")
+@WebServlet("/user/addcomment")
 public class AddCommentServlet extends HttpServlet {
     private final PostService postService = PostService.getInstance();
     private final CommentService commentService = CommentService.getInstance();
