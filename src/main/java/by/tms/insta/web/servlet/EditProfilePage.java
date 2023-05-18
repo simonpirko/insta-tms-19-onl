@@ -34,28 +34,17 @@ public class EditProfilePage extends HttpServlet {
         String newPassword = req.getParameter("newPassword");
         String repeatedNewPassword = req.getParameter("repeatNewPassword");
 
-        if (hasChanges(newName, newEmail, newImage, newPassword, repeatedNewPassword)) {
-            try {
-                UserDto userDto = (UserDto) req.getSession().getAttribute("user");
-                Optional<User> optionalUser = userService.findByUsername(userDto.getUsername());
-
-                if (newName.isEmpty()) {
-                    System.out.println("null name");
-                }
-                if (newEmail.isEmpty()) {
-                    System.out.println("null email");
-                }
-                if (newImage.isEmpty()) {
-                    System.out.println("null image");
-                }
-            } catch (SQLException e) {
-                req.setAttribute("errormessage", "Something went wrong on our side.");
-                getServletContext().getRequestDispatcher("/pages/error.jsp").forward(req, resp);
-            }
+        if(!newPassword.equals(repeatedNewPassword)){
+            req.setAttribute("errormessage", "Passwords are not equal.");
+            getServletContext().getRequestDispatcher("/pages/editprofile.jsp").forward(req, resp);
         }
+
+        UserDto userDto = (UserDto) req.getSession().getAttribute("user");
+
+        userService.updateUserProfile(userDto, newName, newPassword, newEmail, newImage);
+
+        req.setAttribute("username", userDto.getUsername());
+        getServletContext().getRequestDispatcher("/user/account").forward(req, resp);
     }
 
-    private boolean hasChanges(String name, String email, String image, String password, String repeatedPassword){
-        return !(name.isEmpty() && email.isEmpty() && image.isEmpty() && password.isEmpty() && !password.equals(repeatedPassword));
-    }
 }

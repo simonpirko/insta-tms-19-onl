@@ -30,7 +30,10 @@ public class JDBCUserDAO implements UserDAO {
     private static final String FOLLOW_ON_USER = "insert into followers (parent_id, child_id) values (?, ?)";
     private static final String UNFOLLOW_FROM_USER = "delete from followers where parent_id = ? and child_id = ?";
 
-    private static final String UPDATE_USER = "UPDATE users SET (name, password, photo, email) VALUES (?,?,?,?) WHERE user_id = ?";
+    private static final String UPDATE_USER = "UPDATE users SET (name, photo, email) VALUES (?,?,?) WHERE user_id = ?";
+
+    private static final String CHANGE_PASSWORD = "UPDATE users SET password =? WHERE user_id = ?";
+
 
     private static JDBCUserDAO instance;
 
@@ -169,14 +172,25 @@ public class JDBCUserDAO implements UserDAO {
     }
 
     @Override
-    public void update(User user) {
+    public void update(int userId, String name, String email, String avatar) {
         try {
             PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(UPDATE_USER);
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setString(3, user.getAvatar());
-            preparedStatement.setString(4, user.getEmail());
-            preparedStatement.setLong(5, user.getId());
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, avatar);
+            preparedStatement.setString(3, email);
+            preparedStatement.setLong(4, userId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void changePassword(int userId, String password) {
+        try {
+            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(UPDATE_USER);
+            preparedStatement.setString(1, password);
+            preparedStatement.setLong(2, userId);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

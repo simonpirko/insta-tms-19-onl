@@ -1,7 +1,9 @@
 package by.tms.insta.service;
 
 import by.tms.insta.dao.JDBCUserDAO;
+import by.tms.insta.dto.UserDto;
 import by.tms.insta.entity.User;
+import by.tms.insta.validation.UserValidation;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -24,7 +26,9 @@ public class UserService {
 
     }
 
-    public void save(User user) throws SQLException { jdbcUserDAO.save(user); }
+    public void save(User user) throws SQLException {
+        jdbcUserDAO.save(user);
+    }
 
     public void deleteById(int userId) throws SQLException {
         jdbcUserDAO.deleteById(userId);
@@ -63,7 +67,25 @@ public class UserService {
         return jdbcUserDAO.extractCountOfFollowed(userId);
     }
 
-    public void follow (int parentId, int childId) throws SQLException {jdbcUserDAO.follow(parentId, childId);}
+    public void follow(int parentId, int childId) throws SQLException {
+        jdbcUserDAO.follow(parentId, childId);
+    }
 
-    public void unFollow (int parentId, int childId) throws SQLException {jdbcUserDAO.unfollow(parentId, childId);}
+    public void unFollow(int parentId, int childId) throws SQLException {
+        jdbcUserDAO.unfollow(parentId, childId);
+    }
+
+    public void updateUserProfile(UserDto user, String newName, String newPassword, String newEmail, String newImage) {
+        String name = newName.isEmpty() ? user.getName() : newName;
+        String email = newEmail.isEmpty() ? user.getEmail() : newEmail;
+        String avatar = newEmail.isEmpty() ? user.getAvatar() : newImage;
+
+        if(newPassword.isEmpty()) {
+            jdbcUserDAO.update(user.getId(), name, email, avatar);
+        }
+        else {
+            jdbcUserDAO.update(user.getId(), name, email, avatar);
+            jdbcUserDAO.changePassword(user.getId(), newPassword);
+        }
+    }
 }

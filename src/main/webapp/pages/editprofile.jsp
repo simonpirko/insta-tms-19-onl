@@ -56,6 +56,10 @@
                     <label for="repeatNewPassword" class="form-label">Repeat new password:</label>
                     <input name="repeatNewPassword" type="password" class="form-control" id="repeatNewPassword"><br>
 
+                    <c:if test="${requestScope.errornessage != null}">
+                        <p style="color: red">${requestScope.errornessage}</p><br>
+                    </c:if>
+
                     <button type="submit" formaction="/user/account/edit" class="btn btn-primary">Edit</button>
                     <button type="submit" formaction="/user/account/delete" class="btn btn-danger">Delete</button>
                 </form>
