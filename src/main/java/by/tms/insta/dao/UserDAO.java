@@ -37,5 +37,6 @@ public interface UserDAO {
 
     void update(int userId, String name, String email, String avatar);
 
-    void changePassword(int userId, String password);
+    void updateWithPassword(int userId, String name, String email, String avatar, String password);
+
 }

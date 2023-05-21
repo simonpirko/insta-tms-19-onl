@@ -2,6 +2,7 @@ package by.tms.insta.web.servlet;
 
 
 import by.tms.insta.dto.UserDto;
+import by.tms.insta.entity.SessionPrincipalUser;
 import by.tms.insta.entity.User;
 import by.tms.insta.mapper.UserMapper;
 import by.tms.insta.service.UserService;
@@ -43,9 +44,9 @@ public class LogInServlet extends HttpServlet {
             if (byUsername.isPresent()) {
 
                 if (byUsername.get().getPassword().equals(password)) {
-
-                    req.getSession().setAttribute("user", byUsername.get());
-                    req.setAttribute("username", byUsername.get().getUsername());
+                    SessionPrincipalUser sessionPrincipalUser = UserMapper.toSessionPrincipalUserUser(byUsername.get());
+                    req.getSession().setAttribute("user", sessionPrincipalUser);
+                    req.setAttribute("username", sessionPrincipalUser.getUsername());
                     getServletContext().getRequestDispatcher("/user/account").forward(req, resp);
                 } else {
                     req.setAttribute("message", "Wrong password!");

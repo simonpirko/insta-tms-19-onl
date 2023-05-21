@@ -75,17 +75,15 @@ public class UserService {
         jdbcUserDAO.unfollow(parentId, childId);
     }
 
-    public void updateUserProfile(UserDto user, String newName, String newPassword, String newEmail, String newImage) {
-        String name = newName.isEmpty() ? user.getName() : newName;
-        String email = newEmail.isEmpty() ? user.getEmail() : newEmail;
-        String avatar = newEmail.isEmpty() ? user.getAvatar() : newImage;
+    public void updateUserProfile(User oldUser, User newUser) {
+        String name = newUser.getName().isEmpty() ? oldUser.getName() : newUser.getName();
+        String email = newUser.getEmail().isEmpty() ? oldUser.getEmail() : newUser.getEmail();
+        String avatar = newUser.getAvatar().isEmpty() ? oldUser.getAvatar() : newUser.getAvatar();
 
-        if(newPassword.isEmpty()) {
-            jdbcUserDAO.update(user.getId(), name, email, avatar);
-        }
-        else {
-            jdbcUserDAO.update(user.getId(), name, email, avatar);
-            jdbcUserDAO.changePassword(user.getId(), newPassword);
+        if (newUser.getPassword().isEmpty()) {
+            jdbcUserDAO.update(newUser.getId(), name, email, avatar);
+        } else {
+            jdbcUserDAO.updateWithPassword(newUser.getId(), name, email, avatar, newUser.getPassword());
         }
     }
 }

@@ -32,7 +32,7 @@ public class JDBCUserDAO implements UserDAO {
 
     private static final String UPDATE_USER = "UPDATE users SET (name, photo, email) VALUES (?,?,?) WHERE user_id = ?";
 
-    private static final String CHANGE_PASSWORD = "UPDATE users SET password =? WHERE user_id = ?";
+    private static final String UPDATE_WITH_PASSWORD = "UPDATE users SET (name, photo, email, password) VALUES (?,?,?,?) WHERE user_id = ?";
 
 
     private static JDBCUserDAO instance;
@@ -186,11 +186,14 @@ public class JDBCUserDAO implements UserDAO {
     }
 
     @Override
-    public void changePassword(int userId, String password) {
+    public void updateWithPassword(int userId, String name, String email, String avatar, String password) {
         try {
-            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(UPDATE_USER);
-            preparedStatement.setString(1, password);
-            preparedStatement.setLong(2, userId);
+            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(UPDATE_WITH_PASSWORD);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, avatar);
+            preparedStatement.setString(3, email);
+            preparedStatement.setString(4, password);
+            preparedStatement.setLong(4, userId);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

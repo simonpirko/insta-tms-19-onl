@@ -1,7 +1,9 @@
 package by.tms.insta.web.servlet;
 
 import by.tms.insta.dto.UserDto;
+import by.tms.insta.entity.SessionPrincipalUser;
 import by.tms.insta.entity.User;
+import by.tms.insta.mapper.UserMapper;
 import by.tms.insta.service.UserService;
 
 import javax.servlet.ServletException;
@@ -10,8 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Optional;
 
 /**
  * @author Andrei Lisouski (Andrlis) - 18/05/2023 - 1:32
@@ -39,11 +39,21 @@ public class EditProfilePage extends HttpServlet {
             getServletContext().getRequestDispatcher("/pages/editprofile.jsp").forward(req, resp);
         }
 
-        UserDto userDto = (UserDto) req.getSession().getAttribute("user");
 
-        userService.updateUserProfile(userDto, newName, newPassword, newEmail, newImage);
+        SessionPrincipalUser sessionUser = (SessionPrincipalUser) req.getSession().getAttribute("user");
+        User updatedUser = User.builder()
+                .setId(sessionUser.getId())
+                .setUsername(sessionUser.getUsername())
+                .setName(newName)
+                .setEmail(newEmail)
+                .setAvatar(newImage)
+                .setPassword(newPassword)
+                .build();
 
-        req.setAttribute("username", userDto.getUsername());
+
+        userService.updateUserProfile(UserMapper.toUser(sessionUser), updatedUser);
+
+        req.setAttribute("username", sessionUser.getUsername());
         getServletContext().getRequestDispatcher("/user/account").forward(req, resp);
     }
 

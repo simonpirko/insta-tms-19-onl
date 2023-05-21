@@ -3,7 +3,9 @@ package by.tms.insta.web.servlet;
 import by.tms.insta.dto.UserDto;
 import by.tms.insta.entity.Comment;
 import by.tms.insta.entity.Post;
+import by.tms.insta.entity.SessionPrincipalUser;
 import by.tms.insta.entity.User;
+import by.tms.insta.mapper.UserMapper;
 import by.tms.insta.service.CommentService;
 import by.tms.insta.service.PostService;
 import by.tms.insta.service.UserService;
@@ -26,7 +28,7 @@ public class AddCommentServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        User sessionUser = (User) req.getSession().getAttribute("user");
+        SessionPrincipalUser sessionUser = (SessionPrincipalUser) req.getSession().getAttribute("user");
 
         try {
 
@@ -37,7 +39,7 @@ public class AddCommentServlet extends HttpServlet {
                 String commentMessage = req.getParameter("commentMessage");
                 LocalDateTime now = LocalDateTime.now();
                 Comment build = Comment.builder()
-                        .setAuthor(sessionUser)
+                        .setAuthor(UserMapper.toUser(sessionUser))
                         .setPost(post.get())
                         .setMessage(commentMessage)
                         .setCreateAt(now)
