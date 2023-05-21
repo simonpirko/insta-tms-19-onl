@@ -121,7 +121,8 @@
                                                     <div class="row">
                                                         <form action="/user/editcomment"
                                                               class="col-sm-6 align-self-center text-end">
-                                                            <button class="btn border-0" name="comment" type="submit"
+                                                            <input type="hidden" name="commentId" value="${comment.id}" >
+                                                            <button class="btn border-0" type="submit"
                                                                     value="${comment.id}" style="padding: unset">
                                                                 edit
                                                             </button>
@@ -129,8 +130,8 @@
                                                         <form action="/user/deletecomment"
                                                               class="col-sm-6 align-self-center text-center">
                                                             <input type="hidden" name="postId" value="${requestScope.post.id}" >
-                                                            <button class="btn border-0" name="commentId" type="submit"
-                                                                    value="${comment.id}" style="padding: unset">
+                                                            <input type="hidden" name="commentId" value="${comment.id}" >
+                                                            <button class="btn border-0" type="submit" style="padding: unset">
                                                                 del
                                                             </button>
                                                         </form>
@@ -248,9 +249,10 @@
                         <div class="col-sm-11 align-self-center">
                             <input name="commentMessage" type="text" class="form-control" placeholder="create comment"
                                    aria-label="create comment" value="" style="height: 50px;">
+                            <input type="hidden" name="postId" value="${requestScope.post.id}">
                         </div>
                         <div class="col-1 align-self-center">
-                            <button name="postId" value="${requestScope.post.id}" type="submit" class="btn border-0"
+                            <button type="submit" class="btn border-0"
                                     style="padding: unset; --bs-btn-hover-color: blue; transition: 0.3s">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor"
                                      class="bi bi-arrow-up-right-square-fill" viewBox="0 0 16 16" size="cover">
@@ -264,8 +266,8 @@
         </div>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+<script crossorigin="anonymous"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-        crossorigin="anonymous"></script>
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
