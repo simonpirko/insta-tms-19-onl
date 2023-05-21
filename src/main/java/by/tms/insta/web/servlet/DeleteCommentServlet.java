@@ -23,7 +23,7 @@ public class DeleteCommentServlet extends HttpServlet {
 
             commentService.deleteById(commentId);
 
-            resp.sendRedirect(req.getContextPath() + "/viewpost?id=" + postId);
+            resp.sendRedirect(req.getContextPath() + "user/viewpost?id=" + postId);
 
         } catch (SQLException e) {
             req.setAttribute("errormessage", "Something went wrong on our side.");

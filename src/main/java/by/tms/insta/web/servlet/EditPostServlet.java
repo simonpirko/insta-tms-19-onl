@@ -39,7 +39,7 @@ public class EditPostServlet extends HttpServlet {
                     String newImage = req.getParameter("newImage");
                     postService.updatePost(postId, newImage, newDescription);
 
-                   resp.sendRedirect(req.getContextPath() + "/viewpost?id=" + id);
+                   resp.sendRedirect(req.getContextPath() + "user/viewpost?id=" + id);
                 }
 
             } catch (SQLException e) {

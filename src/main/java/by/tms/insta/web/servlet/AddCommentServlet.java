@@ -44,7 +44,7 @@ public class AddCommentServlet extends HttpServlet {
                         .build();
                 commentService.save(build);
 
-                resp.sendRedirect(req.getContextPath() + "/viewpost?id=" + post.get().getId());
+                resp.sendRedirect(req.getContextPath() + "user/viewpost?id=" + post.get().getId());
 
             } else {
                 req.setAttribute("errormessage", "We can't found post.");
