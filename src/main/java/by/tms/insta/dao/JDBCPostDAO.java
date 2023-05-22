@@ -90,10 +90,10 @@ public class JDBCPostDAO implements PostDAO {
         return posts;
     }
 
-    public void like(int userId, int postid) throws SQLException {
+    public void like(int userId, int postId) throws SQLException {
         PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(INSERT_LIKE);
         preparedStatement.setInt(1, userId);
-        preparedStatement.setInt(2, postid);
+        preparedStatement.setInt(2, postId);
         preparedStatement.execute();
     }
 
