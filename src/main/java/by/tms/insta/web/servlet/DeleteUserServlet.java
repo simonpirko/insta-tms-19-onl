@@ -22,11 +22,11 @@ public class DeleteUserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        User user = (User) req.getSession().getAttribute(USER);
+        SessionPrincipalUser sessionUser = (SessionPrincipalUser) req.getSession().getAttribute(USER);
 
         try {
 
-            userService.deleteById(user.getId());
+            userService.deleteById(sessionUser.getId());
             resp.sendRedirect("/register");
 
         } catch (SQLException e) {
