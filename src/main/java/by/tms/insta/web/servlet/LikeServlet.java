@@ -1,6 +1,7 @@
 package by.tms.insta.web.servlet;
 
 import by.tms.insta.entity.Post;
+import by.tms.insta.entity.SessionPrincipalUser;
 import by.tms.insta.entity.User;
 import by.tms.insta.mapper.UserMapper;
 import by.tms.insta.service.PostService;
