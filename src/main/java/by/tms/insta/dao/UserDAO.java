@@ -35,4 +35,8 @@ public interface UserDAO {
 
     void unfollow(int parentId, int childId) throws SQLException;
 
+    void update(int userId, String name, String email, String avatar);
+
+    void updateWithPassword(int userId, String name, String email, String avatar, String password);
+
 }
