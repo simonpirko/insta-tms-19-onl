@@ -1,5 +1,6 @@
 package by.tms.insta.web.servlet;
 
+import by.tms.insta.entity.SessionPrincipalUser;
 import by.tms.insta.entity.User;
 import by.tms.insta.service.PostService;
 
@@ -15,14 +16,14 @@ import java.sql.SQLException;
  * @author Denis Smirnov on 18.05.2023
  */
 
-@WebServlet("/user/unlike")
+@WebServlet("/post/unlike")
 public class UnlikeServlet extends HttpServlet {
     private final static String USER = "user";
     private final static String POST_ID = "postId";
     private final PostService postService = PostService.getInstance();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         SessionPrincipalUser sessionUser = (SessionPrincipalUser) req.getSession().getAttribute(USER);
 
