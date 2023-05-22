@@ -1,6 +1,5 @@
 package by.tms.insta.web.servlet;
 
-import by.tms.insta.dao.JDBCPostDAO;
 import by.tms.insta.entity.Post;
 import by.tms.insta.entity.User;
 import by.tms.insta.service.PostService;
@@ -19,21 +18,21 @@ import java.util.Optional;
  */
 @WebServlet("/user/like")
 public class LikeServlet extends HttpServlet {
-
-    private final JDBCPostDAO jdbcPostDAO = JDBCPostDAO.getInstance();
+    private final static String USER = "user";
+    private final static String POST_ID = "postId";
     private final PostService postService = PostService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        User user = (User) req.getSession().getAttribute("user");
+        User user = (User) req.getSession().getAttribute(USER);
 
         try {
-            int postId = Integer.parseInt(req.getParameter("postId"));
+            int postId = Integer.parseInt(req.getParameter(POST_ID));
             Optional<Post> post = postService.findPostById(postId);
             if (post.isPresent()) {
 
-                jdbcPostDAO.like(user.getId(), postId);
+                postService.like(user.getId(), postId);
                 resp.sendRedirect(req.getContextPath() + "/viewpost?id=" + post.get().getId());
 
             } else {

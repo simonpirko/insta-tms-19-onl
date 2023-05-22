@@ -67,4 +67,12 @@ public class PostService {
     public List<Post> getPostsByUserWithOffset(User user, int limit, int offset) throws SQLException {
         return jdbcPostDAO.getPostsByUserWithOffset(user.getId(), limit, offset);
     }
+
+    public void like (int userId, int postId) throws SQLException {
+        jdbcPostDAO.like(userId, postId);
+    }
+
+    public void unLike (int userId) throws SQLException {
+        jdbcPostDAO.unLike(userId);
+    }
 }

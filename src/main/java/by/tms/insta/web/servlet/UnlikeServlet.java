@@ -1,6 +1,7 @@
 package by.tms.insta.web.servlet;
 
-import by.tms.insta.dao.JDBCPostDAO;
+import by.tms.insta.entity.User;
+import by.tms.insta.service.PostService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,16 +17,18 @@ import java.sql.SQLException;
 
 @WebServlet("/user/unlike")
 public class UnlikeServlet extends HttpServlet {
+    private final static String USER = "user";
+    private final static String POST_ID = "postId";
+    private final PostService postService = PostService.getInstance();
 
-    private final JDBCPostDAO jdbcPostDAO = JDBCPostDAO.getInstance();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        int postId = Integer.parseInt(req.getParameter("postId"));
-        int userId = Integer.parseInt(req.getParameter("userId"));
+        User user = (User) req.getSession().getAttribute(USER);
 
         try {
-            jdbcPostDAO.unLike(userId);
+            int postId = Integer.parseInt(req.getParameter(POST_ID));
+            postService.unLike(user.getId());
 
             resp.sendRedirect(req.getContextPath() + "/viewpost?id=" + postId);
 
