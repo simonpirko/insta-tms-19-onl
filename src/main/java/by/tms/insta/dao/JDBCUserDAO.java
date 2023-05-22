@@ -185,6 +185,10 @@ public class JDBCUserDAO implements UserDAO {
                 count = resultSet.getInt(1);
             }
             return count;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public void update(int userId, String name, String email, String avatar) {
