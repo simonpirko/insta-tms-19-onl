@@ -18,14 +18,14 @@ import java.util.Optional;
 /**
  * @author Denis Smirnov on 18.05.2023
  */
-@WebServlet("/user/like")
+@WebServlet("/post/like")
 public class LikeServlet extends HttpServlet {
     private final static String USER = "user";
     private final static String POST_ID = "postId";
     private final PostService postService = PostService.getInstance();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 
         SessionPrincipalUser sessionUser = (SessionPrincipalUser) req.getSession().getAttribute(USER);
