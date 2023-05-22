@@ -29,11 +29,12 @@ public class JDBCUserDAO implements UserDAO {
 
     private static final String FOLLOW_ON_USER = "insert into followers (parent_id, child_id) values (?, ?)";
     private static final String UNFOLLOW_FROM_USER = "delete from followers where parent_id = ? and child_id = ?";
-
     private static final String IS_FOLLOWER = "select count (*) from followers "
             + "join users followed on followers.child_id = followed.user_id "
             + "join users follower on followers.parent_id = follower.user_id "
             + "where followed.username = ? and follower.username = ?";
+    private static final String UPDATE_USER = "UPDATE users SET (name, photo, email) VALUES (?,?,?) WHERE user_id = ?";
+    private static final String UPDATE_WITH_PASSWORD = "UPDATE users SET (name, photo, email, password) VALUES (?,?,?,?) WHERE user_id = ?";
 
     private static JDBCUserDAO instance;
 
@@ -184,6 +185,31 @@ public class JDBCUserDAO implements UserDAO {
                 count = resultSet.getInt(1);
             }
             return count;
+
+    @Override
+    public void update(int userId, String name, String email, String avatar) {
+        try {
+            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(UPDATE_USER);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, avatar);
+            preparedStatement.setString(3, email);
+            preparedStatement.setLong(4, userId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void updateWithPassword(int userId, String name, String email, String avatar, String password) {
+        try {
+            PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(UPDATE_WITH_PASSWORD);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, avatar);
+            preparedStatement.setString(3, email);
+            preparedStatement.setString(4, password);
+            preparedStatement.setLong(4, userId);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

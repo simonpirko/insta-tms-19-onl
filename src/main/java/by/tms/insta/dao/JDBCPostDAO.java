@@ -16,7 +16,7 @@ public class JDBCPostDAO implements PostDAO {
     private final ConnectionJdbc connectionJdbc = ConnectionJdbc.getInstance();
     private static final String INSERT_POST = "insert into posts (user_id, image, createdAt, description) values (?,?,?,?)";
     private static final String SELECT_BY_POST_ID = "select * from posts join users on users.user_id = posts.user_id where post_id = ? ";
-    private static final String UPDATE_POST = "update post set (image, description) values (?,?) where post_id = ?";
+    private static final String UPDATE_POST = "update posts set (image, description) values (?,?) where post_id = ?";
     private static final String DELETE_BY_POST_ID = "delete from posts where post_id =?";
     private static final String SELECT_BY_USER = "select * from posts join users on users.user_id = posts.user_id where posts.user_id = ? ordered by created_at desc";
     private static final String INSERT_LIKE = "insert into likes (user_id, post_id) values(?,?)";
@@ -24,6 +24,8 @@ public class JDBCPostDAO implements PostDAO {
     private static final String EXTRACT_COUNT_OF_LIKES = "select count (*) from likes where post_id = ?";
     private static final String COUNT_BY_USER = "SELECT count(1) FROM posts WHERE user_id =?";
     private static final String POSTS_BY_USER_WITH_OFFSET = "SELECT * FROM posts JOIN users ON users.user_id = posts.user_id WHERE posts.user_id = ? ORDER BY post_id ASC limit ? offset ?";
+    private static final String SELECT_FOLLOWED_USERS_POSTS = "select u.user_id from " +
+            "followers f join users u on f.parent_id = u.user_id join posts p on u.user_id = p.user_id where f.child_id = ? order by p.created_at desc limit ? offset ?";
 
     private JDBCPostDAO() {
     }
@@ -88,22 +90,22 @@ public class JDBCPostDAO implements PostDAO {
         return posts;
     }
 
-    public void like(int user_id, int post_id) throws SQLException {
+    public void like(int userId, int postId) throws SQLException {
         PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(INSERT_LIKE);
-        preparedStatement.setInt(1, user_id);
-        preparedStatement.setInt(2, post_id);
+        preparedStatement.setInt(1, userId);
+        preparedStatement.setInt(2, postId);
         preparedStatement.execute();
     }
 
-    public void unLike(int user_id) throws SQLException {
+    public void unLike(int userId) throws SQLException {
         PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(DELETE_LIKE);
-        preparedStatement.setInt(1, user_id);
+        preparedStatement.setInt(1, userId);
         preparedStatement.execute();
     }
 
-    public int extractCountOfLikes(int post_id) throws SQLException {
+    public int extractCountOfLikes(int postId) throws SQLException {
         PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(EXTRACT_COUNT_OF_LIKES);
-        preparedStatement.setInt(1, post_id);
+        preparedStatement.setInt(1, postId);
         ResultSet resultSet = preparedStatement.executeQuery();
         int count = 0;
         if (resultSet.next()) {
@@ -113,9 +115,9 @@ public class JDBCPostDAO implements PostDAO {
     }
 
     @Override
-    public int getCountByUser(int user_id) throws SQLException {
+    public int getCountByUser(int userId) throws SQLException {
         PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement(COUNT_BY_USER);
-        statement.setLong(1, user_id);
+        statement.setLong(1, userId);
         ResultSet resultSet = statement.executeQuery();
         if (resultSet.next()) {
             return resultSet.getInt(1);
@@ -124,9 +126,9 @@ public class JDBCPostDAO implements PostDAO {
     }
 
     @Override
-    public List<Post> getPostsByUserWithOffset(int user_id, int limit, int offset) throws SQLException {
+    public List<Post> getPostsByUserWithOffset(int userId, int limit, int offset) throws SQLException {
         PreparedStatement statement = connectionJdbc.getPostgresConnection().prepareStatement(POSTS_BY_USER_WITH_OFFSET);
-        statement.setLong(1, user_id);
+        statement.setLong(1, userId);
         statement.setInt(2, limit);
         statement.setInt(3, offset);
         ResultSet resultSet = statement.executeQuery();
@@ -135,6 +137,19 @@ public class JDBCPostDAO implements PostDAO {
             posts.add(buildPost(resultSet));
         }
         return posts;
+    }
+
+    public List<Post> getFollowedUsersPosts(int userId, int limit, int offset) throws SQLException {
+        PreparedStatement preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(SELECT_FOLLOWED_USERS_POSTS);
+        preparedStatement.setInt(1, userId);
+        preparedStatement.setInt(2, limit);
+        preparedStatement.setInt(3, offset);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<Post> postList = new ArrayList<>();
+        while (resultSet.next()) {
+            postList.add(buildPost(resultSet));
+        }
+        return postList;
     }
 
     private Post buildPost(ResultSet resultSet) throws SQLException {

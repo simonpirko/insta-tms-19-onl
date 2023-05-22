@@ -37,7 +37,7 @@
             <h4>@${requestScope.account.username}</h4>
 
             <c:if test="${sessionScope.user.username == requestScope.account.username}">
-                <a href="#" class="btn btn-sm btn-danger" role="button" aria-pressed="true">Edit</a>
+                <a href="/user/account/edit" class="btn btn-sm btn-danger" role="button" aria-pressed="true">Edit</a>
             </c:if>
         </div>
         <div class="col-md">

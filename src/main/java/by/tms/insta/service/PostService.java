@@ -39,16 +39,24 @@ public class PostService {
         return jdbcPostDAO.findPostById(id);
     }
 
-    public void updatePost(Post post) throws SQLException {
-        jdbcPostDAO.updatePost(post.getId(), post.getImage(), post.getDescription());
+    public void updatePost(int postId, String image, String description) throws SQLException {
+        jdbcPostDAO.updatePost(postId, image, description);
     }
 
     public void deletePost(int id) throws SQLException {
         jdbcPostDAO.deletePost(id);
     }
 
-    public List<Post> getPostsByUser(int user_id) throws SQLException {
-        return jdbcPostDAO.getPostsByUserId(user_id);
+    public List<Post> getPostsByUser(int userId) throws SQLException {
+        return jdbcPostDAO.getPostsByUserId(userId);
+    }
+  
+    public int getCountOfLikes(int postId) throws SQLException {
+        return jdbcPostDAO.extractCountOfLikes(postId);
+    }
+      
+    public List<Post> getFollowedUsersPosts(int userId, int limit, int offset) throws SQLException {
+       return jdbcPostDAO.getFollowedUsersPosts(userId, limit, offset);
     }
 
     public int getCountOfPagesWithPosts(User user, int postsPerPage) throws SQLException {
@@ -58,5 +66,13 @@ public class PostService {
 
     public List<Post> getPostsByUserWithOffset(User user, int limit, int offset) throws SQLException {
         return jdbcPostDAO.getPostsByUserWithOffset(user.getId(), limit, offset);
+    }
+
+    public void like (int userId, int postId) throws SQLException {
+        jdbcPostDAO.like(userId, postId);
+    }
+
+    public void unLike (int userId) throws SQLException {
+        jdbcPostDAO.unLike(userId);
     }
 }
