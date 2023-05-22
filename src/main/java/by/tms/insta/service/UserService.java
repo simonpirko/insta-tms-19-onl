@@ -75,6 +75,11 @@ public class UserService {
         jdbcUserDAO.unfollow(parentId, childId);
     }
 
+    public boolean isFollower(String followedUsername, String followerUsername){
+        int countOfItems = jdbcUserDAO.isFollower(followedUsername, followerUsername);
+        return countOfItems != 0;
+    }
+      
     public void updateUserProfile(User oldUser, User newUser) {
         String name = newUser.getName().isEmpty() ? oldUser.getName() : newUser.getName();
         String email = newUser.getEmail().isEmpty() ? oldUser.getEmail() : newUser.getEmail();
