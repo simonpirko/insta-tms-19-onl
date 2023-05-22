@@ -30,13 +30,13 @@
                         <div class="col-sm-6 text-start">
                             <div class="row g-0">
                                 <a class="page-link col-sm-2 align-self-center text-center"
-                                   href="/user/profile?id=${requestScope.post.author.id}"
+                                   href="/user/profile?username=${requestScope.post.author.username}"
                                    style="padding: unset; text-decoration: unset">
                                     <img class="img-fluid rounded-5" src="${requestScope.post.author.avatar}"
                                          style="padding: unset; height: 24px; width: 24px" alt="profile image">
                                 </a>
                                 <a class="page-link col-sm-10 align-self-center text-center"
-                                   href="/user/profile?id=${requestScope.post.author.id}"
+                                   href="/user/profile?username=${requestScope.post.author.username}"
                                    style="padding: unset; text-decoration: unset">
                                     ${requestScope.post.author.username}
                                 </a>
@@ -60,9 +60,9 @@
                         <div class="col-sm-3 align-self-center text-end">
                             ${requestScope.likes}
                         </div>
-                        <form action="/user/like" class="col-sm-1 align-self-center text-center">
-                            <c:if test="${sessionScope.user.id != requestScope.post.like.id}">
-                                <button type="submit" name="like" value="1" class="btn border-0"
+                        <c:if test="${sessionScope.user.id != requestScope.post.like.id}">
+                            <form action="/user/like" class="col-sm-1 align-self-center text-center">
+                                <button type="submit" class="btn border-0"
                                         style="padding: unset; --bs-btn-hover-color: red; transition: 0.3s">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                                          class="bi bi-heart-fill object-fit-cover" viewBox="0 0 16 16">
@@ -70,17 +70,20 @@
                                               d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"></path>
                                     </svg>
                                 </button>
-                            </c:if>
-                            <c:if test="${sessionScope.user.id == requestScope.post.like.id}">
-                                <button type="submit" name="like" value="0" class="btn border-0"
-                                        style="padding: unset; --bs-btn-hover-color: black; transition: 0.3s">
+                            </form>
+                        </c:if>
+                        <c:if test="${sessionScope.user.id == requestScope.post.like.id}">
+                            <form action="/user/unlike" class="col-sm-1 align-self-center text-center">
+                                <button type="submit" class="btn border-0"
+                                        style=" --bs-body-color: red; padding: unset; --bs-btn-hover-color: black; transition: 0.3s">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                                          class="bi bi-heart-fill object-fit-cover" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd"
                                               d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"></path>
                                     </svg>
                                 </button>
-                            </c:if>
+                            </form>
+                        </c:if>
                         </form>
                     </div>
                 </div>
@@ -102,7 +105,7 @@
                                             <div class="col-sm-8 align-self-center">
                                                 <div class="row g-0">
                                                     <a class="page-link col-sm-2 align-self-center text-center"
-                                                       href="/user/profile?id=${requestScope.comment.author.id}"
+                                                       href="/user/profile?username=${requestScope.comment.author.username}"
                                                        style="padding: unset; text-decoration: unset">
                                                         <img class="img-fluid rounded-5"
                                                              src="${requestScope.comment.author.avatar}"
@@ -110,7 +113,7 @@
                                                              alt="profile image">
                                                     </a>
                                                     <a class="page-link col-sm-2 align-self-center text-center"
-                                                       href="/user/profile?id=${requestScope.comment.author.id}"
+                                                       href="/user/profile?username=${requestScope.comment.author.username}"
                                                        style="padding: unset; text-decoration: unset">
                                                             ${requestScope.comment.author.username}
                                                     </a>
@@ -121,17 +124,19 @@
                                                     <div class="row">
                                                         <form action="/user/editcomment"
                                                               class="col-sm-6 align-self-center text-end">
-                                                            <input type="hidden" name="commentId" value="${comment.id}" >
+                                                            <input type="hidden" name="commentId" value="${comment.id}">
                                                             <button class="btn border-0" type="submit"
-                                                                    value="${comment.id}" style="padding: unset">
+                                                                    style="padding: unset">
                                                                 edit
                                                             </button>
                                                         </form>
                                                         <form action="/user/deletecomment"
                                                               class="col-sm-6 align-self-center text-center">
-                                                            <input type="hidden" name="postId" value="${requestScope.post.id}" >
-                                                            <input type="hidden" name="commentId" value="${comment.id}" >
-                                                            <button class="btn border-0" type="submit" style="padding: unset">
+                                                            <input type="hidden" name="postId"
+                                                                   value="${requestScope.post.id}">
+                                                            <input type="hidden" name="commentId" value="${comment.id}">
+                                                            <button class="btn border-0" type="submit"
+                                                                    style="padding: unset">
                                                                 del
                                                             </button>
                                                         </form>
@@ -195,11 +200,12 @@
                                     <div class="btn-group">
                                         <button class="btn btn-secondary dropdown-toggle" type="button"
                                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                            ${requestScope.page}
+                                                ${requestScope.page}
                                         </button>
                                         <ul class="dropdown-menu">
                                             <c:forEach begin="1" var="i" end="${requestScope.countOfPages}" step="1">
-                                                <li><a class="dropdown-item" href="/user/viewpost?page=${i}">${i}</a></li>
+                                                <li><a class="dropdown-item" href="/user/viewpost?page=${i}">${i}</a>
+                                                </li>
                                             </c:forEach>
                                         </ul>
                                     </div>
