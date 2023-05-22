@@ -2,6 +2,7 @@ package by.tms.insta.web.servlet;
 
 import by.tms.insta.entity.Post;
 import by.tms.insta.entity.User;
+import by.tms.insta.mapper.UserMapper;
 import by.tms.insta.service.PostService;
 
 import javax.servlet.ServletException;
@@ -25,14 +26,15 @@ public class LikeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        User user = (User) req.getSession().getAttribute(USER);
+
+        SessionPrincipalUser sessionUser = (SessionPrincipalUser) req.getSession().getAttribute(USER);
 
         try {
             int postId = Integer.parseInt(req.getParameter(POST_ID));
             Optional<Post> post = postService.findPostById(postId);
             if (post.isPresent()) {
 
-                postService.like(user.getId(), postId);
+                postService.like(sessionUser.getId(), postId);
                 resp.sendRedirect(req.getContextPath() + "/viewpost?id=" + post.get().getId());
 
             } else {

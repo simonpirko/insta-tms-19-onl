@@ -24,11 +24,11 @@ public class UnlikeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        User user = (User) req.getSession().getAttribute(USER);
+        SessionPrincipalUser sessionUser = (SessionPrincipalUser) req.getSession().getAttribute(USER);
 
         try {
             int postId = Integer.parseInt(req.getParameter(POST_ID));
-            postService.unLike(user.getId());
+            postService.unLike(sessionUser.getId());
 
             resp.sendRedirect(req.getContextPath() + "/viewpost?id=" + postId);
 
