@@ -26,6 +26,7 @@ public class JDBCPostDAO implements PostDAO {
     private static final String POSTS_BY_USER_WITH_OFFSET = "SELECT * FROM posts JOIN users ON users.user_id = posts.user_id WHERE posts.user_id = ? ORDER BY post_id ASC limit ? offset ?";
     private static final String SELECT_FOLLOWED_USERS_POSTS = "select u.user_id from " +
             "followers f join users u on f.parent_id = u.user_id join posts p on u.user_id = p.user_id where f.child_id = ? order by p.created_at desc limit ? offset ?";
+    private static final String SELECT_LIKE_BY_POST_USER_ID = "select * from likes where user_id = ? and post_id = ?";
 
     private JDBCPostDAO() {
     }
@@ -150,6 +151,19 @@ public class JDBCPostDAO implements PostDAO {
             postList.add(buildPost(resultSet));
         }
         return postList;
+    }
+
+    public boolean isLiked(int userId, int postId) {
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connectionJdbc.getPostgresConnection().prepareStatement(SELECT_LIKE_BY_POST_USER_ID);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, postId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private Post buildPost(ResultSet resultSet) throws SQLException {

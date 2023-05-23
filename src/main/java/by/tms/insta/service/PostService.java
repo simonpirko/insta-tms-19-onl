@@ -63,6 +63,9 @@ public class PostService {
         int countOfAllPosts = jdbcPostDAO.getCountByUser(user.getId());
         return (int) Math.ceil(countOfAllPosts / postsPerPage);
     }
+    public boolean isLiked(int userId, int postId) {
+        return jdbcPostDAO.isLiked(userId, postId);
+    }
 
     public List<Post> getPostsByUserWithOffset(User user, int limit, int offset) throws SQLException {
         return jdbcPostDAO.getPostsByUserWithOffset(user.getId(), limit, offset);
