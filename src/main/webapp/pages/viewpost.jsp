@@ -247,7 +247,7 @@
                     <form action="/user/createcomment" class="row g-2" method="post">
                         <div class="col-sm-11 align-self-center">
                             <input name="commentMessage" type="text" class="form-control" placeholder="create comment"
-                                   aria-label="create comment" value="" style="height: 50px;">
+                                   aria-label="create comment" style="height: 50px;">
                             <input type="hidden" name="postId" value="${requestScope.post.id}">
                         </div>
                         <div class="col-1 align-self-center">
