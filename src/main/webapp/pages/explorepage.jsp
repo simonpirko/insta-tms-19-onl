@@ -17,15 +17,19 @@
 <body>
 <jsp:include page="header.jsp"/>
 
-
 <div class="row justify-content-center">
     <div class="col-4">
         <nav class="navbar bg-body-tertiary">
             <div class="container-fluid">
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <form action="/user/searchuser" class="d-flex" role="search">
+                    <input name="username" class="form-control me-2" type="search" placeholder="Search user" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
+                <c:if test="${userNotFound != null}">
+                    <div class="alert alert-danger" role="alert">
+                            ${userNotFound}
+                    </div>
+                </c:if>
             </div>
         </nav>
     </div>
@@ -35,11 +39,17 @@
     <div class="row">
         <c:forEach items="${postList}" var="operation">
             <fmt:parseDate value="${post.createdAt}" var="parsedTime" pattern="yyyy-MM-dd'T'HH:mm" type="date"/>
-            <fmt:formatDate value="${#}" pattern="dd.MM.yyyy HH:mm" var="formattedTime"/>
+            <fmt:formatDate value="${parsedTime}" pattern="dd.MM.yyyy HH:mm" var="formattedTime"/>
             <div class="col-sm-4">
                 <div class="card mt-5" style="width: 30rem;">
-                    <p style="margin-left: 20px"><a href="#" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">test_test</a></p>
-                    <img src="${post.image}" alt="post image">
+                    <p style="margin-left: 20px; padding: unset; text-decoration: unset">
+                        <a href="/user/profile?username=${post.author.username}" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">
+                                ${post.author.username}
+                        </a>
+                    </p>
+                    <a href="/user/viewpost?id=${post.id}" style="padding: unset; text-decoration: unset">
+                        <img src="${post.image}" alt="post image">
+                    </a>
                     <div class="card-body">
                         <p class="card-text">${post.description}</p>
                     </div>
