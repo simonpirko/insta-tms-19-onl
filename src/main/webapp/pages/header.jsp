@@ -39,7 +39,10 @@
 
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <c:if test="${sessionScope.user != null}">
-            <a class="nav-link" aria-current="page" href="/#">Profile</a>     <--- Вставить ссылку на страницу по готовности!
+            <c:url value="/user/account" var="profileURL">
+              <c:param name="username" value="${sessionScope.user.username}"/>
+            </c:url>
+            <a class="nav-link" aria-current="page" href='<c:out value="${profileURL}" />'>Profile</a>
           </c:if>
         </ul>
 
@@ -56,7 +59,7 @@
 
           <c:if test="${sessionScope.user != null}">
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/#">Log out</a>      <--- Вставить ссылку на страницу по готовности!
+              <a class="nav-link" aria-current="page" href="/logout">Log out</a>
             </li>
           </c:if>
 

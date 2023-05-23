@@ -5,7 +5,7 @@
   Time: 0:11
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 <head>
     <title>Edit post</title>
@@ -26,10 +26,12 @@
             <div class="card-body">
                 <p class="card-text">${requestScope.post.description}</p><br>
                 <form method="post">
+                    <label for="newImage" class="form-label">New image:</label>
+                    <input name="newImage" type="text" class="form-control" id="newImage"><br>
                     <label for="newDescription" class="form-label">New description:</label>
                     <input name="newDescription" type="text" class="form-control" id="newDescription"><br>
-                    <button type="submit" formaction="/editpost" class="btn btn-primary">Edit</button>
-                    <button type="submit" formaction="/delitpost" class="btn btn-danger">Delete</button>
+                    <button type="submit" formaction="/user/editpost" class="btn btn-primary">Edit</button>
+                    <button type="submit" formaction="/user/deletepost" class="btn btn-danger">Delete</button>
                 </form>
             </div>
         </div>

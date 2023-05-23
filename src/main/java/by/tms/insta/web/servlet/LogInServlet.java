@@ -2,6 +2,7 @@ package by.tms.insta.web.servlet;
 
 
 import by.tms.insta.dto.UserDto;
+import by.tms.insta.entity.SessionPrincipalUser;
 import by.tms.insta.entity.User;
 import by.tms.insta.mapper.UserMapper;
 import by.tms.insta.service.UserService;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Optional;
 
 /**
@@ -35,21 +37,28 @@ public class LogInServlet extends HttpServlet {
 
         String username = req.getParameter(USERNAME);
         String password = req.getParameter(PASSWORD);
-        Optional<User> byUsername = userService.findByUsername(username);
-        if (byUsername.isPresent()) {
-            UserDto byUsernameDto = UserMapper.toDto(byUsername.get());
-            if (byUsername.get().getPassword().equals(password)) {
+        Optional<User> byUsername;
+        try {
+            byUsername = userService.findByUsername(username);
 
-                req.getSession().setAttribute("user", byUsernameDto);
+            if (byUsername.isPresent()) {
 
-                resp.sendRedirect("/");
+                if (byUsername.get().getPassword().equals(password)) {
+                    SessionPrincipalUser sessionPrincipalUser = UserMapper.toSessionPrincipalUserUser(byUsername.get());
+                    req.getSession().setAttribute("user", sessionPrincipalUser);
+                    req.setAttribute("username", sessionPrincipalUser.getUsername());
+                    getServletContext().getRequestDispatcher("/user/account").forward(req, resp);
+                } else {
+                    req.setAttribute("message", "Wrong password!");
+                    getServletContext().getRequestDispatcher("/pages/login.jsp").forward(req, resp);
+                }
             } else {
-                req.setAttribute("message", "Wrong password!");
+                req.setAttribute("message", "Sorry, but User not found!");
                 getServletContext().getRequestDispatcher("/pages/login.jsp").forward(req, resp);
             }
-        } else {
-            req.setAttribute("message", "Sorry, but User not found!");
-            getServletContext().getRequestDispatcher("/pages/login.jsp").forward(req, resp);
+        } catch (SQLException e) {
+            req.setAttribute("errormessage", "Something went wrong on our side.");
+            getServletContext().getRequestDispatcher("/pages/error.jsp").forward(req, resp);
         }
     }
 }
