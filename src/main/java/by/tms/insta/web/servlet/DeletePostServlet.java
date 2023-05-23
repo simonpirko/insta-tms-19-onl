@@ -16,8 +16,9 @@ import java.sql.SQLException;
 @WebServlet("/user/deletepost")
 public class DeletePostServlet extends HttpServlet {
     private final PostService postService = PostService.getInstance();
+
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         SessionPrincipalUser sessionUser = (SessionPrincipalUser) req.getSession().getAttribute("user");
         int id = Integer.parseInt(req.getParameter("username"));
         String username = sessionUser.getUsername();
@@ -32,5 +33,7 @@ public class DeletePostServlet extends HttpServlet {
             getServletContext().getRequestDispatcher("/pages/error.jsp").forward(req, resp);
         }
     }
-}
+
+    }
+
 

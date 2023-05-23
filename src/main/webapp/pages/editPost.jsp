@@ -31,8 +31,6 @@
                     <label for="newDescription" class="form-label">New description:</label>
                     <input name="newDescription" type="text" class="form-control" id="newDescription"><br>
                     <button type="submit" formaction="/user/editpost" class="btn btn-primary">Edit</button>
-                </form>
-                <form>
                     <button type="submit" formaction="/user/deletepost" class="btn btn-danger">Delete</button>
                 </form>
             </div>
