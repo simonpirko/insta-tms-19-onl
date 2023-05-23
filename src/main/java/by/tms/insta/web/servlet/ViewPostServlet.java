@@ -2,6 +2,7 @@ package by.tms.insta.web.servlet;
 
 import by.tms.insta.entity.Comment;
 import by.tms.insta.entity.Post;
+import by.tms.insta.entity.SessionPrincipalUser;
 import by.tms.insta.service.CommentService;
 import by.tms.insta.service.PostService;
 
@@ -22,17 +23,19 @@ public class ViewPostServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        int id = Integer.parseInt(req.getParameter("id"));
+        int postId = Integer.parseInt(req.getParameter("id"));
+
+        SessionPrincipalUser sessionUser = (SessionPrincipalUser) req.getSession().getAttribute("user");
 
         try {
-            Optional<Post> postById = postService.findPostById(id);
+            Optional<Post> postById = postService.findPostById(postId);
             if (postById.isPresent()) {
 
                 req.setAttribute("post", postById);
-                req.setAttribute("likes", postService.getCountOfLikes(id));
+                req.setAttribute("likes", postService.getCountOfLikes(postId));
 
                 int commentPerPage = 5;
-                int countOfPages = commentService.getCountOfPages(id, commentPerPage);
+                int countOfPages = commentService.getCountOfPages(postId, commentPerPage);
                 req.setAttribute("countOfPages", countOfPages);
 
                 String page = req.getParameter("page");
@@ -41,8 +44,11 @@ public class ViewPostServlet extends HttpServlet {
                 }
                 int paginationOffset = (Integer.parseInt(page) - 1) * commentPerPage;
 
-                List<Comment> commentList = commentService.findByPostId(id, paginationOffset, commentPerPage);
+                List<Comment> commentList = commentService.findByPostId(postId, paginationOffset, commentPerPage);
                 req.setAttribute("commentList", commentList);
+
+                boolean like = postService.isLiked(sessionUser.getId(), postId);
+                req.setAttribute("like", like);
 
                 getServletContext().getRequestDispatcher("/pages/viewpost.jsp").forward(req, resp);
 
