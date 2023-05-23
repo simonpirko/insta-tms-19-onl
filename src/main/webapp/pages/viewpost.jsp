@@ -17,7 +17,10 @@
 </head>
 <body>
 <jsp:include page="header.jsp"/>
-<div class="container mt-5">
+<div class="container mt-3">
+    <div class="text-end">
+        <button onclick="history.back()" class="btn border-0">[x]close</button>
+    </div>
     <div class="card mb-3 rounded-0">
         <div class="row g-0" style="height: 800px; background-color: black">
             <div class="col-sm-7 align-self-center" style="text-align: center">
@@ -60,8 +63,8 @@
                         <div class="col-sm-3 align-self-center text-end">
                             ${requestScope.likes}
                         </div>
-                        <c:if test="${sessionScope.user.id != requestScope.post.like.id}">
-                            <form action="/user/like" class="col-sm-1 align-self-center text-center">
+                        <c:if test="${like == false}">
+                            <form action="/post/like" method="post" class="col-sm-1 align-self-center text-center">
                                 <button type="submit" class="btn border-0"
                                         style="padding: unset; --bs-btn-hover-color: red; transition: 0.3s">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -72,8 +75,8 @@
                                 </button>
                             </form>
                         </c:if>
-                        <c:if test="${sessionScope.user.id == requestScope.post.like.id}">
-                            <form action="/user/unlike" class="col-sm-1 align-self-center text-center">
+                        <c:if test="${like == true}">
+                            <form action="/post/unlike" method="post" class="col-sm-1 align-self-center text-center">
                                 <button type="submit" class="btn border-0"
                                         style=" --bs-body-color: red; padding: unset; --bs-btn-hover-color: black; transition: 0.3s">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -121,26 +124,16 @@
                                             </div>
                                             <div class="col-sm-4 text-end">
                                                 <c:if test="${sessionScope.user.id == requestScope.comment.author.id}">
-                                                    <div class="row">
-                                                        <form action="/user/editcomment"
-                                                              class="col-sm-6 align-self-center text-end">
-                                                            <input type="hidden" name="commentId" value="${comment.id}">
-                                                            <button class="btn border-0" type="submit"
-                                                                    style="padding: unset">
-                                                                edit
-                                                            </button>
-                                                        </form>
-                                                        <form action="/user/deletecomment"
-                                                              class="col-sm-6 align-self-center text-center">
-                                                            <input type="hidden" name="postId"
-                                                                   value="${requestScope.post.id}">
-                                                            <input type="hidden" name="commentId" value="${comment.id}">
-                                                            <button class="btn border-0" type="submit"
-                                                                    style="padding: unset">
-                                                                del
-                                                            </button>
-                                                        </form>
-                                                    </div>
+                                                    <form action="/user/deletecomment" method="post"
+                                                          class="col-sm-6 align-self-center text-center">
+                                                        <input type="hidden" name="postId"
+                                                               value="${requestScope.post.id}">
+                                                        <input type="hidden" name="commentId" value="${comment.id}">
+                                                        <button class="btn border-0" type="submit"
+                                                                style="padding: unset">
+                                                            del
+                                                        </button>
+                                                    </form>
                                                 </c:if>
                                             </div>
                                         </div>
@@ -251,7 +244,7 @@
                     </div>
                 </div>
                 <div class="card-footer" style="height: 70px">
-                    <form action="/user/createcomment" class="row g-2">
+                    <form action="/user/createcomment" class="row g-2" method="post">
                         <div class="col-sm-11 align-self-center">
                             <input name="commentMessage" type="text" class="form-control" placeholder="create comment"
                                    aria-label="create comment" value="" style="height: 50px;">
