@@ -12,18 +12,19 @@ public interface PostDAO {
 
     Optional<Post> findPostById (int id) throws SQLException;
 
+    List<Post> findGreatest();
+
     void updatePost(int postId, String image, String description) throws SQLException;
 
     void deletePost(int id) throws SQLException;
-
     List<Post> getPostsByUserId(int userId) throws SQLException;
     void like(int user_id, int post_id) throws SQLException;
     void unLike(int user_id) throws SQLException;
-    int extractCountOfLikes(int post_id) throws SQLException;
 
+    int extractCountOfLikes(int post_id) throws SQLException;
     int getCountByUser(int user_id) throws SQLException;
     List<Post> getFollowedUsersPosts(int userId, int limit, int offset) throws SQLException;
-    boolean isLiked(int userId, int postId);
 
+    boolean isLiked(int userId, int postId);
     List<Post> getPostsByUserWithOffset(int user_id, int limit, int offset) throws SQLException;
 }
