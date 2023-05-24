@@ -44,7 +44,7 @@
                 <div class="card mt-5" style="width: 30rem;">
                     <p style="margin-left: 20px; padding: unset; text-decoration: unset">
                         <a href="/user/profile?username=${post.author.username}" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover fs-5 fw-bold font-monospace">
-                                ${post.author.username}
+                            ${post.author.username}
                         </a>
                     </p>
                     <a href="/user/viewpost?id=${post.id}" style="padding: unset; text-decoration: unset">
