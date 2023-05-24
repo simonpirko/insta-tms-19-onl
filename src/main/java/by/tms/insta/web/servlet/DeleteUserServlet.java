@@ -15,7 +15,7 @@ import java.sql.SQLException;
 /**
  * @author Denis Smirnov on 12.05.2023
  */
-@WebServlet("/user/account")
+@WebServlet("/user/delete")
 public class DeleteUserServlet extends HttpServlet {
     private final String USER = "user";
     private final UserService userService = UserService.getInstance();
