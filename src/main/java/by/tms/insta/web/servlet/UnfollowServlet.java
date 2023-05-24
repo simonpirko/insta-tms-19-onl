@@ -14,7 +14,7 @@ import java.sql.SQLException;
 /**
  * @author Denis Smirnov on 24.05.2023
  */
-@WebServlet("/user/account")
+@WebServlet("/user/unfollow")
 public class UnfollowServlet extends HttpServlet {
 
     private final static String USER = "user";
