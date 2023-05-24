@@ -39,6 +39,10 @@ public class PostService {
         return jdbcPostDAO.findPostById(id);
     }
 
+    public List<Post> findGreatest(){
+        return jdbcPostDAO.findGreatest();
+    }
+
     public void updatePost(int postId, String image, String description) throws SQLException {
         jdbcPostDAO.updatePost(postId, image, description);
     }

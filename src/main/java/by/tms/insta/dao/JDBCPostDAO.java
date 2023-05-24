@@ -27,6 +27,7 @@ public class JDBCPostDAO implements PostDAO {
     private static final String SELECT_FOLLOWED_USERS_POSTS = "select u.user_id from " +
             "followers f join users u on f.parent_id = u.user_id join posts p on u.user_id = p.user_id where f.child_id = ? order by p.created_at desc limit ? offset ?";
     private static final String SELECT_LIKE_BY_POST_USER_ID = "select * from likes where user_id = ? and post_id = ?";
+    private static final String SELECT_GREATEST = "select p.post_id, p.user_id, p.image, p.created_at, p.description, l.post_id AS likesCount from posts p join likes l on p.post_id = l.post_id order by count(likesCount) desc limit 9";
 
     private JDBCPostDAO() {
     }
@@ -58,6 +59,20 @@ public class JDBCPostDAO implements PostDAO {
             return Optional.of(buildPost(resultSet));
         }
         return Optional.empty();
+    }
+
+    public List<Post> findGreatest(){
+        try {
+            Statement statement = connectionJdbc.getPostgresConnection().createStatement();
+            ResultSet resultSet = statement.executeQuery(SELECT_GREATEST);
+            List<Post> postList = new ArrayList<>();
+            while (resultSet.next()) {
+                postList.add(buildPost(resultSet));
+            }
+            return postList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
