@@ -71,7 +71,7 @@ public class UserService {
         jdbcUserDAO.follow(parentId, childId);
     }
 
-    public void unFollow(int parentId, int childId) throws SQLException {
+    public void unfollow(int parentId, int childId) throws SQLException {
         jdbcUserDAO.unfollow(parentId, childId);
     }
 
