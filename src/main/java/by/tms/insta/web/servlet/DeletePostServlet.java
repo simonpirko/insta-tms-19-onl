@@ -23,17 +23,14 @@ public class DeletePostServlet extends HttpServlet {
         int id = Integer.parseInt(req.getParameter("id"));
         String username = sessionUser.getUsername();
 
-
         try {
             postService.deletePost(id);
-            resp.sendRedirect(req.getContextPath() + "/user/account?username=" + username);
-
+            resp.sendRedirect(req.getContextPath() + "/account?username=" + username);
         } catch (SQLException e) {
             req.setAttribute("errormessage", "Something went wrong on our side");
             getServletContext().getRequestDispatcher("/pages/error.jsp").forward(req, resp);
         }
     }
-
-    }
+}
 
 
