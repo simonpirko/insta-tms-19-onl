@@ -13,20 +13,20 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("/user/deletepost")
+@WebServlet("/post/delete")
 public class DeletePostServlet extends HttpServlet {
     private final PostService postService = PostService.getInstance();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         SessionPrincipalUser sessionUser = (SessionPrincipalUser) req.getSession().getAttribute("user");
-        int id = Integer.parseInt(req.getParameter("username"));
+        int id = Integer.parseInt(req.getParameter("id"));
         String username = sessionUser.getUsername();
 
 
         try {
             postService.deletePost(id);
-            resp.sendRedirect(req.getContextPath() + "/user/account?id=" + username);
+            resp.sendRedirect(req.getContextPath() + "/user/account?username=" + username);
 
         } catch (SQLException e) {
             req.setAttribute("errormessage", "Something went wrong on our side");
